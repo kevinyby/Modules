@@ -2,11 +2,23 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+#ifndef LONG
+    #define LONG 1920
+#endif
+
+#ifndef SHORT
+    #define SHORT 1280
+#endif
+
+
 @implementation FrameTranslater
 
 
-static CGSize  portraitCanvasRect;
-static CGSize  landscapeCanvasRect;
+static UIWindow* appWindow;
+
+static CGSize  portraitCanvasSize;
+static CGSize  landscapeCanvasSize;
+
 
 static CGRect frameRect_Landscape;
 
@@ -25,15 +37,33 @@ static bool alignCenterAfterAspectMaintainence;
 
 static bool notShiftPositionToFollowAspectMaintanence;
 
++ (void)initialize {
+    portraitCanvasSize = CGSizeMake(SHORT, LONG);
+    landscapeCanvasSize = CGSizeMake(LONG, SHORT);
+    [super initialize];
+}
+
 
 #pragma mark -
 
-+(void) setPortraitCanvasRect: (CGSize)size {
-    portraitCanvasRect = size;
++(void) setAppWindow: (UIWindow*)window {
+    appWindow = window;
 }
 
-+(void) setLandscapeCanvasRect: (CGSize)size {
-    landscapeCanvasRect = size;
++(CGSize) getPortraitCanvasSize {
+    return portraitCanvasSize;
+}
+
++(CGSize) setLandscapeCanvasSize {
+    return landscapeCanvasSize ;
+}
+
++(void) setPortraitCanvasSize: (CGSize)size {
+    portraitCanvasSize = size;
+}
+
++(void) setLandscapeCanvasSize: (CGSize)size {
+    landscapeCanvasSize = size;
 }
 
 #pragma mark - About Frame
@@ -46,12 +76,12 @@ static bool notShiftPositionToFollowAspectMaintanence;
     BOOL ifAdoptTheOtherOrientataion = ((isPortrait && CGRectIsNull(canvasFrame)) || ((!isPortrait) && CGRectIsNull(frameRect_Landscape)));
     
     CGRect frame = canvasFrame;
-    CGSize canvas = portraitCanvasRect;
+    CGSize canvas = portraitCanvasSize;
     
     if (! isPortrait || CGRectIsNull(canvasFrame)) {
         if (! CGRectIsNull(frameRect_Landscape)){
             frame = frameRect_Landscape;
-            canvas = landscapeCanvasRect;
+            canvas = landscapeCanvasSize;
         }
         // else Assertion wrong
     }
@@ -61,7 +91,7 @@ static bool notShiftPositionToFollowAspectMaintanence;
     
     //Rotation Adjustment
     if (ifAdoptTheOtherOrientataion) {
-        CGSize canvasTarget = (isPortrait)  ? portraitCanvasRect : landscapeCanvasRect;
+        CGSize canvasTarget = (isPortrait)  ? portraitCanvasSize : landscapeCanvasSize;
         
         float ratioHorizontal = canvasTarget.width / canvas.width;
         float ratioVertical = canvasTarget.height/ canvas.height;
@@ -143,11 +173,11 @@ static bool notShiftPositionToFollowAspectMaintanence;
 }
 
 + (CGRect) getDeviceRect: (UIInterfaceOrientation) orientation {
-    id appDelegate = [[UIApplication sharedApplication] delegate];
-    UIWindow* appWindow = [appDelegate valueForKey: @"window"];             // Hard Code Here
+    if (! appWindow) appWindow = [(id)[[UIApplication sharedApplication] delegate] valueForKey: @"window"];   // Hard Code Here
     
-    CGSize deviceRectPortrait = [appWindow bounds].size;
-    CGSize deviceRectLandscape = CGSizeMake([appWindow bounds].size.height, [appWindow bounds].size.width);
+    CGSize appWindowSize = [appWindow bounds].size;
+    CGSize deviceRectPortrait = appWindowSize ;
+    CGSize deviceRectLandscape = CGSizeMake(appWindowSize.height, appWindowSize.width);
     CGRect deviceStatusBarRect = [[UIApplication sharedApplication] statusBarFrame];
     
     BOOL _isPortrait = (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown);
@@ -179,8 +209,8 @@ static bool notShiftPositionToFollowAspectMaintanence;
     
     //    float sx = (float)screenBonus.size.width / (float)SHORT;
     //    float sy = (float)screenBonus.size.height / (float)LONG;
-    float sx = (float)screenBonus.size.width / (float)portraitCanvasRect.width;
-    float sy = (float)screenBonus.size.height / (float)portraitCanvasRect.height;
+    float sx = (float)screenBonus.size.width / (float)portraitCanvasSize.width;
+    float sy = (float)screenBonus.size.height / (float)portraitCanvasSize.height;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         label.transform = CGAffineTransformMakeScale(sx, sy);
@@ -189,17 +219,20 @@ static bool notShiftPositionToFollowAspectMaintanence;
 }
 
 +(void) setupParameters: (NSDictionary*)parameters {        // TODO user enum instead of it .
-    fixXforRotation = [[parameters objectForKey: @"fixXforRotation"] boolValue];
-    fixYforRotation = [[parameters objectForKey: @"fixYforRotation"] boolValue];
-    fixWidthforRotation = [[parameters objectForKey: @"fixWidthforRotation"] boolValue];
-    fixHeightforRotation = [[parameters objectForKey: @"fixHeightforRotation"] boolValue];
-    fixXforDevice = [[parameters objectForKey: @"fixXforDevice"] boolValue];
-    fixYforDevice = [[parameters objectForKey: @"fixYforDevice"] boolValue];
-    fixWidthforDevice = [[parameters objectForKey: @"fixWidthforDevice"] boolValue];
-    fixHeightforDevice = [[parameters objectForKey: @"fixHeightforDevice"] boolValue];
-    maintainRatioByX = [[parameters objectForKey: @"maintainRatioByX"] boolValue];
-    maintainRatioByY = [[parameters objectForKey: @"maintainRatioByY"] boolValue];
-    alignCenterAfterAspectMaintainence = [[parameters objectForKey: @"alignCenterAfterAspectMaintainence"] boolValue];
+    fixXforRotation = [[parameters objectForKey: Frame_fixXforRotation] boolValue];
+    fixYforRotation = [[parameters objectForKey: Frame_fixYforRotation] boolValue];
+    fixWidthforRotation = [[parameters objectForKey: Frame_fixWidthforRotation] boolValue];
+    fixHeightforRotation = [[parameters objectForKey: Frame_fixHeightforRotation] boolValue];
+    
+    fixXforDevice = [[parameters objectForKey: Frame_fixXforDevice] boolValue];
+    fixYforDevice = [[parameters objectForKey: Frame_fixYforDevice] boolValue];
+    fixWidthforDevice = [[parameters objectForKey: Frame_fixWidthforDevice] boolValue];
+    fixHeightforDevice = [[parameters objectForKey: Frame_fixHeightforDevice] boolValue];
+    
+    maintainRatioByX = [[parameters objectForKey: Frame_maintainRatioByX] boolValue];
+    maintainRatioByY = [[parameters objectForKey: Frame_maintainRatioByY] boolValue];
+    alignCenterAfterAspectMaintainence = [[parameters objectForKey: Frame_alignCenterAfterAspectMaintainence] boolValue];
+    notShiftPositionToFollowAspectMaintanence = [[parameters objectForKey: Frame_notShiftPositionToFollowAspectMaintanence] boolValue];
 }
 
 @end
