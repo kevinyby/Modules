@@ -22,6 +22,8 @@
 +(void) setPortraitCanvasSize: (CGSize)size ;
 +(void) setLandscapeCanvasSize: (CGSize)size ;
 
++(void) setRealFrame: (UIInterfaceOrientation)orientation isRotate:(BOOL)isRotate view:(UIView*)view parameters:(NSDictionary*)parameters ;
+
 +(CGRect) getFrame: (UIInterfaceOrientation)orientation canvasFrame:(CGRect)canvasFrame parameters:(NSDictionary*)parameters ;
 
 +(void) adjustLabelSize: (UILabel*)label orientation:(UIInterfaceOrientation)orientation canvasFrame:(CGRect)canvasFrame text:(NSString*)text ;

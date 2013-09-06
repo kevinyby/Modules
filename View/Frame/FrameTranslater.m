@@ -65,7 +65,7 @@ static bool notShiftPositionToFollowAspectMaintanence;
 
 // 
 +(void) setRealFrame: (UIInterfaceOrientation)orientation isRotate:(BOOL)isRotate view:(UIView*)view parameters:(NSDictionary*)parameters {
-    NSValue* canvasFrameValue = isRotate ? view.canvasFrame : view.rotateCanvasFrame;
+    NSValue* canvasFrameValue = !isRotate ? view.canvasFrame : view.rotateCanvasFrame;
     CGRect canvasFrame = [canvasFrameValue CGRectValue];
     CGRect frame = [self getFrame: orientation canvasFrame:canvasFrame parameters:parameters];
     view.frame = frame;
