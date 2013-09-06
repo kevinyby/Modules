@@ -26,8 +26,4 @@
 
 +(void) adjustLabelSize: (UILabel*)label orientation:(UIInterfaceOrientation)orientation canvasFrame:(CGRect)canvasFrame text:(NSString*)text ;
 
-+(CGRect) convertFrame: (CGRect)canvasFrame orientation:(UIInterfaceOrientation)orientation ;
-
-+(CGRect) getDeviceRect: (UIInterfaceOrientation)orientation ;
-
 @end
