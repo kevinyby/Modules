@@ -19,23 +19,6 @@ static CGSize  portraitCanvasSize;
 static CGSize  landscapeCanvasSize;
 
 
-static CGRect frameRect_Landscape;
-
-
-static bool fixXforRotation;
-static bool fixYforRotation;
-static bool fixWidthforRotation;
-static bool fixHeightforRotation;
-static bool fixXforDevice;
-static bool fixYforDevice;
-static bool fixWidthforDevice;
-static bool fixHeightforDevice;
-static bool maintainRatioByX;
-static bool maintainRatioByY;
-static bool alignCenterAfterAspectMaintainence;
-
-static bool notShiftPositionToFollowAspectMaintanence;
-
 + (void)initialize {
     portraitCanvasSize = CGSizeMake(SHORT, LONG);
     landscapeCanvasSize = CGSizeMake(LONG, SHORT);
@@ -66,21 +49,49 @@ static bool notShiftPositionToFollowAspectMaintanence;
 // 
 +(void) setRealFrame: (UIInterfaceOrientation)orientation isRotate:(BOOL)isRotate view:(UIView*)view parameters:(NSDictionary*)parameters {
     NSValue* canvasFrameValue = !isRotate ? view.canvasFrame : view.rotateCanvasFrame;
-    CGRect canvasFrame = [canvasFrameValue CGRectValue];
-    CGRect frame = [self getFrame: orientation canvasFrame:canvasFrame parameters:parameters];
-    view.frame = frame;
-}
-
-// device
-+(CGRect) getFrame: (UIInterfaceOrientation)orientation canvasFrame:(CGRect)canvasFrame parameters:(NSDictionary*)parameters {
-//    [self setupParameters: parameters];
     
     BOOL isPortrait = (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown);
     
+    CGRect frame = [self getFrame: isPortrait canvasFrame:[canvasFrameValue CGRectValue] ];
+    
+    view.frame = frame;
+}
+
++(CGRect)getRotateCanvasFrame: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame {
+    CGRect frame = canvasFrame;
+    
+    CGSize fromCanvas = (isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
+    CGSize toCanvas = (!isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
+    
+    float ratioHorizontal = toCanvas.width / fromCanvas.width;
+    float ratioVertical = toCanvas.height/ fromCanvas.height;
+    
+    frame.origin.x *= ratioHorizontal;
+    frame.origin.y *= ratioVertical;
+    
+    float targetWidth = frame.size.width * ratioHorizontal;
+    float targetHeight = frame.size.height * ratioVertical;
+    
+    float minusWidth = targetWidth - frame.size.width ;
+    float minusHeight = targetHeight - frame.size.height ;
+    
+    frame.origin.x += minusWidth/2;
+    frame.origin.y += minusHeight/2;
+    
+    return frame;
+    
+}
+
+// device
++(NSValue*) getFrameValue: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame {
+    return [NSValue valueWithCGRect:[self getFrame: isPortrait canvasFrame:canvasFrame]];
+}
+
++(CGRect) getFrame: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame {
     CGRect frame = canvasFrame;
     CGSize canvas = (isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
     
-    CGSize screen = [FrameTranslater getDeviceRect:isPortrait].size;
+    CGSize screen = [FrameTranslater getDeviceRect: isPortrait].size;
     
     float ratioHorizontal = screen.width / canvas.width;
     float ratioVertical = screen.height/ canvas.height;
@@ -95,23 +106,21 @@ static bool notShiftPositionToFollowAspectMaintanence;
 
 #pragma mark - About Font (In UILable)
 +(void) adjustLabelSize: (UILabel*)label orientation:(UIInterfaceOrientation)orientation canvasFrame:(CGRect)canvasFrame text:(NSString*)text {
+    
+    BOOL isPortrait = (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown);
+    
     label.frame = canvasFrame;
     label.text = text;
-    [self adjustFitSize: label];
-    CGRect adjustedFrame  = [self getFrame: orientation canvasFrame:canvasFrame parameters:nil];
+    [self transformLabelSize: label];
+    CGRect adjustedFrame  = [self getFrame: isPortrait canvasFrame:canvasFrame ];
     adjustedFrame.size.width = label.frame.size.width; 
     adjustedFrame.size.height = label.frame.size.height;
     label.frame = adjustedFrame;
 }
 
-
-
-#pragma mark - Private Methods
-+(void) adjustFitSize: (UILabel*)label {
++(void) transformLabelSize: (UILabel*)label {
     CGRect screenBonus = [[UIScreen mainScreen] bounds];
     
-    //    float sx = (float)screenBonus.size.width / (float)SHORT;
-    //    float sy = (float)screenBonus.size.height / (float)LONG;
     float sx = (float)screenBonus.size.width / (float)portraitCanvasSize.width;
     float sy = (float)screenBonus.size.height / (float)portraitCanvasSize.height;
     
@@ -121,38 +130,23 @@ static bool notShiftPositionToFollowAspectMaintanence;
     }
 }
 
+
+#pragma mark - Private Methods
+
 // ie . ignore the case of statusbar , portrait (768 x 1024) , then landscape (1024 x 768)
 + (CGRect) getDeviceRect: (BOOL) isPortrait {
-    
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     CGSize deviceRectPortrait = screenSize ;
     CGSize deviceRectLandscape = CGSizeMake(screenSize.height, screenSize.width);
-    CGRect deviceStatusBarRect = [[UIApplication sharedApplication] statusBarFrame];
     
-    BOOL _ifHideStatusBar = [UIApplication sharedApplication].statusBarHidden;
-    CGFloat adjustmentY = (_ifHideStatusBar) ? 0 : deviceStatusBarRect.size.height;
+    CGFloat statusBarOccupied = 0 ;   // forget the status bar influence
+//    BOOL _ifHideStatusBar = [UIApplication sharedApplication].statusBarHidden;
+//    CGRect deviceStatusBarRect = [[UIApplication sharedApplication] statusBarFrame];
+//    statusBarOccupied = (_ifHideStatusBar) ? 0 : isPortrait ? deviceStatusBarRect.size.width : deviceStatusBarRect.size.height;   // for the statusbar
     
     return (isPortrait)
-    ? CGRectMake(0, 0 + adjustmentY, deviceRectPortrait.width, deviceRectPortrait.height-adjustmentY)
-    : CGRectMake(0, 0 + adjustmentY, deviceRectLandscape.width, deviceRectLandscape.height-adjustmentY);
-    
-}
-
-+(void) setupParameters: (NSDictionary*)parameters {        // TODO user enum instead of it .
-    fixXforRotation = [[parameters objectForKey: Frame_fixXforRotation] boolValue];
-    fixYforRotation = [[parameters objectForKey: Frame_fixYforRotation] boolValue];
-    fixWidthforRotation = [[parameters objectForKey: Frame_fixWidthforRotation] boolValue];
-    fixHeightforRotation = [[parameters objectForKey: Frame_fixHeightforRotation] boolValue];
-    
-    fixXforDevice = [[parameters objectForKey: Frame_fixXforDevice] boolValue];
-    fixYforDevice = [[parameters objectForKey: Frame_fixYforDevice] boolValue];
-    fixWidthforDevice = [[parameters objectForKey: Frame_fixWidthforDevice] boolValue];
-    fixHeightforDevice = [[parameters objectForKey: Frame_fixHeightforDevice] boolValue];
-    
-    maintainRatioByX = [[parameters objectForKey: Frame_maintainRatioByX] boolValue];
-    maintainRatioByY = [[parameters objectForKey: Frame_maintainRatioByY] boolValue];
-    alignCenterAfterAspectMaintainence = [[parameters objectForKey: Frame_alignCenterAfterAspectMaintainence] boolValue];
-    notShiftPositionToFollowAspectMaintanence = [[parameters objectForKey: Frame_notShiftPositionToFollowAspectMaintanence] boolValue];
+    ? CGRectMake(0, 0 + statusBarOccupied, deviceRectPortrait.width, deviceRectPortrait.height-statusBarOccupied)
+    : CGRectMake(0, 0 + statusBarOccupied, deviceRectLandscape.width, deviceRectLandscape.height-statusBarOccupied);
 }
 
 @end

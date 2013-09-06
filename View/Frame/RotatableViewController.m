@@ -6,9 +6,6 @@
 
 @implementation RotatableViewController
 
-#pragma mark
--(void) renderByOrientation: (UIInterfaceOrientation)toInterfaceOrientation {}
-
 #pragma mark - Override UIViewController Methods
 // for ios5.0 , 6.0 deprecated
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -28,14 +25,13 @@
     return YES;
 }
 
--(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
-    NSLog(@"[%@] instance willRotateToInterfaceOrientation", [self class]);
-    [self renderByOrientation:(UIInterfaceOrientation)toInterfaceOrientation];
+- (void)viewWillAppear:(BOOL)animated {
+    [self renderByOrientation: self.interfaceOrientation];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
+
+#pragma mark - subclass shold overwrite methods
+
+-(void) renderByOrientation: (UIInterfaceOrientation)interfaceOrientation {}
 
 @end

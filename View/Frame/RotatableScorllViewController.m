@@ -1,11 +1,3 @@
-//
-//  RotatableScorllViewController.m
-//  SteelERP
-//
-//  Created by Xinyuan on 9/6/13.
-//  Copyright (c) 2013 Xinyuan. All rights reserved.
-//
-
 #import "RotatableScorllViewController.h"
 
 @interface RotatableScorllViewController ()
@@ -14,15 +6,12 @@
 
 @implementation RotatableScorllViewController
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        UIScrollView* scrollView = [[UIScrollView alloc] init];
-        self.view = scrollView;
-        [scrollView release];
-    }
-    return self;
+#pragma mark - UIViewController Methods
+-(void)loadView {
+    UIScrollView* scrollView = [[UIScrollView alloc] init];
+    scrollView.frame = [[UIScreen mainScreen] bounds];
+    self.view = scrollView;
+    [scrollView release];
 }
 
 @end

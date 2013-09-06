@@ -3,6 +3,7 @@
 @interface RotatableViewController : UIViewController
 
 #pragma mark - subclass shold overwrite methods
--(void) renderByOrientation: (UIInterfaceOrientation)toInterfaceOrientation ;
+
+-(void) renderByOrientation: (UIInterfaceOrientation)interfaceOrientation ;
 
 @end
