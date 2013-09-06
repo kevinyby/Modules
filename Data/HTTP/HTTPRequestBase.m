@@ -4,6 +4,8 @@
 
 @synthesize delegate;
 
+@synthesize requestId;
+
 - (id)init {
     [self dealloc];
     @throw [NSException exceptionWithName:@"Reject Exception"
@@ -26,10 +28,6 @@
 -(void) startRequest {
     [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     [connection start];
-}
-
--(NSString*) getRequestID {
-    return [NSString stringWithFormat: @"%p", self];
 }
 
 - (void)dealloc
