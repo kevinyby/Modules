@@ -18,7 +18,7 @@
 
 @property (assign) id<IEPostRequestDelegate> delegate;
 
-@property (assign) int requestId ;
+@property (retain) NSString* requestID ;
 
 -(id)initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters ;
 -(void) startRequest ;

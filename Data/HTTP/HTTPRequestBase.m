@@ -4,7 +4,7 @@
 
 @synthesize delegate;
 
-@synthesize requestId;
+@synthesize requestID;
 
 - (id)init {
     [self dealloc];
@@ -20,6 +20,7 @@
     if (self) {
         NSMutableURLRequest* request = [self getURLRequest: urlString parameters:parameters];
         connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+        self.requestID = [NSString stringWithFormat: @"%p", self];
     }
     
     return self;
