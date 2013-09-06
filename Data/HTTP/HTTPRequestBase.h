@@ -21,6 +21,8 @@
 -(id)initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters ;
 -(void) startRequest ;
 
+-(NSString*) getRequestID ;
+
 #pragma mark - SubClass Overwrite Methods
 -(NSMutableURLRequest*) getURLRequest: (NSString*)urlString parameters:(NSDictionary*)parameters ;
 

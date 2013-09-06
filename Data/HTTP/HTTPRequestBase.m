@@ -28,6 +28,10 @@
     [connection start];
 }
 
+-(NSString*) getRequestID {
+    return [NSString stringWithFormat: @"%p", self];
+}
+
 - (void)dealloc
 {
     [connection release];
