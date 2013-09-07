@@ -18,4 +18,6 @@
 
 +(void) adjustLabelSize: (UILabel*)label canvasFrame:(CGRect)canvasFrame text:(NSString*)text ;
 
++(CGFloat) adjustFontSize: (CGFloat)fontSize ;
+
 @end

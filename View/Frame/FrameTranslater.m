@@ -142,6 +142,15 @@ static CGFloat statusBarVerHeight;
     }
 }
 
++(CGFloat) adjustFontSize: (CGFloat)fontSize {
+    CGRect screenBonus = [[UIScreen mainScreen] bounds];
+    
+    float sx = (float)screenBonus.size.width / (float)portraitCanvasSize.width;
+    float sy = (float)screenBonus.size.height / (float)portraitCanvasSize.height;
+    
+    return fontSize * ((sx+sy)/2);
+}
+
 
 #pragma mark - Private Methods
 
