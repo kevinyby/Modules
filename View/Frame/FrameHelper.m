@@ -10,6 +10,10 @@
     view.rotateCanvasFrame = [self getRotateFrameValue: canvas];
 }
 
++(void) setFrameByOrientation: (UIInterfaceOrientation)interfaceOrientation view:(UIView*)view {
+    view.frame = UIInterfaceOrientationIsPortrait(interfaceOrientation) ? [view.canvasFrame CGRectValue] : [view.rotateCanvasFrame CGRectValue];
+}
+
 
 +(NSValue*) getFrameValue: (CGRect)canvas {
     return [NSValue valueWithCGRect: [FrameTranslater getFrame: canvas]];
