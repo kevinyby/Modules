@@ -2,18 +2,20 @@
 
 @interface FrameTranslater : NSObject
 
+
++(BOOL) isPortraitDesigned ;
++(void) setIsPortraitDesigned: (BOOL)portraitDesigned ;
+
 +(CGSize) getPortraitCanvasSize ;
 +(CGSize) setLandscapeCanvasSize ;
 +(void) setPortraitCanvasSize: (CGSize)size ;
 +(void) setLandscapeCanvasSize: (CGSize)size ;
 
-+(void) setRealFrame: (UIInterfaceOrientation)orientation isRotate:(BOOL)isRotate view:(UIView*)view parameters:(NSDictionary*)parameters ;
 
-+(CGRect)getRotateCanvasFrame: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame ;
++(CGRect) getFrame: (CGRect)canvasFrame ;
 
-+(NSValue*) getFrameValue: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame ;
-+(CGRect) getFrame: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame ;
++(CGRect)getRotateCanvasFrame: (CGRect)canvasFrame ;
 
-+(void) adjustLabelSize: (UILabel*)label orientation:(UIInterfaceOrientation)orientation canvasFrame:(CGRect)canvasFrame text:(NSString*)text ;
++(void) adjustLabelSize: (UILabel*)label canvasFrame:(CGRect)canvasFrame text:(NSString*)text ;
 
 @end

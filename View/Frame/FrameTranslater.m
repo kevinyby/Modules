@@ -1,7 +1,5 @@
 #import "FrameTranslater.h"
 
-#import "UIWiew+CanvasFrame.h"
-
 #import <QuartzCore/QuartzCore.h>
 
 #ifndef LONG
@@ -15,18 +13,41 @@
 
 @implementation FrameTranslater
 
+
+static bool isPortraitDesigned;
+
 static CGSize  portraitCanvasSize;
 static CGSize  landscapeCanvasSize;
 
 
+
+static bool isStatusBarHidden;
+static CGFloat statusBarVerHeight;
+
+
 + (void)initialize {
-    portraitCanvasSize = CGSizeMake(SHORT, LONG);
-    landscapeCanvasSize = CGSizeMake(LONG, SHORT);
+    isPortraitDesigned = YES;                       // default is designed according portrait
+    portraitCanvasSize = CGSizeMake(SHORT, LONG);   // default
+    landscapeCanvasSize = CGSizeMake(LONG, SHORT);  // default
+    
+    // For status bar
+    isStatusBarHidden = [UIApplication sharedApplication].statusBarHidden;
+    CGSize statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
+    BOOL _isPortrait = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
+    statusBarVerHeight = _isPortrait ? statusBarSize.height : statusBarSize.width;
+    
     [super initialize];
 }
 
 
 #pragma mark -
++(BOOL) isPortraitDesigned {
+    return isPortraitDesigned;
+}
+
++(void) setIsPortraitDesigned: (BOOL)portraitDesigned {
+    isPortraitDesigned = portraitDesigned;
+}
 
 +(CGSize) getPortraitCanvasSize {
     return portraitCanvasSize;
@@ -45,23 +66,14 @@ static CGSize  landscapeCanvasSize;
 }
 
 #pragma mark - About Frame
-
-// 
-+(void) setRealFrame: (UIInterfaceOrientation)orientation isRotate:(BOOL)isRotate view:(UIView*)view parameters:(NSDictionary*)parameters {
-    NSValue* canvasFrameValue = !isRotate ? view.canvasFrame : view.rotateCanvasFrame;
-    
-    BOOL isPortrait = (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown);
-    
-    CGRect frame = [self getFrame: isPortrait canvasFrame:[canvasFrameValue CGRectValue] ];
-    
-    view.frame = frame;
++(CGRect)getRotateCanvasFrame: (CGRect)canvasFrame {
+    return [self getRotateCanvasFrame: isPortraitDesigned canvasFrame:canvasFrame];
 }
-
-+(CGRect)getRotateCanvasFrame: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame {
++(CGRect)getRotateCanvasFrame: (BOOL)isInitPortrait canvasFrame:(CGRect)canvasFrame {
     CGRect frame = canvasFrame;
     
-    CGSize fromCanvas = (isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
-    CGSize toCanvas = (!isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
+    CGSize fromCanvas = (isInitPortrait) ? portraitCanvasSize : landscapeCanvasSize;
+    CGSize toCanvas = (!isInitPortrait) ? portraitCanvasSize : landscapeCanvasSize;
     
     float ratioHorizontal = toCanvas.width / fromCanvas.width;
     float ratioVertical = toCanvas.height/ fromCanvas.height;
@@ -82,16 +94,16 @@ static CGSize  landscapeCanvasSize;
     
 }
 
-// device
-+(NSValue*) getFrameValue: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame {
-    return [NSValue valueWithCGRect:[self getFrame: isPortrait canvasFrame:canvasFrame]];
-}
 
-+(CGRect) getFrame: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame {
+// device
++(CGRect) getFrame: (CGRect)canvasFrame {
+    return [self getFrame: isPortraitDesigned canvasFrame:canvasFrame];
+}
++(CGRect) getFrame: (BOOL)isInitPortrait canvasFrame:(CGRect)canvasFrame {
     CGRect frame = canvasFrame;
-    CGSize canvas = (isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
+    CGSize canvas = (isInitPortrait) ? portraitCanvasSize : landscapeCanvasSize;
     
-    CGSize screen = [FrameTranslater getDeviceRect: isPortrait].size;
+    CGSize screen = [FrameTranslater getDeviceRect: isInitPortrait].size;
     
     float ratioHorizontal = screen.width / canvas.width;
     float ratioVertical = screen.height/ canvas.height;
@@ -105,14 +117,14 @@ static CGSize  landscapeCanvasSize;
 }
 
 #pragma mark - About Font (In UILable)
-+(void) adjustLabelSize: (UILabel*)label orientation:(UIInterfaceOrientation)orientation canvasFrame:(CGRect)canvasFrame text:(NSString*)text {
-    
-    BOOL isPortrait = (orientation == UIInterfaceOrientationPortrait || orientation == UIInterfaceOrientationPortraitUpsideDown);
-    
++(void) adjustLabelSize: (UILabel*)label canvasFrame:(CGRect)canvasFrame text:(NSString*)text {
+    return [self adjustLabelSize: label isInitPortrait:isPortraitDesigned canvasFrame:canvasFrame text:text];
+}
++(void) adjustLabelSize: (UILabel*)label isInitPortrait:(BOOL)isInitPortrait canvasFrame:(CGRect)canvasFrame text:(NSString*)text {
     label.frame = canvasFrame;
     label.text = text;
     [self transformLabelSize: label];
-    CGRect adjustedFrame  = [self getFrame: isPortrait canvasFrame:canvasFrame ];
+    CGRect adjustedFrame  = [self getFrame: isInitPortrait canvasFrame:canvasFrame ];
     adjustedFrame.size.width = label.frame.size.width; 
     adjustedFrame.size.height = label.frame.size.height;
     label.frame = adjustedFrame;
@@ -134,17 +146,15 @@ static CGSize  landscapeCanvasSize;
 #pragma mark - Private Methods
 
 // ie . ignore the case of statusbar , portrait (768 x 1024) , then landscape (1024 x 768)
-+ (CGRect) getDeviceRect: (BOOL) isPortrait {
++ (CGRect) getDeviceRect: (BOOL) isInitPortrait {
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     CGSize deviceRectPortrait = screenSize ;
     CGSize deviceRectLandscape = CGSizeMake(screenSize.height, screenSize.width);
     
     CGFloat statusBarOccupied = 0 ;   // forget the status bar influence
-//    BOOL _ifHideStatusBar = [UIApplication sharedApplication].statusBarHidden;
-//    CGRect deviceStatusBarRect = [[UIApplication sharedApplication] statusBarFrame];
-//    statusBarOccupied = (_ifHideStatusBar) ? 0 : isPortrait ? deviceStatusBarRect.size.width : deviceStatusBarRect.size.height;   // for the statusbar
+    statusBarOccupied = (isStatusBarHidden) ? 0 : statusBarVerHeight;   // for the statusbar influence
     
-    return (isPortrait)
+    return (isInitPortrait)
     ? CGRectMake(0, 0 + statusBarOccupied, deviceRectPortrait.width, deviceRectPortrait.height-statusBarOccupied)
     : CGRectMake(0, 0 + statusBarOccupied, deviceRectLandscape.width, deviceRectLandscape.height-statusBarOccupied);
 }
