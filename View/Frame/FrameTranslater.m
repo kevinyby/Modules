@@ -166,6 +166,16 @@ static CGFloat statusBarVerHeight;
     return (float)screenBonus.size.height / (float)canvas.height;
 }
 
++(CGFloat) convertCanvasY: (CGFloat)y {
+    CGRect rect = [self getFrame: CGRectMake(0, 0, 0, y)];
+    return rect.size.height * [self canvasScreenRatioY];
+}
+
++(CGFloat) convertCanvasX: (CGFloat)x {
+    CGRect rect = [self getFrame: CGRectMake(0, 0, x, 0)];
+    return rect.size.width * [self canvasScreenRatioX];
+}
+
 
 #pragma mark - Private Methods
 

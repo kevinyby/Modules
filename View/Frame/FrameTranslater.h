@@ -22,5 +22,7 @@
 
 +(CGFloat) canvasScreenRatioX ;
 +(CGFloat) canvasScreenRatioY ;
++(CGFloat) convertCanvasY: (CGFloat)y ;
++(CGFloat) convertCanvasX: (CGFloat)x ;
 
 @end
