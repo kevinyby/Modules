@@ -20,4 +20,7 @@
 
 +(CGFloat) adjustFontSize: (CGFloat)fontSize ;
 
++(CGFloat) canvasScreenRatioX ;
++(CGFloat) canvasScreenRatioY ;
+
 @end

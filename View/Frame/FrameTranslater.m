@@ -69,11 +69,11 @@ static CGFloat statusBarVerHeight;
 +(CGRect)getRotateCanvasFrame: (CGRect)canvasFrame {
     return [self getRotateCanvasFrame: isPortraitDesigned canvasFrame:canvasFrame];
 }
-+(CGRect)getRotateCanvasFrame: (BOOL)isInitPortrait canvasFrame:(CGRect)canvasFrame {
++(CGRect)getRotateCanvasFrame: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame {
     CGRect frame = canvasFrame;
     
-    CGSize fromCanvas = (isInitPortrait) ? portraitCanvasSize : landscapeCanvasSize;
-    CGSize toCanvas = (!isInitPortrait) ? portraitCanvasSize : landscapeCanvasSize;
+    CGSize fromCanvas = (isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
+    CGSize toCanvas = (!isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
     
     float ratioHorizontal = toCanvas.width / fromCanvas.width;
     float ratioVertical = toCanvas.height/ fromCanvas.height;
@@ -99,11 +99,11 @@ static CGFloat statusBarVerHeight;
 +(CGRect) getFrame: (CGRect)canvasFrame {
     return [self getFrame: isPortraitDesigned canvasFrame:canvasFrame];
 }
-+(CGRect) getFrame: (BOOL)isInitPortrait canvasFrame:(CGRect)canvasFrame {
++(CGRect) getFrame: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame {
     CGRect frame = canvasFrame;
-    CGSize canvas = (isInitPortrait) ? portraitCanvasSize : landscapeCanvasSize;
+    CGSize canvas = (isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
     
-    CGSize screen = [FrameTranslater getDeviceRect: isInitPortrait].size;
+    CGSize screen = [FrameTranslater getDeviceRect: isPortrait].size;
     
     float ratioHorizontal = screen.width / canvas.width;
     float ratioVertical = screen.height/ canvas.height;
@@ -118,23 +118,24 @@ static CGFloat statusBarVerHeight;
 
 #pragma mark - About Font (In UILable)
 +(void) adjustLabelSize: (UILabel*)label canvasFrame:(CGRect)canvasFrame text:(NSString*)text {
-    return [self adjustLabelSize: label isInitPortrait:isPortraitDesigned canvasFrame:canvasFrame text:text];
+    return [self adjustLabelSize: label isPortrait:isPortraitDesigned canvasFrame:canvasFrame text:text];
 }
-+(void) adjustLabelSize: (UILabel*)label isInitPortrait:(BOOL)isInitPortrait canvasFrame:(CGRect)canvasFrame text:(NSString*)text {
++(void) adjustLabelSize: (UILabel*)label isPortrait:(BOOL)isPortrait canvasFrame:(CGRect)canvasFrame text:(NSString*)text {
     label.frame = canvasFrame;
     label.text = text;
-    [self transformLabelSize: label];
-    CGRect adjustedFrame  = [self getFrame: isInitPortrait canvasFrame:canvasFrame ];
+    [self transformLabelSize: label isPortrait:isPortrait];
+    CGRect adjustedFrame  = [self getFrame: isPortrait canvasFrame:canvasFrame ];
     adjustedFrame.size.width = label.frame.size.width; 
     adjustedFrame.size.height = label.frame.size.height;
     label.frame = adjustedFrame;
 }
 
-+(void) transformLabelSize: (UILabel*)label {
-    CGRect screenBonus = [[UIScreen mainScreen] bounds];
-    
-    float sx = (float)screenBonus.size.width / (float)portraitCanvasSize.width;
-    float sy = (float)screenBonus.size.height / (float)portraitCanvasSize.height;
++(void) transformLabelSize: (UILabel*)label isPortrait:(BOOL)isPortrait {
+    CGRect screenBonus = [self getDeviceRect: isPortrait] ;
+
+    CGSize canvas = (isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
+    float sx = (float)screenBonus.size.width / (float)canvas.width;
+    float sy = (float)screenBonus.size.height / (float)canvas.height;
     
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         label.transform = CGAffineTransformMakeScale(sx, sy);
@@ -142,20 +143,35 @@ static CGFloat statusBarVerHeight;
     }
 }
 
+#pragma mark - 
 +(CGFloat) adjustFontSize: (CGFloat)fontSize {
-    CGRect screenBonus = [[UIScreen mainScreen] bounds];
+    CGRect screenBonus = [self getDeviceRect: isPortraitDesigned] ;
+    CGSize canvas = (isPortraitDesigned) ? portraitCanvasSize : landscapeCanvasSize;
     
-    float sx = (float)screenBonus.size.width / (float)portraitCanvasSize.width;
-    float sy = (float)screenBonus.size.height / (float)portraitCanvasSize.height;
+    float sx = (float)screenBonus.size.width / (float)canvas.width;
+    float sy = (float)screenBonus.size.height / (float)canvas.height;
     
     return fontSize * ((sx+sy)/2);
+}
+
++(CGFloat) canvasScreenRatioX {
+    CGRect screenBonus = [self getDeviceRect: isPortraitDesigned] ;
+    CGSize canvas = (isPortraitDesigned) ? portraitCanvasSize : landscapeCanvasSize;
+    return (float)screenBonus.size.width / (float)canvas.width;
+}
+
++(CGFloat) canvasScreenRatioY {
+    CGRect screenBonus = [self getDeviceRect: isPortraitDesigned] ;
+    CGSize canvas = (isPortraitDesigned) ? portraitCanvasSize : landscapeCanvasSize;
+    return (float)screenBonus.size.height / (float)canvas.height;
 }
 
 
 #pragma mark - Private Methods
 
 // ie . ignore the case of statusbar , portrait (768 x 1024) , then landscape (1024 x 768)
-+ (CGRect) getDeviceRect: (BOOL) isInitPortrait {
++ (CGRect) getDeviceRect: (BOOL)isPortrait {
+
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     CGSize deviceRectPortrait = screenSize ;
     CGSize deviceRectLandscape = CGSizeMake(screenSize.height, screenSize.width);
@@ -163,7 +179,7 @@ static CGFloat statusBarVerHeight;
     CGFloat statusBarOccupied = 0 ;   // forget the status bar influence
     statusBarOccupied = (isStatusBarHidden) ? 0 : statusBarVerHeight;   // for the statusbar influence
     
-    return (isInitPortrait)
+    return isPortrait // UIInterfaceOrientationIsPortrait(interfaceOrientation)
     ? CGRectMake(0, 0 + statusBarOccupied, deviceRectPortrait.width, deviceRectPortrait.height-statusBarOccupied)
     : CGRectMake(0, 0 + statusBarOccupied, deviceRectLandscape.width, deviceRectLandscape.height-statusBarOccupied);
 }
