@@ -5,12 +5,22 @@
     #define Localize @"Localize"
 #endif
 
+static NSString* currentLocalize ;
 
 @implementation LocalizeManager
 
++(void)initialize {
+    currentLocalize = IOSCurrentLocalize;
+    [super initialize];
+}
+
++(void) setLurrentLocalize: (NSString*)localize {
+    currentLocalize = localize;
+}
+
 
 +(NSString*) getLocalized: (NSString*)key {
-    return [self getLocalized: key localize:CurrentLocalize];
+    return [self getLocalized: key localize:currentLocalize];
 }
 
 
