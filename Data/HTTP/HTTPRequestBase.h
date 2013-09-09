@@ -10,13 +10,13 @@
 
 #define NetworkTimeOutInterval 25
 
-@protocol IEPostRequestDelegate;
+@protocol HTTPRequestDelegate;
 
 @interface HTTPRequestBase : NSObject <NSURLConnectionDataDelegate> {
     NSURLConnection* connection;
 }
 
-@property (assign) id<IEPostRequestDelegate> delegate;
+@property (assign) id<HTTPRequestDelegate> delegate;
 
 @property (retain) NSString* requestID ;
 
@@ -29,12 +29,12 @@
 @end
 
 
-@protocol IEPostRequestDelegate <NSObject>
+@protocol HTTPRequestDelegate <NSObject>
 
 @optional
 
 -(void) didFailPostWithError: (HTTPRequestBase*)request error:(NSError*)error ;
--(void) didSucceedPost: (HTTPRequestBase*)request response:(NSURLResponse*)response;
+-(void) didSucceedPost: (HTTPRequestBase*)request response:(NSHTTPURLResponse*)response;
 -(void) didReceiveData: (HTTPRequestBase*)request data:(NSData*)data ;
 -(void) didFinishReceiveData: (HTTPRequestBase*)request;
 
