@@ -25,7 +25,7 @@
 
 @interface LocalizeManager : NSObject
 
-+(void) setLurrentLocalize: (NSString*)localize ;
++(void) setCurrentLocalize: (NSString*)localize ;
 
 +(NSString*) getLocalized: (NSString*)key ;
 

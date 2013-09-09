@@ -14,7 +14,7 @@ static NSString* currentLocalize ;
     [super initialize];
 }
 
-+(void) setLurrentLocalize: (NSString*)localize {
++(void) setCurrentLocalize: (NSString*)localize {
     currentLocalize = localize;
 }
 
