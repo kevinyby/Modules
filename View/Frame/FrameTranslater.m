@@ -25,6 +25,17 @@ static bool isStatusBarHidden;
 static CGFloat statusBarVerHeight;
 
 
+/**
+ Note here :
+ 
+    all "canvasFrame" is the designed canvas frame , the origin frame on your canvas 
+ 
+    not the value has been fixed by device frame .
+ 
+    not the property of UIView+CanvasFrame .
+ 
+ **/
+
 + (void)initialize {
     isPortraitDesigned = YES;                       // default is designed according portrait
     portraitCanvasSize = CGSizeMake(SHORT, LONG);   // default
@@ -53,7 +64,7 @@ static CGFloat statusBarVerHeight;
     return portraitCanvasSize;
 }
 
-+(CGSize) setLandscapeCanvasSize {
++(CGSize) getLandscapeCanvasSize {
     return landscapeCanvasSize ;
 }
 
@@ -63,35 +74,6 @@ static CGFloat statusBarVerHeight;
 
 +(void) setLandscapeCanvasSize: (CGSize)size {
     landscapeCanvasSize = size;
-}
-
-#pragma mark - About Frame
-+(CGRect)getRotateCanvasFrame: (CGRect)canvasFrame {
-    return [self getRotateCanvasFrame: isPortraitDesigned canvasFrame:canvasFrame];
-}
-+(CGRect)getRotateCanvasFrame: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame {
-    CGRect frame = canvasFrame;
-    
-    CGSize fromCanvas = (isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
-    CGSize toCanvas = (!isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
-    
-    float ratioHorizontal = toCanvas.width / fromCanvas.width;
-    float ratioVertical = toCanvas.height/ fromCanvas.height;
-    
-    frame.origin.x *= ratioHorizontal;
-    frame.origin.y *= ratioVertical;
-    
-    float targetWidth = frame.size.width * ratioHorizontal;
-    float targetHeight = frame.size.height * ratioVertical;
-    
-    float minusWidth = targetWidth - frame.size.width ;
-    float minusHeight = targetHeight - frame.size.height ;
-    
-    frame.origin.x += minusWidth/2;
-    frame.origin.y += minusHeight/2;
-    
-    return frame;
-    
 }
 
 
@@ -117,16 +99,27 @@ static CGFloat statusBarVerHeight;
 }
 
 #pragma mark - About Font (In UILable)
-+(void) adjustLabelSize: (UILabel*)label canvasFrame:(CGRect)canvasFrame text:(NSString*)text {
-    return [self adjustLabelSize: label isPortrait:isPortraitDesigned canvasFrame:canvasFrame text:text];
+/**
+ Example:
+ NSLog(@"%@", [UIFont familyNames]);
+ UILabel* helloworld = [[UILabel alloc] init];
+ helloworld.layer.borderColor = [[UIColor greenColor] CGColor];
+ helloworld.layer.borderWidth = 1.0f;
+ helloworld.text = @"Hello world";
+ helloworld.font = [UIFont fontWithName:@"Bradley Hand" size:40];
+ CGRect rect = CGRectMake(200, 300, 200, 50);
+ [FrameHelper translateCanvas: rect view:helloworld];
+ helloworld.frame = [helloworld.canvasFrame CGRectValue];
+ [self.view addSubview: helloworld];
+ 
+ [FrameTranslater adjustLabelSize: helloworld canvasFrame:rect]; // pass rect , not [helloworld.canvasFrame CGRectValue]
+ **/
++(void) adjustLabelSize: (UILabel*)label canvasFrame:(CGRect)canvasFrame {
+    return [self adjustLabelSize: label isPortrait:isPortraitDesigned canvasFrame:canvasFrame ];
 }
-+(void) adjustLabelSize: (UILabel*)label isPortrait:(BOOL)isPortrait canvasFrame:(CGRect)canvasFrame text:(NSString*)text {
-    label.frame = canvasFrame;
-    label.text = text;
++(void) adjustLabelSize: (UILabel*)label isPortrait:(BOOL)isPortrait canvasFrame:(CGRect)canvasFrame { 
     [self transformLabelSize: label isPortrait:isPortrait];
     CGRect adjustedFrame  = [self getFrame: isPortrait canvasFrame:canvasFrame ];
-    adjustedFrame.size.width = label.frame.size.width; 
-    adjustedFrame.size.height = label.frame.size.height;
     label.frame = adjustedFrame;
 }
 
@@ -144,7 +137,7 @@ static CGFloat statusBarVerHeight;
 }
 
 #pragma mark - 
-+(CGFloat) adjustFontSize: (CGFloat)fontSize {
++(CGFloat) translateFontSize: (CGFloat)fontSize {
     CGRect screenBonus = [self getDeviceRect: isPortraitDesigned] ;
     CGSize canvas = (isPortraitDesigned) ? portraitCanvasSize : landscapeCanvasSize;
     

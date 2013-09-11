@@ -7,18 +7,16 @@
 +(void) setIsPortraitDesigned: (BOOL)portraitDesigned ;
 
 +(CGSize) getPortraitCanvasSize ;
-+(CGSize) setLandscapeCanvasSize ;
++(CGSize) getLandscapeCanvasSize ;
 +(void) setPortraitCanvasSize: (CGSize)size ;
 +(void) setLandscapeCanvasSize: (CGSize)size ;
 
 
 +(CGRect) getFrame: (CGRect)canvasFrame ;
 
-+(CGRect)getRotateCanvasFrame: (CGRect)canvasFrame ;
++(void) adjustLabelSize: (UILabel*)label canvasFrame:(CGRect)canvasFrame ;
 
-+(void) adjustLabelSize: (UILabel*)label canvasFrame:(CGRect)canvasFrame text:(NSString*)text ;
-
-+(CGFloat) adjustFontSize: (CGFloat)fontSize ;
++(CGFloat) translateFontSize: (CGFloat)fontSize ;
 
 +(CGFloat) canvasScreenRatioX ;
 +(CGFloat) canvasScreenRatioY ;
