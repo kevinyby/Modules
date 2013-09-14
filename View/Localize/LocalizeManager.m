@@ -5,12 +5,22 @@
     #define Localize @"Localize"
 #endif
 
+#define SIMULATOR @"Simulator"
+
+#define ISSIMULATOR [[[UIDevice currentDevice] model] rangeOfString: SIMULATOR].location != NSNotFound
+
 static NSString* currentLocalize ;
 
 @implementation LocalizeManager
 
 +(void)initialize {
     currentLocalize = IOSCurrentLocalize;
+    
+    if (ISSIMULATOR) {
+        if ([currentLocalize isEqualToString: Localize_zh_Hans]) currentLocalize = Localize_zh_CN ;
+        else if ([currentLocalize isEqualToString: Localize_zh_Hant]) currentLocalize = Localize_zh_TW ;
+    }
+    
     [super initialize];
 }
 
