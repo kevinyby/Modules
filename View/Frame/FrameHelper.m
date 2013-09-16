@@ -5,15 +5,31 @@
 
 @implementation FrameHelper
 
+static Boolean isNeedReserve ;
+
++(void)initialize {
+    [super initialize];
+    isNeedReserve = YES;
+}
+
++(Boolean) isNeedReserve {
+    return isNeedReserve;
+}
+
++(void) isNeedReserve: (Boolean)isNeed {
+    isNeedReserve = isNeed;
+}
+
+
 +(void) setFrame: (CGRect)canvas view:(UIView*)view {
     [self translateCanvas: canvas view:view];
     view.frame = [view.canvasFrame CGRectValue];
 }
 
 +(void) translateCanvas: (CGRect)canvas view:(UIView*)view {
-    view.designFrame = [NSValue valueWithCGRect: canvas];
     view.canvasFrame = [NSValue valueWithCGRect: [FrameTranslater getFrame: canvas]];
-    view.rotateCanvasFrame = [NSValue valueWithCGRect: [FrameTranslater getFrame: [self getRotateCanvas: canvas]]];
+    if (isNeedReserve) view.designFrame = [NSValue valueWithCGRect: canvas];
+    if (isNeedReserve) view.rotateCanvasFrame = [NSValue valueWithCGRect: [FrameTranslater getFrame: [self getRotateCanvas: canvas]]];
 }
 
 +(void) setFrameByOrientation: (UIInterfaceOrientation)interfaceOrientation view:(UIView*)view {   // first call translateCanvas:view:
