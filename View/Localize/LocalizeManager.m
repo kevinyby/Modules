@@ -16,10 +16,10 @@ static NSString* currentLocalize ;
 +(void)initialize {
     currentLocalize = IOSCurrentLocalize;
     
-    if (ISSIMULATOR) {
+//    if (ISSIMULATOR) {
         if ([currentLocalize isEqualToString: Localize_zh_Hans]) currentLocalize = Localize_zh_CN ;
         else if ([currentLocalize isEqualToString: Localize_zh_Hant]) currentLocalize = Localize_zh_TW ;
-    }
+//    }
     
     [super initialize];
 }

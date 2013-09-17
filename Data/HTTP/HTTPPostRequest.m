@@ -26,7 +26,7 @@
     }
     
     
-    NSMutableData* requestData = [NSMutableData dataWithData: [parameterString dataUsingEncoding: NSISOLatin2StringEncoding]];
+    NSMutableData* requestData = [NSMutableData dataWithData: [parameterString dataUsingEncoding: NSUTF8StringEncoding]];
     [request setHTTPMethod:@"POST"];
     [request setValue: @"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody: requestData];
