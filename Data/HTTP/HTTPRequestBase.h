@@ -20,7 +20,7 @@
 
 @property (retain) NSString* requestID ;
 
--(id)initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters ;
+-(id) initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters ;
 -(void) startRequest ;
 
 #pragma mark - SubClass Overwrite Methods

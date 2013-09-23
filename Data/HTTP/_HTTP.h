@@ -3,3 +3,5 @@
 #import "HTTPPostRequest.h"
 
 #import "HTTPGetRequest.h"
+
+#import "HTTPUploader.h"

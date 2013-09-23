@@ -1,6 +1,5 @@
 #import "HTTPRequestBase.h"
 
-@interface HTTPPostRequest : HTTPRequestBase {
-}
+@interface HTTPPostRequest : HTTPRequestBase 
 
 @end

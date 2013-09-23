@@ -90,54 +90,13 @@ static NSString * const tableViewCellId = @"tableViewCellId";
     self.searchDisplayController.searchResultsDelegate = self;
     self.searchDisplayController.delegate = self;
     
-    
-    /*
-     SearchBar as header and at the top:
-     The search bar always stays at the top if the table view is scrolled down and behaves similar to a section header.
-     
-     Note: For this scrolling behavior it is *essential* that the view controller is a subclass of UIViewController instead of UITableViewController, because UISearchDisplayController adds the dimming view to the searchContentsController's view and because UITableViewController's view is the table view, the dimming view is added to the table view and is only visible when the table view is scrolled to the top. If you can't change the superclass to UIViewController, you'll have to manually set the dimming view's frame by iterating through the table view's view hierarchy when the search begins which is very ugly.
-     */
     [self.view addSubview: self.searchBar];
     self.tableView.contentInset = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds), 0, 0, 0);
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds), 0, 0, 0);
     
 }
 
-#pragma mark - UIScrollViewDelegate Methods
-
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-//    if (scrollView == self.tableView) {         // Don't do anything if the search table view get's scrolled
-//        if (scrollView.contentOffset.y < -CGRectGetHeight(self.searchBar.bounds)) {
-//            self.searchBar.layer.zPosition = 0; // Make sure the search bar is below the section index titles control when scrolling up
-//        } else {
-//            self.searchBar.layer.zPosition = 1; // Make sure the search bar is above the section headers when scrolling down
-//        }
-//        
-//        CGRect searchBarFrame = self.searchBar.frame;
-//        searchBarFrame.origin.y = MAX(scrollView.contentOffset.y, -CGRectGetHeight(searchBarFrame));
-//        
-//        self.searchBar.frame = searchBarFrame;
-//    }
-//}
-
 #pragma mark - TableView Delegate and DataSource
-
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section; {
-//    UIView *headerView = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 30)] autorelease];
-//    if (section == 2)
-//        [headerView setBackgroundColor:[UIColor redColor]];
-//    else
-//        [headerView setBackgroundColor:[UIColor grayColor]];
-//    return headerView;
-//}
-
-//- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-//    if (tableView == self.tableView) {
-//        return [[NSArray arrayWithObject:UITableViewIndexSearch] arrayByAddingObjectsFromArray:[[UILocalizedIndexedCollation currentCollation] sectionIndexTitles]];
-//    } else {
-//        return nil;
-//    }
-//}
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (tableView == self.tableView) {
