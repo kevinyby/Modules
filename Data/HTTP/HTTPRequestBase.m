@@ -48,8 +48,8 @@
 
 #pragma mark - NSURLConnectionDelegate Methods
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    if (delegate && [delegate respondsToSelector: @selector(didFailPostWithError:error:)] ) {
-        [delegate didFailPostWithError: self error:error];
+    if (delegate && [delegate respondsToSelector: @selector(didFailRequestWithError:error:)] ) {
+        [delegate didFailRequestWithError: self error:error];
     }
 }
 
@@ -57,8 +57,8 @@
 //- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)response {}
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    if (delegate && [delegate respondsToSelector: @selector(didSucceedPost:response:)] ) {
-        [delegate didSucceedPost: self response:response];
+    if (delegate && [delegate respondsToSelector: @selector(didSucceedRequest:response:)] ) {
+        [delegate didSucceedRequest: self response:(NSHTTPURLResponse*)response];
     }
 }
 

@@ -35,8 +35,8 @@
 
 @optional
 
--(void) didFailPostWithError: (HTTPRequestBase*)request error:(NSError*)error ;
--(void) didSucceedPost: (HTTPRequestBase*)request response:(NSHTTPURLResponse*)response;
+-(void) didFailRequestWithError: (HTTPRequestBase*)request error:(NSError*)error ;
+-(void) didSucceedRequest: (HTTPRequestBase*)request response:(NSHTTPURLResponse*)response;
 -(void) didReceiveData: (HTTPRequestBase*)request data:(NSData*)data ;
 -(void) didFinishReceiveData: (HTTPRequestBase*)request data:(NSData*)data;
 
