@@ -21,6 +21,8 @@
         NSMutableURLRequest* request = [self getURLRequest: urlString parameters:parameters];
         connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
         self.requestID = [NSString stringWithFormat: @"%p", self];
+        
+        receiveData = [[NSMutableData alloc] initWithCapacity:0];
     }
     
     return self;
@@ -34,6 +36,7 @@
 - (void)dealloc
 {
     [connection release];
+    [receiveData release];
     [super dealloc];
 }
 
@@ -60,6 +63,7 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    [receiveData appendData: data];
     if (delegate && [delegate respondsToSelector: @selector(didReceiveData:data:)] ) {
         [delegate didReceiveData: self data:data];
     }
@@ -72,8 +76,8 @@
 //- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse *)cachedResponse {}
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    if (delegate && [delegate respondsToSelector: @selector(didFinishReceiveData:)]) {
-        [delegate didFinishReceiveData: self];
+    if (delegate && [delegate respondsToSelector: @selector(didFinishReceiveData:data:)]) {
+        [delegate didFinishReceiveData: self data:receiveData];
     }
 }
 

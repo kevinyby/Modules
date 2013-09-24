@@ -13,6 +13,8 @@
 @protocol HTTPRequestDelegate;
 
 @interface HTTPRequestBase : NSObject <NSURLConnectionDataDelegate> {
+    @private
+    NSMutableData* receiveData;
     NSURLConnection* connection;
 }
 
@@ -36,6 +38,6 @@
 -(void) didFailPostWithError: (HTTPRequestBase*)request error:(NSError*)error ;
 -(void) didSucceedPost: (HTTPRequestBase*)request response:(NSHTTPURLResponse*)response;
 -(void) didReceiveData: (HTTPRequestBase*)request data:(NSData*)data ;
--(void) didFinishReceiveData: (HTTPRequestBase*)request;
+-(void) didFinishReceiveData: (HTTPRequestBase*)request data:(NSData*)data;
 
 @end
