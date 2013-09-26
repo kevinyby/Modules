@@ -19,7 +19,7 @@
     
     if (self) {
         NSMutableURLRequest* request = [self getURLRequest: urlString parameters:parameters];
-        connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+        urlconnection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
         self.requestID = [NSString stringWithFormat: @"%p", self];
         
         receiveData = [[NSMutableData alloc] initWithCapacity:0];
@@ -29,13 +29,13 @@
 }
 
 -(void) startRequest {
-    [connection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
-    [connection start];
+    [urlconnection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    [urlconnection start];
 }
 
 - (void)dealloc
 {
-    [connection release];
+    [urlconnection release];
     [receiveData release];
     [super dealloc];
 }
@@ -57,8 +57,22 @@
 //- (NSURLRequest *)connection:(NSURLConnection *)connection willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)response {}
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    
+    // Note here :  statusCode >= 400 , we regard it as request fail
+    NSHTTPURLResponse* httpURLReqponse = (NSHTTPURLResponse*) response;
+    NSInteger statusCode = [httpURLReqponse statusCode];
+    if( statusCode >= 400) {
+        NSMutableDictionary* userInfo = [NSMutableDictionary dictionaryWithDictionary: [httpURLReqponse allHeaderFields]];
+        NSString* suggestedFilename = httpURLReqponse.suggestedFilename;
+        NSString* mimetype = httpURLReqponse.MIMEType;
+        [userInfo setObject: suggestedFilename forKey:@"suggestedFilename"];
+        [userInfo setObject: mimetype forKey:@"mimetype"];
+        [userInfo setObject: [NSNumber numberWithInt: statusCode] forKey:@"statusCode"];
+        [self connection: connection didFailWithError: [NSError errorWithDomain: httpURLReqponse.URL.host code:statusCode userInfo:userInfo]];
+    }
+    
     if (delegate && [delegate respondsToSelector: @selector(didSucceedRequest:response:)] ) {
-        [delegate didSucceedRequest: self response:(NSHTTPURLResponse*)response];
+        [delegate didSucceedRequest: self response:httpURLReqponse];
     }
 }
 

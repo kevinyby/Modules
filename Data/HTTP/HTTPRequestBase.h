@@ -15,7 +15,7 @@
 @interface HTTPRequestBase : NSObject <NSURLConnectionDataDelegate> {
     @private
     NSMutableData* receiveData;
-    NSURLConnection* connection;
+    NSURLConnection* urlconnection;
 }
 
 @property (assign) id<HTTPRequestDelegate> delegate;
