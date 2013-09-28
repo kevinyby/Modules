@@ -76,7 +76,7 @@
 }
 
 // JAVASCRIPT SOURCE: http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.3.js
-// OBJECTIVE-C SOURCE : https://github.com/NachoSoto/NSKeyframeAnimation
+// OBJECTIVE-C SOURCE : https://github.com/NachoSoto/NSBKeyframeAnimation
 // REFERENCE:  http://gsgd.co.uk/sandbox/jquery/easing/
 // EASING DEMO : http://jqueryui.com/resources/demos/effect/easing.html
 
