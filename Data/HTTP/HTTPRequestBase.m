@@ -1,5 +1,7 @@
 #import "HTTPRequestBase.h"
 
+#define NetworkTimeOutInterval 30
+
 @implementation HTTPRequestBase
 
 @synthesize delegate;
@@ -15,14 +17,23 @@
 }
 
 -(id)initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters {
+    return [self initWithURLString:urlString parameters:parameters timeoutInterval:NetworkTimeOutInterval];
+}
+
+-(id)initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters timeoutInterval:(NSTimeInterval)timeoutInterval {
     self = [super init];
     
     if (self) {
-        NSMutableURLRequest* request = [self getURLRequest: urlString parameters:parameters];
+        
+        NSURL* url = [self getURL: urlString parameters:parameters];
+        NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:timeoutInterval] ;
+        [self applyRequest: request parameters:parameters];
+        
         urlconnection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
         self.requestID = [NSString stringWithFormat: @"%p", self];
         
         receiveData = [[NSMutableData alloc] initWithCapacity:0];
+        
     }
     
     return self;
@@ -40,10 +51,15 @@
     [super dealloc];
 }
 
-#pragma mark - SubClass Overwrite Methods
--(NSMutableURLRequest*) getURLRequest: (NSString*)urlString parameters:(NSDictionary*)parameters {
-    return nil;
+#pragma mark - SubClass Optional Overwrite Methods
+-(NSURL*) getURL: (NSString*)urlString parameters:(NSDictionary*)parameters {
+    return [NSURL URLWithString: urlString];
 }
+
+#pragma mark - SubClass Required Overwrite Methods
+-(void) applyRequest:(NSMutableURLRequest*)request parameters:(NSDictionary*)parameters {}
+
+
 
 
 #pragma mark - NSURLConnectionDelegate Methods

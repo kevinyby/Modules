@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#define NetworkTimeOutInterval 25
-
 @protocol HTTPRequestDelegate;
 
 @interface HTTPRequestBase : NSObject <NSURLConnectionDataDelegate> {
@@ -23,10 +21,11 @@
 @property (retain) NSString* requestID ;
 
 -(id) initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters ;
+-(id)initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters timeoutInterval:(NSTimeInterval)timeoutInterval ;
 -(void) startRequest ;
 
 #pragma mark - SubClass Overwrite Methods
--(NSMutableURLRequest*) getURLRequest: (NSString*)urlString parameters:(NSDictionary*)parameters ;
+-(void) applyRequest:(NSMutableURLRequest*)request parameters:(NSDictionary*)parameters;
 
 @end
 

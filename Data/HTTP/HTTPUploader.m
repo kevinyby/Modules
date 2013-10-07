@@ -27,20 +27,9 @@
  *          NSString with key UPLOAD_MIMEType
  *          NSDictionary with key UPLOAD_FormParameters
  **/
--(NSMutableURLRequest*) getURLRequest: (NSString*)urlString parameters:(NSDictionary*)parameters {
-
-    NSURL* url = [NSURL URLWithString: urlString];
-    
-    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url
-                                                           cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                       timeoutInterval:NetworkTimeOutInterval] ;
-    
-    
-
+-(void) applyRequest:(NSMutableURLRequest*)request parameters:(NSDictionary*)parameters {
     [request setHTTPMethod:@"POST"];
     [self setUploadData: request parameters:parameters];
-    
-    return request;
 }
 
 -(void) setUploadData: (NSMutableURLRequest*)request parameters:(NSDictionary*)parameters {

@@ -3,8 +3,11 @@
 @implementation HTTPGetRequest
 
 #pragma mark - Overwrite Methods
--(NSMutableURLRequest*) getURLRequest: (NSString*)urlString parameters:(NSDictionary*)parameters {
-    
+-(void) applyRequest:(NSMutableURLRequest*)request parameters:(NSDictionary*)parameters {
+    [request setHTTPMethod:@"GET"];
+}
+
+-(NSURL*) getURL: (NSString*)urlString parameters:(NSDictionary*)parameters {
     NSMutableString* parameterString = [NSMutableString stringWithString: urlString];
     
     for(NSString* key in parameters) {
@@ -19,13 +22,7 @@
     
     NSURL* url = [NSURL URLWithString: parameterString];
     
-    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url
-                                                           cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                       timeoutInterval:NetworkTimeOutInterval] ;
-    
-    [request setHTTPMethod:@"GET"];
-    
-    return request;
+    return url;
 }
 
 @end

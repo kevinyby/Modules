@@ -3,14 +3,7 @@
 @implementation HTTPPostRequest
 
 #pragma mark - Overwrite Methods
--(NSMutableURLRequest*) getURLRequest: (NSString*)urlString parameters:(NSDictionary*)parameters {
-    
-    NSURL* url = [NSURL URLWithString: urlString];
-    
-    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url
-                                                                cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                                            timeoutInterval:NetworkTimeOutInterval] ;
-    
+-(void) applyRequest:(NSMutableURLRequest*)request parameters:(NSDictionary*)parameters {
     
     NSMutableString* parameterString = [NSMutableString stringWithCapacity:0];
     
@@ -30,8 +23,6 @@
     [request setHTTPMethod:@"POST"];
     [request setValue: @"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody: requestData];
-    
-    return request;
 }
 
 @end
