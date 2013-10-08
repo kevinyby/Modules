@@ -1,18 +1,13 @@
 #import "SearchBarTableViewController.h"
-#import <QuartzCore/QuartzCore.h>
 
 static NSString * const tableViewCellId = @"tableViewCellId";
 
 @interface SearchBarTableViewController () {
-    
+    NSMutableArray* _contents;
+    NSMutableArray* _sections;
 }
 
-@property(nonatomic, copy) NSArray *sectionContents;
-
 @property(nonatomic, copy) NSArray *filteredContents;
-
-@property(nonatomic, strong, readwrite) UITableView *tableView;
-@property(nonatomic, strong, readwrite) UISearchBar *searchBar;
 
 // UIViewController doesn't retain the search display controller if it's created programmatically: http://openradar.appspot.com/10254897
 @property(nonatomic, strong) UISearchDisplayController *strongSearchDisplayController; 
@@ -21,46 +16,48 @@ static NSString * const tableViewCellId = @"tableViewCellId";
 
 @implementation SearchBarTableViewController
 
+@synthesize contentsDictionary;
+@synthesize showSectionTitle;
 
--(void)setContents:(NSArray *)contents {
-    if (_contents) {
-        [_contents release];
-        _contents = nil;
-    }
-    _contents = [contents retain];
-    
-    UILocalizedIndexedCollation *collation = [UILocalizedIndexedCollation currentCollation];
-    
-    int count = [[collation sectionTitles] count];
-    NSMutableArray *unsortedSections = [[NSMutableArray alloc] initWithCapacity:count];
-    for (NSUInteger i = 0; i < count; i++) {
-        [unsortedSections addObject:[NSMutableArray array]];
-    }
-    
-    for (NSString *personName in _contents) {
-        NSInteger index = [collation sectionForObject:personName collationStringSelector:@selector(description)];
-        [[unsortedSections objectAtIndex:index] addObject:personName];
-    }
-    
-    NSMutableArray *sortedSections = [[NSMutableArray alloc] initWithCapacity:unsortedSections.count];
-    for (NSMutableArray *section in unsortedSections) {
-        [sortedSections addObject:[collation sortedArrayFromArray:section collationStringSelector:@selector(description)]];
-    }
-    [unsortedSections release];
-    
-    self.sectionContents = sortedSections;
-    [sortedSections release];
-}
+@synthesize tableView;
+@synthesize searchBar;
 
 #pragma mark - Override Methods
 
+-(id)init {
+    self = [super init];
+    if (self) {
+        showSectionTitle = YES;
+        _contents = [[NSMutableArray alloc] init];
+        _sections = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
+-(void) setContentsDictionary:(NSDictionary *)contentsDictionaryObj {
+    if (contentsDictionary) {
+        [contentsDictionary release];
+        contentsDictionary = nil;
+    }
+    contentsDictionary = [contentsDictionaryObj retain];
+    [_contents removeAllObjects];
+    [_sections removeAllObjects];
+    
+    for (NSString* key in contentsDictionary) {
+        [_sections addObject: key];
+        [_contents addObjectsFromArray: [contentsDictionary objectForKey: key]];
+    }
+}
+
 -(void)dealloc {
+    [contentsDictionary release];
     [_contents release];
-    [_sectionContents release];
+    [_sections release];
+    
     [_filteredContents release];
     
-    [_tableView release];
-    [_searchBar release];
+    [tableView release];
+    [searchBar release];
     
     [super dealloc];
 }
@@ -96,44 +93,48 @@ static NSString * const tableViewCellId = @"tableViewCellId";
     
 }
 
+
+#pragma mark - Public Methods
+
+-(NSString*) getSectionTitle: (NSInteger)section {
+    return showSectionTitle ? [_sections objectAtIndex: section] : Nil;
+}
+
 #pragma mark - TableView Delegate and DataSource
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (tableView == self.tableView) {
-        if ([[self.sectionContents objectAtIndex:section] count] > 0) {
-            NSString* titleForHead = [[[UILocalizedIndexedCollation currentCollation] sectionTitles] objectAtIndex:section];
-            return titleForHead;
-        } else {
-            return nil;
-        }
-    } else {
-        return nil;
-    }
+- (NSString *)tableView:(UITableView *)tableViewObj titleForHeaderInSection:(NSInteger)section {
+    return showSectionTitle ? [_sections objectAtIndex: section] : nil;
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (tableView == self.tableView) {
-        return self.sectionContents.count;
-    } else {
-        return 1;
-    }
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableViewObj {
+    return showSectionTitle ? _sections.count : 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (tableView == self.tableView) {
-        return [[self.sectionContents objectAtIndex:section] count];
+- (NSInteger)tableView:(UITableView *)tableViewObj numberOfRowsInSection:(NSInteger)section {
+    
+    // in normal mode
+    if (tableViewObj == tableView) {
+        NSString* sectionKey = [_sections objectAtIndex: section];
+        NSArray* sectionContents = [contentsDictionary objectForKey: sectionKey];
+        return sectionContents.count;
+        
     // in search mode
     } else {
         return self.filteredContents.count;
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:tableViewCellId];
+- (UITableViewCell *)tableView:(UITableView *)tableViewObj cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableViewObj dequeueReusableCellWithIdentifier:tableViewCellId];
     if (cell == nil) cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:tableViewCellId] autorelease];  // auto release , no problem ???
     
-    if (tableView == self.tableView) {
-        cell.textLabel.text = [[self.sectionContents objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    // in normal mode
+    if (tableViewObj == tableView) {
+        NSString* sectionKey = [_sections objectAtIndex: indexPath.section];
+        NSArray* sectionContents = [contentsDictionary objectForKey: sectionKey];
+        int row = indexPath.row ;
+        cell.textLabel.text = [sectionContents objectAtIndex: row];
+        
     // in search mode
     } else {
         cell.textLabel.text = [self.filteredContents objectAtIndex:indexPath.row];
@@ -155,13 +156,14 @@ static NSString * const tableViewCellId = @"tableViewCellId";
     
     // when enter character
     if (searchString.length > 0) { 
-        NSArray *personsToSearch = _contents;
+        NSArray *searchContents = _contents;
         
-        self.filteredContents = [personsToSearch filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"SELF contains[cd] %@", searchString]];
+        self.filteredContents = [searchContents filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"SELF contains[cd] %@", searchString]];
         
     // in search mode, when delete the search string
     } else {
         self.filteredContents = _contents;
+        [tableView reloadData];
     }
     
     return YES;
