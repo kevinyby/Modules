@@ -9,7 +9,6 @@
 @synthesize requestID;
 
 - (id)init {
-    [self dealloc];
     @throw [NSException exceptionWithName:@"Reject Exception"
                                    reason:@"Invoke initWithURLString:parameters: instead "
                                  userInfo:nil];
@@ -44,12 +43,6 @@
     [urlconnection start];
 }
 
-- (void)dealloc
-{
-    [urlconnection release];
-    [receiveData release];
-    [super dealloc];
-}
 
 #pragma mark - SubClass Optional Overwrite Methods
 -(NSURL*) getURL: (NSString*)urlString parameters:(NSDictionary*)parameters {

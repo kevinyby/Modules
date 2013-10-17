@@ -11,7 +11,6 @@
     UIScrollView* scrollView = [[UIScrollView alloc] init];
     scrollView.frame = [[UIScreen mainScreen] bounds];
     self.view = scrollView;
-    [scrollView release];
 }
 
 @end

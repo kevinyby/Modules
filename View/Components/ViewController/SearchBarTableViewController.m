@@ -37,10 +37,9 @@ static NSString * const tableViewCellId = @"tableViewCellId";
 
 -(void) setContentsDictionary:(NSDictionary *)contentsDictionaryObj {
     if (contentsDictionary) {
-        [contentsDictionary release];
         contentsDictionary = nil;
     }
-    contentsDictionary = [contentsDictionaryObj retain];
+    contentsDictionary = contentsDictionaryObj;
     [_contents removeAllObjects];
     [_sections removeAllObjects];
     
@@ -50,18 +49,6 @@ static NSString * const tableViewCellId = @"tableViewCellId";
     }
 }
 
--(void)dealloc {
-    [contentsDictionary release];
-    [_contents release];
-    [_sections release];
-    
-    [filteredContents release];
-    
-    [tableView release];
-    [searchBar release];
-    
-    [super dealloc];
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -79,7 +66,6 @@ static NSString * const tableViewCellId = @"tableViewCellId";
     
     UISearchDisplayController* controller = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
     self.strongSearchDisplayController = controller;
-    [controller release];
     self.searchDisplayController.searchResultsDataSource = self;
     self.searchDisplayController.searchResultsDelegate = self;
     self.searchDisplayController.delegate = self;
@@ -123,7 +109,7 @@ static NSString * const tableViewCellId = @"tableViewCellId";
 
 - (UITableViewCell *)tableView:(UITableView *)tableViewObj cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableViewObj dequeueReusableCellWithIdentifier:tableViewCellId];
-    if (cell == nil) cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:tableViewCellId] autorelease];  // auto release , no problem ???
+    if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:tableViewCellId];  // auto release , no problem ???
     
     // in normal mode
     if (tableViewObj == tableView) {

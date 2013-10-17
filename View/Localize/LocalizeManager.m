@@ -14,7 +14,7 @@ static NSString* currentLocalize = nil ;
 @implementation LocalizeManager
 
 +(void)initialize {
-    currentLocalize = [IOSCurrentLocalize retain];
+    currentLocalize = IOSCurrentLocalize;
     
 //    if (ISSIMULATOR) {
         if ([currentLocalize isEqualToString: Localize_zh_Hans]) currentLocalize = Localize_zh_CN ;
@@ -26,7 +26,6 @@ static NSString* currentLocalize = nil ;
 
 +(void) setCurrentLocalize: (NSString*)localize {
     if (currentLocalize) {
-        [currentLocalize release];
         currentLocalize = nil;
     }
     currentLocalize = localize;

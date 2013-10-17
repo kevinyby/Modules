@@ -16,9 +16,9 @@
     NSURLConnection* urlconnection;
 }
 
-@property (assign) id<HTTPRequestDelegate> delegate;
+@property (weak) id<HTTPRequestDelegate> delegate;
 
-@property (retain) NSString* requestID ;
+@property (strong) NSString* requestID ;
 
 -(id) initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters ;
 -(id)initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters timeoutInterval:(NSTimeInterval)timeoutInterval ;
