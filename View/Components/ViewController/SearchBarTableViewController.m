@@ -21,6 +21,7 @@ static NSString * const tableViewCellId = @"tableViewCellId";
 
 @synthesize tableView;
 @synthesize searchBar;
+@synthesize filteredContents;
 
 #pragma mark - Override Methods
 
@@ -54,7 +55,7 @@ static NSString * const tableViewCellId = @"tableViewCellId";
     [_contents release];
     [_sections release];
     
-    [_filteredContents release];
+    [filteredContents release];
     
     [tableView release];
     [searchBar release];
@@ -65,17 +66,13 @@ static NSString * const tableViewCellId = @"tableViewCellId";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UITableView* table = [[UITableView alloc] initWithFrame: self.view.bounds];
-    self.tableView = table;
-    [table release];
+    tableView = [[UITableView alloc] initWithFrame: self.view.bounds];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     
     [self.view addSubview:self.tableView];
     
-    UISearchBar* bar = [[UISearchBar alloc] init];
-    self.searchBar = bar;
-    [bar release];
+    searchBar = [[UISearchBar alloc] init];
     self.searchBar.placeholder = @"Search";
     self.searchBar.delegate = self;
     [self.searchBar sizeToFit];

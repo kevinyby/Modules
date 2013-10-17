@@ -8,8 +8,8 @@
 @property(nonatomic, retain) NSDictionary* contentsDictionary;
 @property(nonatomic, assign) BOOL showSectionTitle;
 
-@property(nonatomic, strong) UITableView *tableView;
-@property(nonatomic, strong) UISearchBar *searchBar;
+@property(nonatomic, strong, readonly) UITableView *tableView;
+@property(nonatomic, strong, readonly) UISearchBar *searchBar;
 
 
 -(NSString*) getSectionTitle: (NSInteger)section ;
