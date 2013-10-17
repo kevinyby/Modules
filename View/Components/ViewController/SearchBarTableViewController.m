@@ -1,5 +1,13 @@
 #import "SearchBarTableViewController.h"
 
+
+#define IOS_VERSION [[[UIDevice currentDevice] systemVersion] floatValue]
+
+#define STATUSBAR_ORIENTATION [UIApplication sharedApplication].statusBarOrientation
+#define STATUSBAR_HEIGHT [UIApplication sharedApplication].statusBarFrame.size.height
+#define STATUSBAR_WIDTH [UIApplication sharedApplication].statusBarFrame.size.width
+#define STATUSBAR_HIDDEN [UIApplication sharedApplication].statusBarHidden
+
 static NSString * const tableViewCellId = @"tableViewCellId";
 
 @interface SearchBarTableViewController () {
@@ -73,7 +81,6 @@ static NSString * const tableViewCellId = @"tableViewCellId";
     [self.view addSubview: self.searchBar];
     self.tableView.contentInset = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds), 0, 0, 0);
     self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(CGRectGetHeight(self.searchBar.bounds), 0, 0, 0);
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -84,8 +91,30 @@ static NSString * const tableViewCellId = @"tableViewCellId";
 
 #pragma mark - Public Methods
 
+-(void) setViewFrame: (CGRect)frame {
+    self.view.frame = frame;
+    self.searchBar.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.searchBar.frame.size.height);
+    self.tableView.frame = self.view.bounds;
+    [self fixStatusBarFrameOnIOS7];
+}
+
+-(void) setViewBounds: (CGRect)bounds {
+    self.view.bounds = bounds;
+    self.searchBar.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.searchBar.frame.size.height);
+    self.tableView.frame = self.view.bounds;
+    [self fixStatusBarFrameOnIOS7];
+}
+
 -(NSString*) getSectionTitle: (NSInteger)section {
     return showSectionTitle ? [_sections objectAtIndex: section] : Nil;
+}
+
+-(void) fixStatusBarFrameOnIOS7 {
+    BOOL navBarVisible = self.navigationController && !self.navigationController.isNavigationBarHidden;
+    CGFloat height = navBarVisible ? 0 : UIInterfaceOrientationIsPortrait(STATUSBAR_ORIENTATION) ? STATUSBAR_HEIGHT : STATUSBAR_WIDTH;
+    if (IOS_VERSION >= 7.0 && ! STATUSBAR_HIDDEN) {
+        searchBar.frame = CGRectMake(0, height, searchBar.bounds.size.width, searchBar.bounds.size.height);
+    }
 }
 
 #pragma mark - TableView Delegate and DataSource
@@ -134,12 +163,30 @@ static NSString * const tableViewCellId = @"tableViewCellId";
 
 #pragma mark - UISearchDisplayDelegate
 
+static bool flag = NO;
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
     self.filteredContents = nil;
+
+    // fix Pair A  : isNavigationBarHidden = YES
+    if (IOS_VERSION >= 7.0 && ! STATUSBAR_HIDDEN) {
+        BOOL navBarVisible = self.navigationController && !self.navigationController.isNavigationBarHidden;
+        flag = navBarVisible;
+        
+        CGFloat height = UIInterfaceOrientationIsPortrait(STATUSBAR_ORIENTATION) ? STATUSBAR_HEIGHT : STATUSBAR_WIDTH;
+        if (navBarVisible) searchBar.frame = CGRectMake(0, height, searchBar.bounds.size.width, searchBar.bounds.size.height);
+    }
 }
-- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller {
+- (void) searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
     self.filteredContents = nil;
+    
+    // fix Pair B : isNavigationBarHidden = NO
+    if (IOS_VERSION >= 7.0 && ! STATUSBAR_HIDDEN) {
+        BOOL navBarVisible = self.navigationController && !self.navigationController.isNavigationBarHidden;
+        if (flag != navBarVisible) searchBar.frame = CGRectMake(0, 0, searchBar.bounds.size.width, searchBar.bounds.size.height);
+    }
 }
+
+
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
     
     // when enter character

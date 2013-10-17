@@ -12,6 +12,11 @@
 @property(nonatomic, strong, readonly) UISearchBar *searchBar;
 
 
+-(void) fixStatusBarFrameOnIOS7 ;
+
+-(void) setViewFrame: (CGRect)frame ;
+-(void) setViewBounds: (CGRect)bounds ;
+
 -(NSString*) getSectionTitle: (NSInteger)section ;
 
 @end
