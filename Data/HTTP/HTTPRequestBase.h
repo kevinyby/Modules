@@ -24,13 +24,25 @@
 -(id) initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters ;
 -(id)initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters timeoutInterval:(NSTimeInterval)timeoutInterval ;
 
+
+
 -(void) startRequest ;
+-(void) startRequest: (void (^)(NSURLResponse* response, NSData* data, NSError* connectionError))completeHandler ;      // no need delegate
+
+
 
 #pragma mark - SubClass Overwrite Methods
 -(void) applyRequest:(NSMutableURLRequest*)request parameters:(NSDictionary*)parameters;
 
 @end
 
+
+
+/**
+ *
+ *   HTTPRequestDelegate
+ *
+ */
 
 @protocol HTTPRequestDelegate <NSObject>
 

@@ -12,6 +12,7 @@
 
 @synthesize delegate;
 
+@synthesize request;
 @synthesize requestID;
 
 - (id)init {
@@ -47,6 +48,11 @@
 -(void) startRequest {
     [urlconnection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     [urlconnection start];
+}
+
+-(void) startRequest: (void (^)(NSURLResponse* response, NSData* data, NSError* connectionError))completeHandler {
+    NSOperationQueue* queue = [[NSOperationQueue alloc] init];
+    [NSURLConnection sendAsynchronousRequest: request queue:queue completionHandler:completeHandler];
 }
 
 
