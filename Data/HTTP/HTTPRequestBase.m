@@ -2,6 +2,12 @@
 
 #define NetworkTimeOutInterval 30
 
+@interface HTTPRequestBase ()
+
+@property (strong) NSURLRequest* request;
+
+@end
+
 @implementation HTTPRequestBase
 
 @synthesize delegate;
@@ -25,14 +31,14 @@
     if (self) {
         
         NSURL* url = [self getURL: urlString parameters:parameters];
-        NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:timeoutInterval] ;
-        [self applyRequest: request parameters:parameters];
+        NSMutableURLRequest* urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:timeoutInterval] ;
+        [self applyRequest: urlRequest parameters:parameters];
+        self.request = urlRequest;
         
-        urlconnection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+        urlconnection = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self startImmediately:NO];
         self.requestID = [NSString stringWithFormat: @"%p", self];
         
         receiveData = [[NSMutableData alloc] initWithCapacity:0];
-        
     }
     
     return self;

@@ -19,9 +19,11 @@
 @property (weak) id<HTTPRequestDelegate> delegate;
 
 @property (strong) NSString* requestID ;
+@property (readonly) NSURLRequest* request;
 
 -(id) initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters ;
 -(id)initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters timeoutInterval:(NSTimeInterval)timeoutInterval ;
+
 -(void) startRequest ;
 
 #pragma mark - SubClass Overwrite Methods
