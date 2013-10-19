@@ -13,7 +13,7 @@
 @synthesize delegate;
 
 @synthesize request;
-@synthesize requestID;
+@synthesize identification;
 
 - (id)init {
     @throw [NSException exceptionWithName:@"Reject Exception"
@@ -37,7 +37,7 @@
         self.request = urlRequest;
         
         urlconnection = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self startImmediately:NO];
-        self.requestID = [NSString stringWithFormat: @"%p", self];
+        self.identification = [NSString stringWithFormat: @"%p", self];
         
         receiveData = [[NSMutableData alloc] initWithCapacity:0];
     }

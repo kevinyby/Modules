@@ -18,7 +18,7 @@
 
 @property (weak) id<HTTPRequestDelegate> delegate;
 
-@property (strong) NSString* requestID ;
+@property (strong) NSString* identification ;
 @property (readonly) NSURLRequest* request;
 
 -(id) initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters ;
