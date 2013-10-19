@@ -4,6 +4,6 @@
 #import "ImageHelper.h"
 #import "IterateHelper.h"
 #import "ArrayListHelper.h"
-#import "ArrayFeedHelper.h"
+#import "ArrayHelper.h"
 
 #import "DictionaryHelper.h"

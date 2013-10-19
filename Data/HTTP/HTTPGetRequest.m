@@ -20,7 +20,8 @@
         }
     }
     
-    NSURL* url = [NSURL URLWithString: parameterString];
+    NSString* encodeURL = [parameterString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURL* url = [NSURL URLWithString: encodeURL];
     
     return url;
 }

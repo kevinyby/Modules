@@ -1,6 +1,6 @@
-#import "ArrayFeedHelper.h"
+#import "ArrayHelper.h"
 
-@implementation ArrayFeedHelper
+@implementation ArrayHelper
 
 +(void) add: (NSMutableArray*)repository objs:(id)obj, ... {
     id arg = nil;

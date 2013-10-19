@@ -58,7 +58,8 @@
 
 #pragma mark - SubClass Optional Overwrite Methods
 -(NSURL*) getURL: (NSString*)urlString parameters:(NSDictionary*)parameters {
-    return [NSURL URLWithString: urlString];
+    NSString* encodeURL = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    return [NSURL URLWithString: encodeURL];
 }
 
 #pragma mark - SubClass Required Overwrite Methods
