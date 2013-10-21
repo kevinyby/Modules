@@ -24,8 +24,9 @@
         label.transform = CGAffineTransformRotate(label.transform, rotate / 100.0);
         
         [label isKindOfClass: [StrokeLabel class]] ?
-        [self applyStroke: config onObject:(StrokeLabel*)label],
-        [self applyGradient: config onObject:(StrokeLabel*)label] : nil;
+        [self applyStroke: config onObject:(StrokeLabel*)label] ,
+        [label isKindOfClass: [GradientLabel class]] ?
+        [self applyGradient: config onObject:(GradientLabel*)label] : nil : nil;
         
         [label setNeedsDisplay];
     }
@@ -48,7 +49,7 @@
     }
 }
 
--(void) applyGradient: (NSDictionary*)config onObject:(StrokeLabel*)object {
+-(void) applyGradient: (NSDictionary*)config onObject:(GradientLabel*)object {
     NSDictionary* gradientDic = [config objectForKey: @"GRADIENT"];
     NSNumber* countNum = [gradientDic objectForKey: @"Point.Count"];
     object.gradientCount = countNum ? [countNum intValue] : 2 ;
