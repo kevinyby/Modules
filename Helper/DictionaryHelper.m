@@ -15,4 +15,18 @@
     }
 }
 
++(void) deepCopy: (NSDictionary*)source to:(NSMutableDictionary*)destination  {
+    for (NSString* key in source) {
+        id obj = [source objectForKey: key];
+        
+        if ([obj isKindOfClass: [NSDictionary class]]) {
+            NSMutableDictionary* subDestination = [NSMutableDictionary dictionary];
+            [DictionaryHelper deepCopy:obj to:subDestination];
+            obj = subDestination;
+        }
+        [destination setObject: obj forKey:key];
+        
+    }
+}
+
 @end

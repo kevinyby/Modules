@@ -1,5 +1,5 @@
 #import "TextFormatter.h"
-#import "StrokeLabel.h"
+#import "GradientLabel.h"
 
 @implementation TextFormatter
 
