@@ -25,7 +25,7 @@
  *          NSString with key UPLOAD_FileName
  *      @optional content:
  *          NSString with key UPLOAD_MIMEType
- *          NSDictionary with key UPLOAD_FormParameters
+ *          NSDictionary with key UPLOAD_FormParameters , can add html <form> </from> data in it.
  **/
 -(void) applyRequest:(NSMutableURLRequest*)request parameters:(NSDictionary*)parameters {
     [request setHTTPMethod:@"POST"];
@@ -35,7 +35,7 @@
 -(void) setUploadData: (NSMutableURLRequest*)request parameters:(NSDictionary*)parameters {
     NSData* uploadData = [parameters objectForKey: UPLOAD_Data];                    // required !!
     NSString* fileName = [parameters objectForKey: UPLOAD_FileName];
-    NSString* contentType = [parameters objectForKey: UPLOAD_MIMEType];          // image/jpeg ...
+    NSString* contentType = [parameters objectForKey: UPLOAD_MIMEType];             // image/jpeg ...
     NSDictionary* formParameters = [parameters objectForKey: UPLOAD_FormParameters];
     
     NSString* boundaryCharacters = [HTTPUploader randomCharactersByCount: BoundaryLength];
