@@ -100,8 +100,8 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
     [receiveData appendData: data];
-    if (delegate && [delegate respondsToSelector: @selector(didReceiveData:data:)] ) {
-        [delegate didReceiveData: self data:data];
+    if (delegate && [delegate respondsToSelector: @selector(didReceivePieceData:data:)] ) {
+        [delegate didReceivePieceData: self data:data];
     }
 }
 
