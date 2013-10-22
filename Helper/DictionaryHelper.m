@@ -23,6 +23,10 @@
             NSMutableDictionary* subDestination = [NSMutableDictionary dictionary];
             [DictionaryHelper deepCopy:obj to:subDestination];
             obj = subDestination;
+        } else if ([obj isKindOfClass: [NSArray class]]) {
+            NSMutableArray* subDestination = [NSMutableArray array];
+            [ArrayHelper deepCopy: obj to:subDestination];
+            obj = subDestination;
         }
         [destination setObject: obj forKey:key];
         
