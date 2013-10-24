@@ -2,11 +2,14 @@
 
 #define NSFileManager [NSFileManager defaultManager]
 
+#define tmp @"tmp"
+
+
 @implementation FileManager
 
 
 +(NSString*) tmpPath {
-    return [NSHomeDirectory() stringByAppendingPathComponent: Documents];
+    return [NSHomeDirectory() stringByAppendingPathComponent: tmp];
 }
 
 +(NSString*) homePath {
@@ -45,7 +48,8 @@
 #pragma mark - Not Explicit	Public Methods
 
 +(NSArray *)listFileAtPath:(NSString *)directoryPath {
-    NSArray *directoryContent = [NSFileManager contentsOfDirectoryAtPath:directoryPath error:NULL];
+    NSError* error = nil;
+    NSArray *directoryContent = [NSFileManager contentsOfDirectoryAtPath:directoryPath error:&error];
 //    for (int count = 0; count < (int)[directoryContent count]; count++) {
 //        NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
 //    }
@@ -54,7 +58,7 @@
 
 +(void) saveDataToFile: (NSString*)fullPath data:(NSData*)data {
     [self checkOrCreateFolder:fullPath];
-//    [fileManager createFileAtPath:fullPath contents:_data attributes:nil];
+//    [fileManager createFileAtPath:fullPath contents:data attributes:nil];
     [data writeToFile: fullPath atomically:NO];
 }
 
@@ -65,7 +69,7 @@
         // file not exists
         NSString* directoryPath = [fullPath stringByDeletingLastPathComponent];
         if(![NSFileManager fileExistsAtPath:directoryPath]) {
-            // dir not exists
+            // dir not exists, create it
             [NSFileManager createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:&error];
         }
     }

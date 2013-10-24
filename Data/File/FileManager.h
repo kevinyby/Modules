@@ -1,6 +1,5 @@
 #import <Foundation/Foundation.h>
 
-#define tmp @"tmp"
 
 #define Library @"Library"
 
