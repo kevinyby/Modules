@@ -1,4 +1,5 @@
 #import "ArrayHelper.h"
+#import "DictionaryHelper.h"
 
 @implementation ArrayHelper
 

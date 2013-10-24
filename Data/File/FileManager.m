@@ -29,9 +29,14 @@
     return ([NSFileManager fileExistsAtPath:fullPath]);
 }
 
-+(void) saveDataToDocumentWithSubPath: (NSString*)subPath data:(NSData*)data {
-    NSString* fullPath = [[self documentsPath] stringByAppendingPathComponent: subPath];
++(void) writeDataToDocument: (NSString*)filename data:(NSData*)data {
+    NSString* fullPath = [[self documentsPath] stringByAppendingPathComponent: filename];
     [self saveDataToFile: fullPath data:data];
+}
+
++(NSData*) getDataFromDocument: (NSString*)filename {
+    NSString* fullPath = [[self documentsPath] stringByAppendingPathComponent: filename];
+    return [NSData dataWithContentsOfFile: fullPath];
 }
 
 +(NSMutableArray*) getFilesPathsIn: (NSString*)fullPath {
