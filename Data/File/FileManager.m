@@ -1,6 +1,6 @@
 #import "FileManager.h"
 
-#define NSFileManager [NSFileManager defaultManager]
+#define NSFileManagerInstance [NSFileManager defaultManager]
 
 #define tmp @"tmp"
 
@@ -9,6 +9,7 @@
 
 
 +(NSString*) tmpPath {
+//    return NSTemporaryDirectory();        // the has the suffix "/"
     return [NSHomeDirectory() stringByAppendingPathComponent: tmp];
 }
 
@@ -24,9 +25,13 @@
     return [NSHomeDirectory() stringByAppendingPathComponent: Documents];
 }
 
++(void) deleteFile: (NSString*)fullPath {
+    NSError* error = nil;
+    [NSFileManagerInstance removeItemAtPath: fullPath error:&error];
+}
 
-+(BOOL) ifFileExist: (NSString*)fullPath {
-    return ([NSFileManager fileExistsAtPath:fullPath]);
++(BOOL) isFileExist: (NSString*)fullPath {
+    return ([NSFileManagerInstance fileExistsAtPath:fullPath]);
 }
 
 +(void) writeDataToDocument: (NSString*)filename data:(NSData*)data {
@@ -39,46 +44,39 @@
     return [NSData dataWithContentsOfFile: fullPath];
 }
 
-+(NSMutableArray*) getFilesPathsIn: (NSString*)fullPath {
-    NSArray* files = [self listFileAtPath: fullPath];
++(NSMutableArray*) getFilesPathsIn: (NSString*)directoryPath {
+    NSError* error = nil;
+    NSArray *files = [NSFileManagerInstance contentsOfDirectoryAtPath:directoryPath error:&error];
     NSMutableArray* filePaths = [NSMutableArray array];
     for (NSString* file in files) {
-        NSString* path = [fullPath stringByAppendingPathComponent: file];
+        NSString* path = [directoryPath stringByAppendingPathComponent: file];
         if (path) [filePaths addObject: path];
     }
     return filePaths;
 }
 
 
-#pragma mark - Not Explicit	Public Methods
-
-+(NSArray *)listFileAtPath:(NSString *)directoryPath {
-    NSError* error = nil;
-    NSArray *directoryContent = [NSFileManager contentsOfDirectoryAtPath:directoryPath error:&error];
-//    for (int count = 0; count < (int)[directoryContent count]; count++) {
-//        NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
-//    }
-    return directoryContent;
-}
-
-+(void) saveDataToFile: (NSString*)fullPath data:(NSData*)data {
-    [self checkOrCreateFolder:fullPath];
-//    [fileManager createFileAtPath:fullPath contents:data attributes:nil];
-    [data writeToFile: fullPath atomically:NO];
-}
-
-+(void) checkOrCreateFolder: (NSString*)fullPath {
++(void) createFolderIfNotExist: (NSString*)fullPath {
     NSError* error = nil;
     
-    if(![self ifFileExist: fullPath]) {
+    if(![self isFileExist: fullPath]) {
         // file not exists
         NSString* directoryPath = [fullPath stringByDeletingLastPathComponent];
-        if(![NSFileManager fileExistsAtPath:directoryPath]) {
+        if(![NSFileManagerInstance fileExistsAtPath:directoryPath]) {
             // dir not exists, create it
-            [NSFileManager createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:&error];
+            [NSFileManagerInstance createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:&error];
         }
     }
 }
+
+
+#pragma mark - Not Explicit	Public Methods
+
++(void) saveDataToFile: (NSString*)fullPath data:(NSData*)data {
+    [self createFolderIfNotExist:fullPath];
+    [data writeToFile: fullPath atomically:NO];
+}
+
 
 
 @end

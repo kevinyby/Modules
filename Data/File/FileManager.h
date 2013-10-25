@@ -16,13 +16,17 @@
 +(NSString*) libraryPath ;
 +(NSString*) documentsPath ;
 
-+(BOOL) ifFileExist: (NSString*)fullPath ;
++(void) deleteFile: (NSString*)fullPath ;
+
++(BOOL) isFileExist: (NSString*)fullPath ;
+
++(void) createFolderIfNotExist: (NSString*)fullPath ;
 
 // file name can be "/abc/hot.png", the will save to "Documents/abc/hot.png"
 +(NSData*) getDataFromDocument: (NSString*)filename ;
 +(void) writeDataToDocument: (NSString*)filename data:(NSData*)data ;
 
-+(NSMutableArray*) getFilesPathsIn: (NSString*)fullPath ;
++(NSMutableArray*) getFilesPathsIn: (NSString*)directoryPath ;
 
     
 @end
