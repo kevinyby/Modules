@@ -1,26 +1,29 @@
 #import <Foundation/Foundation.h>
 
-
-#define Library @"Library"
-
-#define Documents @"Documents"
-
-
 @interface FileManager : NSObject {
 }
 
+#pragma mark - Path
 // in the last path string do not have "/"
 // in the other word , character "/" is not the tail
-+(NSString*) tmpPath ;
+/** Use stringByAppendingPathComponent: , you really no need to care about this*/
++(NSString*) tempPath: (NSString*)subPath ;
 +(NSString*) homePath ;
 +(NSString*) libraryPath ;
 +(NSString*) documentsPath ;
 
-+(void) deleteFile: (NSString*)fullPath ;
++(NSString*) libraryCachesPath: (NSString*)subPath ;
 
-+(BOOL) isFileExist: (NSString*)fullPath ;
+#pragma mark - Delete , Copy , Move , Create , Check Exist ...
++(NSError*) deleteFile: (NSString*)fullPath ;
+
++(NSError*) copyFile: (NSString*)fileSrcFullPath to:(NSString*)fileDesFullPath ;
++(void) saveDataToFile: (NSString*)fullPath data:(NSData*)data ;
++(NSError*) moveFile: (NSString*)fileSrcFullPath to:(NSString*)fileDesFullPath ;
 
 +(void) createFolderIfNotExist: (NSString*)fullPath ;
++(BOOL) isFileExist: (NSString*)fullPath ;
+
 
 // file name can be "/abc/hot.png", the will save to "Documents/abc/hot.png"
 +(NSData*) getDataFromDocument: (NSString*)filename ;
@@ -28,5 +31,9 @@
 
 +(NSMutableArray*) getFilesPathsIn: (NSString*)directoryPath ;
 
+
+#pragma mark - Util Methods
+
++(BOOL) addSkipBackupAttributeToItemAtURL: (NSURL *)URL ;
     
 @end

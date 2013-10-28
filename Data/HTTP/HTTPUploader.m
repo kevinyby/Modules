@@ -1,5 +1,5 @@
 #import "HTTPUploader.h"
-#import "NSString+Base64.h"
+#import "NSString+Base64.h" // in _Base64.h Module
 
 
 #if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_3
