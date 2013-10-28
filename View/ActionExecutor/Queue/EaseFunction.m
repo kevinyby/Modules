@@ -4,6 +4,12 @@
 
 @implementation EaseFunction
 
+// Warning : Unsequenced modification and access to parameter
+// http://stackoverflow.com/questions/18729323/unsequenced-modification-and-access-to-parameter
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunsequenced"
+
 + (NSKeyframeAnimationFunction)easingFunctionForType: (EasingType)easingType {
     switch (easingType) {
         case NoEasing:
@@ -266,5 +272,9 @@ double NSKeyframeAnimationFunctionEaseInOutBounce(double t, double b, double c, 
     else
         return NSKeyframeAnimationFunctionEaseOutBounce(t*2-d, 0, c, d) * .5 + c*.5 + b;
 }
+
+
+#pragma clang diagnostic pop
+
 
 @end

@@ -90,7 +90,7 @@
 
 #pragma mark - Private Methods
 +(CGPoint) parseGradientPoint: (id)config {
-    float x , y ;
+    float x = 0 , y = 0;
     if ([config isKindOfClass:[NSDictionary class]]) {
         x = [[config objectForKey: @"X"] floatValue];
         y = [[config objectForKey: @"Y"] floatValue];

@@ -85,7 +85,9 @@ static NSString * const tableViewCellId = @"tableViewCellId";
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.translucent = NO;       // important !!!
+//    [self.navigationController setNavigationBarHidden:NO animated:YES];   // be sure this invoke before [self fixStatusBarFrameOnIOS7]
+    [self fixStatusBarFrameOnIOS7];
 }
 
 
