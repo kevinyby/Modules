@@ -162,9 +162,9 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableViewObj didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (tableViewObj != tableView) [self.strongSearchDisplayController setActive:NO]; // [self.strongSearchDisplayController setActive: NO animated:YES];
-}
+//- (void)tableView:(UITableView *)tableViewObj didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+//    if (tableViewObj != tableView) [self.strongSearchDisplayController setActive:NO]; // [self.strongSearchDisplayController setActive: NO animated:YES];
+//}
 
 
 #pragma mark - UISearchDisplayDelegate
