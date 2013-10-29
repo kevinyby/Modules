@@ -8,8 +8,6 @@
 #define STATUSBAR_WIDTH [UIApplication sharedApplication].statusBarFrame.size.width
 #define STATUSBAR_HIDDEN [UIApplication sharedApplication].statusBarHidden
 
-static NSString * const tableViewCellId = @"tableViewCellId";
-
 @interface SearchBarTableViewController () {
     NSMutableArray* _contents;
     NSMutableArray* _sections;
@@ -144,6 +142,8 @@ static NSString * const tableViewCellId = @"tableViewCellId";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableViewObj cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString * const tableViewCellId = @"tableViewCellId";
+    
     UITableViewCell *cell = [tableViewObj dequeueReusableCellWithIdentifier:tableViewCellId];
     if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:tableViewCellId];  // auto release , no problem ???
     
@@ -160,6 +160,10 @@ static NSString * const tableViewCellId = @"tableViewCellId";
     }
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableViewObj didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableViewObj != tableView) [self.strongSearchDisplayController setActive:NO]; // [self.strongSearchDisplayController setActive: NO animated:YES];
 }
 
 
