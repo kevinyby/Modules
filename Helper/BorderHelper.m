@@ -5,7 +5,7 @@
 
 +(void) setBorder: (UIView*)view {
     view.layer.borderWidth = 1.0f;
-    view.layer.borderColor = [[UIColor blackColor] CGColor];
+    view.layer.borderColor = [[UIColor greenColor] CGColor];
 }
 
 @end

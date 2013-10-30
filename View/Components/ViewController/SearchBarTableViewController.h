@@ -5,7 +5,7 @@
 }
 
 // [NSDictionary dictionaryWithObject:[NSArray arrayWithObjects: @"LeaveOrder", @"OutOrder", nil] forKey:@"HumanResource"];
-@property(nonatomic, strong) NSDictionary* contentsDictionary;
+@property(nonatomic, strong) NSDictionary* contentsDictionary;  // the show contents
 @property(nonatomic, assign) BOOL showSectionTitle;
 
 @property(nonatomic, strong, readonly) UITableView *tableView;
@@ -17,6 +17,7 @@
 -(void) setViewFrame: (CGRect)frame ;
 -(void) setViewBounds: (CGRect)bounds ;
 
--(NSString*) getSectionTitle: (NSInteger)section ;
+-(NSString*) getSectionKey: (NSInteger)section ;
+-(NSArray*) getSectionContents: (NSInteger)section ;
 
 @end

@@ -1,9 +1,5 @@
 #import "RotatableScorllViewController.h"
 
-@interface RotatableScorllViewController ()
-
-@end
-
 @implementation RotatableScorllViewController
 
 #pragma mark - UIViewController Methods

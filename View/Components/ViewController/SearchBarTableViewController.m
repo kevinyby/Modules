@@ -105,8 +105,13 @@
     [self fixStatusBarFrameOnIOS7];
 }
 
--(NSString*) getSectionTitle: (NSInteger)section {
+-(NSString*) getSectionKey: (NSInteger)section {
     return showSectionTitle ? [_sections objectAtIndex: section] : Nil;
+}
+
+-(NSArray*) getSectionContents: (NSInteger)section {
+    NSString* sectionKey = [_sections objectAtIndex: section];
+    return [contentsDictionary objectForKey: sectionKey];
 }
 
 -(void) fixStatusBarFrameOnIOS7 {
@@ -149,10 +154,8 @@
     
     // in normal mode
     if (tableViewObj == tableView) {
-        NSString* sectionKey = [_sections objectAtIndex: indexPath.section];
-        NSArray* sectionContents = [contentsDictionary objectForKey: sectionKey];
-        int row = indexPath.row ;
-        cell.textLabel.text = [sectionContents objectAtIndex: row];
+        NSArray* sectionContents = [self getSectionContents: indexPath.section];
+        cell.textLabel.text = [sectionContents objectAtIndex: indexPath.row];
         
     // in search mode
     } else {
