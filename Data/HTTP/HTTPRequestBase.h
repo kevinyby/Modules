@@ -6,6 +6,8 @@
  *
  */
 
+#define HTTP_HEADER_COOKIE @"Set-Cookie"
+
 #import <Foundation/Foundation.h>
 
 @protocol HTTPRequestDelegate;

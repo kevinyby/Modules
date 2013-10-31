@@ -13,10 +13,8 @@
     NSMutableArray* _sections;
 }
 
-@property(nonatomic, copy) NSArray *filteredContents;
-
-// UIViewController doesn't retain the search display controller if it's created programmatically: http://openradar.appspot.com/10254897
-@property(nonatomic, strong) UISearchDisplayController *strongSearchDisplayController; 
+@property(nonatomic, copy) NSString* searchedString;
+@property(nonatomic, copy) NSArray *searchedContents;
 
 @end
 
@@ -27,7 +25,10 @@
 
 @synthesize tableView;
 @synthesize searchBar;
-@synthesize filteredContents;
+@synthesize searchDisplayController;
+
+@synthesize searchedString;
+@synthesize searchedContents;
 
 #pragma mark - Override Methods
 
@@ -70,8 +71,8 @@
     self.searchBar.delegate = self;
     [self.searchBar sizeToFit];
     
-    UISearchDisplayController* controller = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
-    self.strongSearchDisplayController = controller;
+    // UIViewController doesn't retain the search display controller if it's created programmatically: http://openradar.appspot.com/10254897
+    searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
     self.searchDisplayController.searchResultsDataSource = self;
     self.searchDisplayController.searchResultsDelegate = self;
     self.searchDisplayController.delegate = self;
@@ -142,7 +143,9 @@
         
     // in search mode
     } else {
-        return self.filteredContents.count;
+        self.searchedContents = [_contents filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"SELF contains[cd] %@", searchedString]];
+        
+        return self.searchedContents.count;
     }
 }
 
@@ -159,22 +162,19 @@
         
     // in search mode
     } else {
-        cell.textLabel.text = [self.filteredContents objectAtIndex:indexPath.row];
+        cell.textLabel.text = [self.searchedContents objectAtIndex:indexPath.row];
     }
     
     return cell;
 }
-
-//- (void)tableView:(UITableView *)tableViewObj didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    if (tableViewObj != tableView) [self.strongSearchDisplayController setActive:NO]; // [self.strongSearchDisplayController setActive: NO animated:YES];
-//}
 
 
 #pragma mark - UISearchDisplayDelegate
 
 static bool flag = NO;
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller {
-    self.filteredContents = nil;
+    self.searchedString = nil;
+    self.searchedContents = nil;
 
     // fix Pair A  : isNavigationBarHidden = YES
     if (IOS_VERSION >= 7.0 && ! STATUSBAR_HIDDEN) {
@@ -186,7 +186,8 @@ static bool flag = NO;
     }
 }
 - (void) searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller {
-    self.filteredContents = nil;
+    self.searchedString = nil;
+    self.searchedContents = nil;
     
     // fix Pair B : isNavigationBarHidden = NO
     if (IOS_VERSION >= 7.0 && ! STATUSBAR_HIDDEN) {
@@ -197,17 +198,14 @@ static bool flag = NO;
 
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString {
-    
     // when enter character
-    if (searchString.length > 0) { 
-        NSArray *searchContents = _contents;
-        
-        self.filteredContents = [searchContents filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"SELF contains[cd] %@", searchString]];
+    if (searchString.length > 0) {
+        self.searchedString = searchString;
         
     // in search mode, when delete the search string
     } else {
-        self.filteredContents = _contents;
-        [tableView reloadData];
+        self.searchedString = nil;
+        self.searchedContents = nil;
     }
     
     return YES;

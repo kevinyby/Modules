@@ -6,6 +6,12 @@
 
 @interface DateHelper : NSObject
 
++ (NSString *)stringFromDate:(NSDate *)date pattern:(NSString*)pattern ;
+
++ (NSDate *)dateFromString:(NSString *)string pattern:(NSString*)pattern ;
+
++(NSString*)stringFromString:(NSString *)sourceString fromPattern:(NSString*)fromPattern toPattern:(NSString*)toPattern ;
+
 + (NSDateFormatter*) getLocaleDateFormater: (NSString*)pattern ;
 
 + (NSDate*) date: (NSDate*)date addMonth: (int)month ;
