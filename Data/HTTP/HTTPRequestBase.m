@@ -46,8 +46,10 @@
 }
 
 -(void) startRequest {
-    [urlconnection scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    NSRunLoop* loop = [NSRunLoop currentRunLoop];
+    [urlconnection scheduleInRunLoop:loop forMode:NSRunLoopCommonModes];
     [urlconnection start];
+//    [loop run];   //If you want the run loop to terminate, you shouldn't use this method. See the docs
 }
 
 -(void) startRequest: (void (^)(NSURLResponse* response, NSData* data, NSError* connectionError))completeHandler {
