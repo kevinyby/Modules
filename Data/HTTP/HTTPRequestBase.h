@@ -6,7 +6,8 @@
  *
  */
 
-#define HTTP_HEADER_COOKIE @"Set-Cookie"
+#define HTTP_RES_HEADER_COOKIE @"Set-Cookie"
+#define HTTP_REQ_HEADER_COOKIE @"cookie"
 
 #import <Foundation/Foundation.h>
 

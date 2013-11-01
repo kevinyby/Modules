@@ -11,8 +11,9 @@
     id content = [NSJSONSerialization JSONObjectWithData: jsonData options: NSJSONReadingAllowFragments error:&error];
     
     if (error) {
+        NSString* message = [NSString stringWithFormat:@"Check your %@ json file or json format please", jsonFileName];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle: @"JASON PARSE ERROR"
-                                                        message: @"Check your json file or json format please "
+                                                        message: message
                                                        delegate: nil
                                               cancelButtonTitle: @"OK"
                                               otherButtonTitles: nil];
@@ -20,15 +21,6 @@
     }
     
     return content;
-}
-
-
-+(CGRect) convertToRect: (NSArray *)rectArray
-{
-    return CGRectMake([[rectArray objectAtIndex: 0] floatValue],
-                      [[rectArray objectAtIndex: 1] floatValue],
-                      [[rectArray objectAtIndex: 2] floatValue],
-                      [[rectArray objectAtIndex: 3] floatValue]);
 }
 
 @end

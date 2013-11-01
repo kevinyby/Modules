@@ -8,6 +8,4 @@
 
 +(id) getJson: (NSString*)jsonFileName;
 
-+(CGRect) convertToRect: (NSArray *)rectArray ;
-
 @end

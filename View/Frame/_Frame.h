@@ -1,5 +1,5 @@
 
-
+#import "FrameManager.h"
 
 #import "FrameHelper.h"
 

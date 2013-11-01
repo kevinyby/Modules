@@ -36,6 +36,7 @@ typedef enum {
 @class HVTableView;
 
 @protocol HVTableViewDelegate <NSObject>
+@required
 - (UIView *)hvTableView:(HVTableView *)hvTableView viewForRect:(CGRect)rect;
 - (void)hvTableView:(HVTableView *)hvTableView setDataForView:(UIView *)view forIndexPath:(NSIndexPath*)indexPath;
 @optional
