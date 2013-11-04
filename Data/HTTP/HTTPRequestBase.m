@@ -1,6 +1,6 @@
 #import "HTTPRequestBase.h"
 
-#define NetworkTimeOutInterval 30
+#define NetworkTimeOutInterval 20
 
 @interface HTTPRequestBase ()
 
