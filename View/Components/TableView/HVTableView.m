@@ -292,7 +292,6 @@
 #pragma mark TableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	[tableView deselectRowAtIndexPath:indexPath animated:NO];
 	[self setSelectedIndexPath:indexPath];
 }
 
