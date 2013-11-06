@@ -8,4 +8,15 @@
 +(CAGradientLayer*) assembleGradientLayer: (NSDictionary*)config ;
 +(void) parseColor: (id)config red:(float*)red green:(float*)green blue:(float*)blue alpha:(float*)alpha ;
 
+
+
+#pragma mark -
+#pragma mark -  Convenient Methods
+
++(void) setBorder: (UIView*)view;
++(void) setBorder: (UIView*)view color:(UIColor*)color;
+
++(void) setBackGround: (UIView*)view;
++(void) setBackGround: (UIView*)view color:(UIColor*)color;
+
 @end

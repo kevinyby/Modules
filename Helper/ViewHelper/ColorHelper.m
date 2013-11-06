@@ -103,4 +103,31 @@
     return CGPointMake(x, y);
 }
 
+
+
+#pragma mark - 
+#pragma mark - Convenient Methods
+
++(void) setBorder: (UIView*)view
+{
+    view.layer.borderWidth = 1.0f;
+    view.layer.borderColor = [[UIColor greenColor] CGColor];
+}
+
++(void) setBorder: (UIView*)view color:(UIColor*)color
+{
+    view.layer.borderWidth = 1.0f;
+    view.layer.borderColor = [color CGColor];
+}
+
++(void) setBackGround: (UIView*)view
+{
+    view.backgroundColor = [UIColor yellowColor];
+}
+
++(void) setBackGround: (UIView*)view color:(UIColor*)color
+{
+    view.backgroundColor = color;
+}
+
 @end

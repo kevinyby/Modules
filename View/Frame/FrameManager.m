@@ -1,7 +1,5 @@
 #import "FrameManager.h"
-
 #import "FrameHelper.h"
-#import "BorderHelper.h"
 
 @implementation FrameManager
 
