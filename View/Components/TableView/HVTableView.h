@@ -34,6 +34,7 @@ typedef enum {
 } HVTableViewOrientation;
 
 @class HVTableView;
+@class HVUITableView;
 
 @protocol HVTableViewDelegate <NSObject>
 @required
@@ -58,7 +59,7 @@ typedef enum {
 }
 
 @property (nonatomic, unsafe_unretained) id<HVTableViewDelegate> delegate;
-@property (nonatomic, readonly, unsafe_unretained) UITableView *tableView;
+@property (nonatomic, readonly, unsafe_unretained) HVUITableView *tableView;
 @property (nonatomic, readonly, unsafe_unretained) NSArray *visibleViews;
 @property (nonatomic) NSIndexPath *selectedIndexPath;
 @property (nonatomic) UIColor *cellBackgroundColor;
@@ -76,5 +77,13 @@ typedef enum {
 - (UIView *)viewAtIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath*)indexPathForView:(UIView *)cell;
 - (void)reloadData;
+
+@end
+
+
+
+@interface HVUITableView : UITableView
+
+@property (assign) CGPoint touchPoint;
 
 @end

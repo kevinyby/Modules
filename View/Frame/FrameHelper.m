@@ -32,7 +32,7 @@ static Boolean isNeedReserve ;
     if (isNeedReserve) view.rotateCanvasFrame = [NSValue valueWithCGRect: [FrameTranslater getFrame: [self getRotateCanvas: canvas]]];
 }
 
-+(void) setFrameByOrientation: (UIInterfaceOrientation)interfaceOrientation view:(UIView*)view {   // first call translateCanvas:view:
++(void) setFrameByOrientation: (UIInterfaceOrientation)interfaceOrientation view:(UIView*)view {            // first call translateCanvas:view:
     view.frame = UIInterfaceOrientationIsPortrait(interfaceOrientation) ? [view.canvasFrame CGRectValue] : [view.rotateCanvasFrame CGRectValue];
 }
 

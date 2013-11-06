@@ -69,10 +69,10 @@
 	if (orientation == HVTableViewOrientationHorizontal) {
 		int xOrigin	= (self.bounds.size.width - self.bounds.size.height)/2;
 		int yOrigin	= (self.bounds.size.height - self.bounds.size.width)/2;
-		tableView	= [[UITableView alloc] initWithFrame:CGRectMake(xOrigin, yOrigin, self.bounds.size.height, self.bounds.size.width)];
+		tableView	= [[HVUITableView alloc] initWithFrame:CGRectMake(xOrigin, yOrigin, self.bounds.size.height, self.bounds.size.width)];
 	}
 	else
-		tableView	= [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
+		tableView	= [[HVUITableView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
 	
 	tableView.tag				= TABLEVIEW_TAG;
 	tableView.delegate			= self;
@@ -90,7 +90,6 @@
 	
 	[self addSubview:tableView];
 }
-
 
 #pragma mark -
 #pragma mark Properties
@@ -382,7 +381,7 @@
 	}
     
 //    cell.layer.borderWidth = 1.0f ;
-//    cell.layer.borderColor = [[UIColor greenColor] CGColor];
+//    cell.layer.borderColor = [[UIColor redColor] CGColor];
     
 	[self setCell:cell boundsForOrientation:_orientation];
 	
@@ -429,6 +428,19 @@
 
 -(void)reloadData{
     [self.tableView reloadData];
+}
+
+@end
+
+
+
+
+@implementation HVUITableView
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesBegan: touches withEvent:event];
+    CGPoint point = [[touches anyObject] locationInView: self];
+    _touchPoint = point;
 }
 
 @end

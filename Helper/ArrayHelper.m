@@ -38,4 +38,10 @@
 }
 
 
++(BOOL) isTwoDimension: (NSArray*)array
+{
+    id obj = [array lastObject];
+    return [obj isKindOfClass: [NSArray class]];
+}
+
 @end

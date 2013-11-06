@@ -10,7 +10,7 @@
 		self.textColor = [UIColor blackColor];
 		self.backgroundColor = [UIColor clearColor];
 		self.highlightedTextColor = [UIColor blackColor];
-		self.textAlignment = UITextAlignmentCenter;
+		self.textAlignment = NSTextAlignmentCenter;
 		self.text = text;
     }
     return self;
