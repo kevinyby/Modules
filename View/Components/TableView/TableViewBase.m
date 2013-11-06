@@ -14,6 +14,8 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 @synthesize proxy;
 
+@synthesize scrollProxy;
+
 @synthesize hideSections;
 
 @synthesize contentsDictionary;
@@ -110,6 +112,24 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     CGRect frame = [FrameTranslater getFrame: canvas];
     CGFloat defaultHeight = frame.size.height;
     return defaultHeight;
+}
+
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollProxy && [scrollProxy respondsToSelector:@selector(didScroll:)]) {
+        [scrollProxy didScroll: self];
+    }
+}
+
+// called on finger up if the user dragged. decelerate is true if it will continue moving afterwards
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (scrollProxy && [scrollProxy respondsToSelector:@selector(didEndDragging:on:)]) {
+        [scrollProxy didEndDragging: decelerate on:self];
+    }
 }
 
 @end

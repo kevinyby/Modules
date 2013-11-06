@@ -3,7 +3,7 @@
 
 @class TableViewBase;
 
-@protocol TableViewBaseProxy <NSObject>
+@protocol TableViewTableProxy <NSObject>
 
 
 @optional
@@ -20,6 +20,17 @@
 @end
 
 
+@protocol TableViewScrollProxy <NSObject>
+
+@optional
+
+- (void)didScroll:(TableViewBase *)tableViewObj;
+
+- (void)didEndDragging:(BOOL)willDecelerate on:(TableViewBase *)tableViewObj;
+
+@end
+
+
 
 
 
@@ -27,7 +38,9 @@
 
 @interface TableViewBase : UITableView <UITableViewDataSource, UITableViewDelegate>
 
-@property(assign) id<TableViewBaseProxy> proxy;
+@property(assign) id<TableViewTableProxy> proxy;
+
+@property(assign) id<TableViewScrollProxy> scrollProxy;
 
 @property(nonatomic, assign) BOOL hideSections;
 
