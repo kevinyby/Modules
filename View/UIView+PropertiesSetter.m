@@ -12,4 +12,18 @@
     self.center = CGPointMake(self.center.x, y);
 }
 
+- (void)setSizeWidth: (CGFloat)width
+{
+	CGRect frame = self.frame;
+	frame.size.width = width;
+	self.frame = frame;
+}
+
+- (void)setSizeHeight: (CGFloat)height
+{
+	CGRect frame = self.frame;
+	frame.size.height = height;
+	self.frame = frame;
+}
+
 @end

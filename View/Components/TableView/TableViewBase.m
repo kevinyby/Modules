@@ -4,12 +4,6 @@
 static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 
-@interface TableViewBase() {
-     NSMutableArray* _sections;
-}
-
-@end
-
 @implementation TableViewBase
 
 @synthesize proxy;
@@ -27,43 +21,41 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
         self.hideSections = YES;
         self.dataSource = self;
         self.delegate = self;
-        _sections = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 -(void) setContentsDictionary:(NSMutableDictionary *)contentsDictionaryObj
 {
-    if (contentsDictionary) {
-        contentsDictionary = nil;
-    }
+    if (contentsDictionary) contentsDictionary = nil;
     contentsDictionary = contentsDictionaryObj;
-    [_sections removeAllObjects];
-    
-    for (NSString* key in contentsDictionary) {
-        [_sections addObject: key];
-    }
 }
 
--(NSArray*) getSections
+-(NSArray *)sections
 {
-    return _sections;
+    NSMutableArray* sections = [NSMutableArray arrayWithArray: [contentsDictionary allKeys]];
+    NSArray* sortedSections = [sections sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1 compare: obj1];
+    }];
+    return sortedSections;
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSString *)tableView:(UITableView *)tableViewObj titleForHeaderInSection:(NSInteger)section {
-    int sectionsHighestCount = _sections.count - 1;
-    return hideSections || sectionsHighestCount < (int)section ? nil : [_sections objectAtIndex: section];
+    NSArray* sections = self.sections;
+    int sectionsHighestIndex = sections.count - 1;
+    return hideSections || sectionsHighestIndex < (int)section ? nil : [sections objectAtIndex: section];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableViewObj {
-    return hideSections ? 1 : _sections.count;
+    return hideSections ? 1 : self.sections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableViewObj numberOfRowsInSection:(NSInteger)section {
-    int sectionsHighestCount = _sections.count - 1;
-    NSString* sectionKey = sectionsHighestCount < (int)section ? nil : [_sections objectAtIndex: section];
+    NSArray* sections = self.sections;
+    int sectionsHighestIndex = sections.count - 1;
+    NSString* sectionKey = sectionsHighestIndex < (int)section ? nil : [sections objectAtIndex: section];
     NSArray* sectionContents = [contentsDictionary objectForKey: sectionKey];
     int count = sectionContents.count;
     
@@ -76,8 +68,10 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RaiseTableViewCellId];
     int row = indexPath.row;
     int section = indexPath.section ;
-    int sectionsHighestCount = _sections.count - 1;
-    NSString* sectionKey = sectionsHighestCount < section ? nil : [_sections objectAtIndex: section];
+    
+    NSArray* sections = self.sections;
+    int sectionsHighestIndex = sections.count - 1;
+    NSString* sectionKey = sectionsHighestIndex < section ? nil : [sections objectAtIndex: section];
     NSArray* sectionContents = [contentsDictionary objectForKey: sectionKey];
     cell.textLabel.text = [sectionContents objectAtIndex: row];
     

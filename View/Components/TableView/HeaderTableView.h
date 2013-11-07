@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@class AlignTableView;
+#import "AlignTableView.h"
 
 @interface HeaderTableView : UIView
 

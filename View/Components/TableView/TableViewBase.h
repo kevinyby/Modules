@@ -49,6 +49,6 @@
 
 
 /** get the sequential keys of contentsDictionary, against to the table section */
--(NSArray*) getSections ;
+@property (readonly) NSArray* sections;
 
 @end
