@@ -12,6 +12,7 @@
 		self.highlightedTextColor = [UIColor blackColor];
 		self.textAlignment = NSTextAlignmentCenter;
 		self.text = text;
+        [self adjustWidth];
     }
     return self;
 }

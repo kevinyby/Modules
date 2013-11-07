@@ -32,7 +32,7 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     return self;
 }
 
--(void) setContentsDictionary:(NSDictionary *)contentsDictionaryObj
+-(void) setContentsDictionary:(NSMutableDictionary *)contentsDictionaryObj
 {
     if (contentsDictionary) {
         contentsDictionary = nil;

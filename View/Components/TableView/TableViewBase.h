@@ -45,7 +45,7 @@
 @property(nonatomic, assign) BOOL hideSections;
 
 // { @"section_1":@[@"1",@"2",@"3"], @"section_2":@[@"a",@"b",@"c"] };
-@property(nonatomic, strong) NSDictionary* contentsDictionary; // the visible contents
+@property(nonatomic, strong) NSMutableDictionary* contentsDictionary; // the visible contents
 
 
 /** get the sequential keys of contentsDictionary, against to the table section */

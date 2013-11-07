@@ -1,7 +1,7 @@
 #import "AlignTableView.h"
-#import "FrameHelper.h"
-#import "ArrayHelper.h"
-#import "UILabel+AdjustWidth.h"
+#import "_Frame.h"
+#import "_Helper.h"
+#import "_Label.h"
 
 @implementation AlignTableView
 
