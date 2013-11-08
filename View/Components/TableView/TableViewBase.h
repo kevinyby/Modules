@@ -44,7 +44,7 @@
 
 @property(nonatomic, assign) BOOL hideSections;
 
-// { @"section_1":@[@"1",@"2",@"3"], @"section_2":@[@"a",@"b",@"c"] };
+// { @"section_1":@[[@"1",@"2",@"3"],[@"1",@"2",@"3"]], @"section_2":@[[@"1",@"2",@"3"],[@"1",@"2",@"3"]] };
 @property(nonatomic, strong) NSMutableDictionary* contentsDictionary; // the visible contents
 
 

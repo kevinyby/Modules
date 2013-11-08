@@ -87,6 +87,7 @@
 	tableView.showsHorizontalScrollIndicator = NO;
     
     self.clipsToBounds = NO;
+    tableView.clipsToBounds = NO;
 	
 	[self addSubview:tableView];
 }

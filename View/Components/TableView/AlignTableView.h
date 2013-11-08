@@ -5,7 +5,9 @@
 #define HEADER_CONTENT_LABEL_TAG(_index) (_index + 202)
 
 /**
- *  Here , this align table's contentsDictionary's every lin content should connect with CELL_CONTENT_DELIMITER
+ *  Here , this align table's contentsDictionary's every line content should connect with CELL_CONTENT_DELIMITER
+ *
+ * i.e. {@"Section_1":@[@[@"1,2,3"],@[@"a,b,c"]]}, divided by ","
  *  
  *  Note , for more than one sections , the header will be the same 
  *

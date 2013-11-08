@@ -9,8 +9,8 @@
 @property (strong) AlignTableView* tableView;
 
 
-@property (nonatomic, strong) NSArray* headers;            // one dimension
-@property (nonatomic, strong) NSArray* headersXcoodinates; // one dimension
+@property (nonatomic, strong) NSArray* headers;            //here one dimension
+@property (nonatomic, strong) NSArray* headersXcoodinates; //here one dimension
 
 
 - (id)initWithHeaders: (NSArray*)headersObj xCoordinates:(NSArray*)xCoordinates;
