@@ -34,7 +34,10 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 -(NSArray *)sections
 {
-    return [DictionaryHelper getSortedKeys: contentsDictionary];
+    if (! _sections || [[DictionaryHelper getSortedKeys: contentsDictionary] count] != _sections.count) {
+        _sections = [DictionaryHelper getSortedKeys: contentsDictionary];
+    }
+    return _sections;
 }
 
 #pragma mark - UITableViewDataSource

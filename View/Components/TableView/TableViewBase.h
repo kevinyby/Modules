@@ -54,6 +54,6 @@
 
 
 /** get the sequential keys of contentsDictionary, against to the table section */
-@property (readonly) NSArray* sections;
+@property (nonatomic, strong) NSArray* sections;
 
 @end

@@ -10,4 +10,7 @@
 - (void)setOriginX: (CGFloat)x;
 - (void)setOriginY: (CGFloat)y;
 
+- (void)addOriginX: (CGFloat)x;
+- (void)addOriginY: (CGFloat)y;
+
 @end
