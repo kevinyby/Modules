@@ -5,4 +5,6 @@
 +(void) combine: (NSMutableDictionary*)destination with:(NSDictionary*)source ;
 +(void) deepCopy: (NSDictionary*)source to:(NSMutableDictionary*)destination  ;
 
++(NSArray*) getSortedKeys: (NSDictionary*)dictionary;
+
 @end

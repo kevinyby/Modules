@@ -1,4 +1,5 @@
 #import "LocalizeFileManager.h"
+#import "_Helper.h"
 
 @implementation LocalizeFileManager
 
@@ -27,13 +28,7 @@
     
     if (created) {
         NSMutableString* stringsFileContents = [[NSMutableString alloc] init];
-        
-        // sort keys
-        NSArray* allKeys = [contents allKeys];
-        NSMutableArray* tempKeys = [NSMutableArray arrayWithArray: allKeys];
-        NSArray* sorteKeys = [tempKeys sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            return [obj1 caseInsensitiveCompare:obj2];
-        }];
+        NSArray* sorteKeys = [DictionaryHelper getSortedKeys: contents];
         
         // append keys-values
         for (int i = 0; i < sorteKeys.count ; i ++) {

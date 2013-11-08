@@ -21,7 +21,7 @@
 
 
 @property (nonatomic, strong) NSArray* headers;            //here one dimension
-@property (nonatomic, strong) NSArray* headersXcoodinates; //here one dimension
+@property (nonatomic, strong) NSArray* valuesXcoodinates; //here one dimension
 
 
 - (id)initWithHeaders: (NSArray*)headersObj xCoordinates:(NSArray*)xCoordinates;

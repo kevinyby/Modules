@@ -10,7 +10,7 @@
 
 
 @synthesize headers;
-@synthesize headersXcoodinates;
+@synthesize valuesXcoodinates;
 
 - (id)init
 {
@@ -30,7 +30,7 @@
     self = [self init];
     if (self) {
         headers = headersObj;
-        headersXcoodinates = xCoordinates;
+        valuesXcoodinates = xCoordinates;
     }
     return self;
 }
@@ -43,9 +43,9 @@
     [self refreshHeader];
 }
 
--(void)setHeadersXcoodinates:(NSArray *)headersXcoodinatesObj {
-    headersXcoodinates = headersXcoodinatesObj;
-    tableView.headersXcoodinates = headersXcoodinatesObj;
+-(void)setValuesXcoodinates:(NSArray *)valuesXcoodinatesObj {
+    valuesXcoodinates = valuesXcoodinatesObj;
+    tableView.valuesXcoodinates = valuesXcoodinatesObj;
     
     [self refreshHeader];
 }
@@ -59,7 +59,7 @@
 
 -(void) refreshHeader
 {
-    [AlignTableView setAlignHeaders:headerView headers:headers headersXcoodinates:headersXcoodinates];
+    [AlignTableView setAlignHeaders:headerView headers:headers valuesXcoodinates:valuesXcoodinates];
 }
 
 -(void) reloadData {

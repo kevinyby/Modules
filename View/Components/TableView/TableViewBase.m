@@ -1,5 +1,6 @@
 #import "TableViewBase.h"
 #import "FrameTranslater.h"
+#import "_Helper.h"
 
 static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
@@ -33,11 +34,7 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 -(NSArray *)sections
 {
-    NSMutableArray* sections = [NSMutableArray arrayWithArray: [contentsDictionary allKeys]];
-    NSArray* sortedSections = [sections sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        return [obj1 compare: obj1];
-    }];
-    return sortedSections;
+    return [DictionaryHelper getSortedKeys: contentsDictionary];
 }
 
 #pragma mark - UITableViewDataSource
