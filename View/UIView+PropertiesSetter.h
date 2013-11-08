@@ -7,4 +7,7 @@
 - (void)setSizeWidth: (CGFloat)width;
 - (void)setSizeHeight: (CGFloat)height;
 
+- (void)setOriginX: (CGFloat)x;
+- (void)setOriginY: (CGFloat)y;
+
 @end

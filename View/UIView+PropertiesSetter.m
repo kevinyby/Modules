@@ -26,4 +26,19 @@
 	self.frame = frame;
 }
 
+
+- (void)setOriginX: (CGFloat)x
+{
+	CGRect frame = self.frame;
+	frame.origin.x = x;
+	self.frame = frame;
+}
+
+- (void)setOriginY: (CGFloat)y
+{
+	CGRect frame = self.frame;
+	frame.origin.y = y;
+	self.frame = frame;
+}
+
 @end

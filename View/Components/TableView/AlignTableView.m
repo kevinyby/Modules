@@ -1,4 +1,5 @@
 #import "AlignTableView.h"
+#import "UIView+PropertiesSetter.h"
 #import "_Frame.h"
 #import "_Helper.h"
 #import "_Label.h"
@@ -46,10 +47,6 @@
 {
     // set up contents & labels with x coordinate
     int count = headers.count;
-    
-    BOOL isCenterAlign = valuesXcoodinates.count == count + 1;      // TO BE IMPROVE
-    BOOL isBetweenAlign = valuesXcoodinates.count == count * 2;     // TO BE IMPROVE
-    
     for (int i = 0; i < count; i++) {
         NSString* labelText = [headers objectAtIndex:i];
         
@@ -66,21 +63,10 @@
         [label adjustWidth];
         
         // set frame by FrameHelper
-        float contentX = [self getXcoordinate: valuesXcoodinates index:i];
+        [self setFrame:label valuesXcoodinates:valuesXcoodinates index:i count:count];
+        [label setOriginY: [FrameTranslater convertCanvasY:[[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone  ? 8 : 0]];
         
-        if (isCenterAlign) {
-            float contentNextX = [self getXcoordinate: valuesXcoodinates index:i + 1];
-            contentX = (contentX + contentNextX) / 2;
-        } else if (isBetweenAlign){
-            contentX = [self getXcoordinate: valuesXcoodinates index:i * 2];
-            float contentNextX = [self getXcoordinate: valuesXcoodinates index:i * 2 + 1];
-            contentX = (contentX + contentNextX) / 2;
-        }
-        
-        CGRect labelCanvas = CGRectMake(contentX, [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone  ? 8 : 0, label.frame.size.width, 25);
-        [FrameHelper setFrame:labelCanvas view:label];
-        [FrameHelper translateFontLabel:label];
-        
+//         NSLog(@"header%@",NSStringFromCGPoint(label.center));
     }
 }
 
@@ -88,14 +74,14 @@
 + (void)separateCellTextToAlignHeaders: (UITableViewCell*)cell valuesXcoodinates:(NSArray*)valuesXcoodinates text:(NSString*)text
 {
     NSArray* texts = [text componentsSeparatedByString: CELL_CONTENT_DELIMITER];
-    int count = texts.count;
+    int count = texts.count;        // == headers count
         for (int i = 0; i < count;  i++) {
             
             // init label
             UILabel* label = (UILabel*)[cell viewWithTag:CELL_CONTENT_LABEL_TAG(i)] ;
             if (!label) {
                 label = [[UILabel alloc] initWithText:nil];
-                label.textAlignment = NSTextAlignmentLeft;
+                label.textAlignment = NSTextAlignmentCenter;
                 // set font size
                 label.font = [UIFont systemFontOfSize: 20];
                 // adjust width by text content
@@ -104,10 +90,8 @@
                 [cell addSubview:label];
             }
             
-            float contentX = [self getXcoordinate: valuesXcoodinates index:i];
-            CGRect labelCanvas= CGRectMake(contentX, 10, label.frame.size.width, 25);
-            [FrameHelper setFrame:labelCanvas view:label];
-            [FrameHelper translateFontLabel:label];     // the same as [FrameTranslater translateFontSize:]
+            [self setFrame:label valuesXcoodinates:valuesXcoodinates index:i count:count];
+            [label setOriginY: [FrameTranslater convertCanvasY: 10]];
         }
     
     
@@ -116,7 +100,36 @@
         label.text = [texts objectAtIndex: i];
         // adjust width by text content
         [label adjustWidth];
+//        NSLog(@"-%@",NSStringFromCGPoint(label.center));
     }
+    
+}
+
+
++ (void) setFrame: (UILabel*)label valuesXcoodinates:(NSArray*)valuesXcoodinates index:(int)i count:(int)count {
+    BOOL isCenterAlign = valuesXcoodinates.count == count + 1;      // TO BE IMPROVE
+    BOOL isBetweenAlign = valuesXcoodinates.count == count * 2;     // TO BE IMPROVE
+    
+    float contentX = [self getXcoordinate: valuesXcoodinates index:i];
+    if (isCenterAlign) {
+        float contentNextX = [self getXcoordinate: valuesXcoodinates index:i + 1];
+        contentX = (contentX + contentNextX) / 2;
+    } else if (isBetweenAlign){
+        contentX = [self getXcoordinate: valuesXcoodinates index:i * 2];
+        float contentNextX = [self getXcoordinate: valuesXcoodinates index:i * 2 + 1];
+        contentX = (contentX + contentNextX) / 2;
+    }
+    
+    CGRect labelCanvas = CGRectMake(contentX, 0, label.frame.size.width, 25);
+    [FrameHelper translateCanvas: labelCanvas view:label];
+    if (isCenterAlign || isBetweenAlign) {
+        [label setCenterX: [label.canvasFrame CGRectValue].origin.x];
+    } else {
+        label.frame = [label.canvasFrame CGRectValue];
+    }
+    
+//    [ColorHelper setBorder:label];
+    [FrameHelper translateFontLabel:label];     // the same as [FrameTranslater translateFontSize:]
 }
 
 
