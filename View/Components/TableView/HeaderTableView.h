@@ -2,6 +2,7 @@
 
 #import "AlignTableView.h"
 
+@class HeaderTableView;
 
 @protocol HeaderTableViewDelegate <TableViewTableProxy>
 

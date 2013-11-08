@@ -70,6 +70,8 @@
 
 -(void) setSubviewsConstraints
 {
+    float inset = 0.0f;         // for test
+    
     [headerView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     
@@ -94,9 +96,9 @@
     
     
     [self addConstraints:[NSLayoutConstraint
-                          constraintsWithVisualFormat:@"V:[headerView][tableView]-0-|"
+                          constraintsWithVisualFormat:@"V:[headerView]-(inset)-[tableView]-0-|"
                           options:NSLayoutFormatDirectionLeadingToTrailing
-                          metrics:nil
+                          metrics:@{@"inset":@(inset)}
                           views:NSDictionaryOfVariableBindings(headerView,tableView)]];
 }
 
