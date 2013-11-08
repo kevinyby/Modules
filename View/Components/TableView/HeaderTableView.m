@@ -3,6 +3,8 @@
 
 @implementation HeaderTableView
 
+@synthesize delegate;
+
 @synthesize tableView;
 @synthesize headerView;
 
@@ -48,6 +50,13 @@
     [self refreshHeader];
 }
 
+-(void)setDelegate:(id<HeaderTableViewDelegate>)delegateObj {
+    delegate = delegateObj;
+    tableView.proxy = delegateObj;
+}
+
+#pragma mark - Public Methods
+
 -(void) refreshHeader
 {
     [AlignTableView setAlignHeaders:headerView headers:headers headersXcoodinates:headersXcoodinates];
@@ -63,6 +72,7 @@
 {
     [headerView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
     [self addConstraints:[NSLayoutConstraint
                           constraintsWithVisualFormat:@"|-0-[headerView]-0-|"
                           options:NSLayoutFormatAlignAllBaseline

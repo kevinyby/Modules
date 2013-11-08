@@ -82,6 +82,10 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     return cell;
 }
 
+
+
+
+
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableViewObj willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -107,6 +111,9 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     CGFloat defaultHeight = frame.size.height;
     return defaultHeight;
 }
+
+
+
 
 
 #pragma mark - UIScrollViewDelegate

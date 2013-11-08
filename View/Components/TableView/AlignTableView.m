@@ -10,6 +10,9 @@
 
 #pragma mark - UITableViewDelegate
 // this header is for sections, not for the whole table
+// Use HeaderTable instead if you want a table header
+
+
 //- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 //    NSArray* subHeaders = [ArrayHelper isTwoDimension: headers] ? [headers objectAtIndex: section] : headers;
 //    NSArray* subHeaderCoordinates = [ArrayHelper isTwoDimension: headersXcoodinates] ? [headersXcoodinates objectAtIndex: section] : headersXcoodinates;

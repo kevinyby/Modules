@@ -14,10 +14,15 @@
 
 - (CGFloat)heightAtIndexPath:(NSIndexPath *)indexPath on:(TableViewBase *)tableViewObj;
 
-// this method, you had better not implement it except in special case .
+
 - (UITableViewCell*)cellForIndexPath:(NSIndexPath *)indexPath on:(TableViewBase *)tableViewObj;
 
 @end
+
+
+
+
+
 
 
 @protocol TableViewScrollProxy <NSObject>
@@ -40,7 +45,7 @@
 
 @property(assign) id<TableViewTableProxy> proxy;
 
-@property(assign) id<TableViewScrollProxy> scrollProxy;
+@property(assign) id<TableViewScrollProxy> scrollProxy;     // For RefreshTableView now
 
 @property(nonatomic, assign) BOOL hideSections;
 

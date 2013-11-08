@@ -2,8 +2,18 @@
 
 #import "AlignTableView.h"
 
+
+@protocol HeaderTableViewDelegate <TableViewTableProxy>
+
+@optional
+
+@end
+
+
 @interface HeaderTableView : UIView
 
+
+@property (nonatomic, assign) id<HeaderTableViewDelegate> delegate;
 
 @property (strong) UIView* headerView;
 @property (strong) AlignTableView* tableView;
