@@ -67,6 +67,8 @@
         [self setFrame:label xcoordinates:headersXcoordinates index:i];
         
         [label setOriginY: [FrameTranslater convertCanvasY:[[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone  ? 8 : 0]];
+        
+        [FrameHelper translateFontLabel:label];
     }
 }
 
@@ -81,11 +83,11 @@
             UILabel* label = (UILabel*)[cell viewWithTag:CELL_CONTENT_LABEL_TAG(i)] ;
             if (!label) {
                 label = [[UILabel alloc] initWithText:nil];
-                label.textAlignment = NSTextAlignmentCenter;
+                label.textAlignment = NSTextAlignmentLeft;
                 // set font size
-                label.font = [UIFont systemFontOfSize: 20];
+                float size = [FrameTranslater translateFontSize: 20];
+                label.font = [UIFont systemFontOfSize: size];
                 // adjust width by text content
-                [label adjustWidth];
                 label.tag = CELL_CONTENT_LABEL_TAG(i);
                 [cell addSubview:label];
             }
@@ -106,16 +108,11 @@
 
 
 + (void)setFrame: (UILabel*)label xcoordinates:(NSArray*)xCoordinates index:(int)i {
-    
     NSNumber* coordinate = xCoordinates.count > i ? [xCoordinates objectAtIndex: i] : nil;
     float coordinateX = coordinate ? [coordinate floatValue] : 100 * i;
-    
     CGRect labelCanvas = CGRectMake(coordinateX, 0, label.frame.size.width, 25);
     [FrameHelper translateCanvas: labelCanvas view:label];
     label.frame = [label.canvasFrame CGRectValue];
-    
-//    [ColorHelper setBorder:label];
-    [FrameHelper translateFontLabel:label];     // the same as [FrameTranslater translateFontSize:]
 }
 
 @end
