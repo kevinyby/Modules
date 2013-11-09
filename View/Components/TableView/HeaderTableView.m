@@ -8,10 +8,6 @@
 @synthesize tableView;
 @synthesize headerView;
 
-
-@synthesize headers;
-@synthesize valuesXcoodinates;
-
 - (id)init
 {
     self = [super init];
@@ -25,29 +21,22 @@
     return self;
 }
 
-- (id)initWithHeaders: (NSArray*)headersObj xCoordinates:(NSArray*)xCoordinates
+-(void)setHeaders:(NSArray *)headers
 {
-    self = [self init];
-    if (self) {
-        headers = headersObj;
-        valuesXcoodinates = xCoordinates;
-    }
-    return self;
+    tableView.headers = headers;
+    if (!tableView.headersXcoordinates) [AlignTableView setAlignHeaders:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates];
 }
 
--(void)setHeaders:(NSArray *)headersObj
+-(void) setHeadersXcoordinates:(NSArray *)headersXcoordinates
 {
-    headers = headersObj;
-    tableView.headers = headersObj;
-    
-    [self refreshHeader];
+    tableView.headersXcoordinates = headersXcoordinates;
+    [AlignTableView setAlignHeaders:headerView headers:tableView.headers headersXcoordinates:tableView.headersXcoordinates];
 }
 
--(void)setValuesXcoodinates:(NSArray *)valuesXcoodinatesObj {
-    valuesXcoodinates = valuesXcoodinatesObj;
-    tableView.valuesXcoodinates = valuesXcoodinatesObj;
-    
-    [self refreshHeader];
+-(void)setValuesXcoordinates:(NSArray *)valuesXcoordinates
+{
+    tableView.valuesXcoordinates = valuesXcoordinates;
+    if (!tableView.headersXcoordinates) [AlignTableView setAlignHeaders:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates];
 }
 
 -(void)setDelegate:(id<HeaderTableViewDelegate>)delegateObj {
@@ -56,11 +45,6 @@
 }
 
 #pragma mark - Public Methods
-
--(void) refreshHeader
-{
-    [AlignTableView setAlignHeaders:headerView headers:headers valuesXcoodinates:valuesXcoodinates];
-}
 
 -(void) reloadData {
     [tableView reloadData];

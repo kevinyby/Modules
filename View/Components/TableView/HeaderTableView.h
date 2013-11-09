@@ -21,13 +21,10 @@
 
 
 @property (nonatomic, strong) NSArray* headers;            //here one dimension
-@property (nonatomic, strong) NSArray* valuesXcoodinates; //here one dimension
+@property (nonatomic, strong) NSArray* headersXcoordinates;//here one dimension
+@property (nonatomic, strong) NSArray* valuesXcoordinates; //here one dimension
 
-
-- (id)initWithHeaders: (NSArray*)headersObj xCoordinates:(NSArray*)xCoordinates;
 
 -(void) reloadData ;
-
--(void) refreshHeader;
 
 @end

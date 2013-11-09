@@ -7,7 +7,8 @@
 @implementation AlignTableView
 
 @synthesize headers;
-@synthesize valuesXcoodinates;
+@synthesize headersXcoordinates;
+@synthesize valuesXcoordinates;
 
 #pragma mark - UITableViewDelegate
 // this header is for sections, not for the whole table
@@ -15,11 +16,11 @@
 
 //- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 //    NSArray* subHeaders = [ArrayHelper isTwoDimension: headers] ? [headers objectAtIndex: section] : headers;
-//    NSArray* subHeaderCoordinates = [ArrayHelper isTwoDimension: valuesXcoodinates] ? [valuesXcoodinates objectAtIndex: section] : valuesXcoodinates;
+//    NSArray* subHeaderCoordinates = [ArrayHelper isTwoDimension: headersXcoordinates] ? [headersXcoordinates objectAtIndex: section] : headersXcoordinates;
 //    
 //    UIView* headerView = [[UIView alloc] init];
 //    headerView.backgroundColor = [UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:0.5];
-//    [AlignTableView setAlignHeaders:headerView headers:subHeaders valuesXcoodinates:subHeaderCoordinates];
+//    [AlignTableView setAlignHeaders:headerView headers:subHeaders valuesXcoordinates:subHeaderCoordinates];
 //    return headerView;
 //}
 
@@ -32,8 +33,8 @@
     NSString* text = cell.textLabel.text;
     cell.textLabel.hidden = YES;
     
-     NSArray* subHeaderCoordinates = [ArrayHelper isTwoDimension: valuesXcoodinates] ? [valuesXcoodinates objectAtIndex: indexPath.section] : valuesXcoodinates;
-    [AlignTableView separateCellTextToAlignHeaders:cell valuesXcoodinates:subHeaderCoordinates text:text];
+     NSArray* subHeaderCoordinates = [ArrayHelper isTwoDimension: valuesXcoordinates] ? [valuesXcoordinates objectAtIndex: indexPath.section] : valuesXcoordinates;
+    [AlignTableView separateCellTextToAlignHeaders:cell valuesXcoordinates:subHeaderCoordinates text:text];
     
     return cell;
 }
@@ -43,7 +44,7 @@
 
 #pragma mark - AlignTableView Class Object Methods
 
-+ (void)setAlignHeaders: (UIView*)headerView headers:(NSArray*)headers valuesXcoodinates:(NSArray*)valuesXcoodinates
++ (void)setAlignHeaders: (UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates
 {
     // set up contents & labels with x coordinate
     int count = headers.count;
@@ -63,15 +64,14 @@
         [label adjustWidth];
         
         // set frame by FrameHelper
-        [self setFrame:label valuesXcoodinates:valuesXcoodinates index:i count:count];
-        [label setOriginY: [FrameTranslater convertCanvasY:[[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone  ? 8 : 0]];
+        [self setFrame:label valuesXcoordinates:headersXcoordinates index:i count:count];
         
-//         NSLog(@"header%@",NSStringFromCGPoint(label.center));
+        [label setOriginY: [FrameTranslater convertCanvasY:[[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone  ? 8 : 0]];
     }
 }
 
 
-+ (void)separateCellTextToAlignHeaders: (UITableViewCell*)cell valuesXcoodinates:(NSArray*)valuesXcoodinates text:(NSString*)text
++ (void)separateCellTextToAlignHeaders: (UITableViewCell*)cell valuesXcoordinates:(NSArray*)valuesXcoordinates text:(NSString*)text
 {
     NSArray* texts = [text componentsSeparatedByString: CELL_CONTENT_DELIMITER];
     int count = texts.count;        // == headers count
@@ -90,7 +90,7 @@
                 [cell addSubview:label];
             }
             
-            [self setFrame:label valuesXcoodinates:valuesXcoodinates index:i count:count];
+            [self setFrame:label valuesXcoordinates:valuesXcoordinates index:i count:count];
             [label setOriginY: [FrameTranslater convertCanvasY: 10]];
         }
     
@@ -100,43 +100,27 @@
         label.text = [texts objectAtIndex: i];
         // adjust width by text content
         [label adjustWidth];
-//        NSLog(@"-%@",NSStringFromCGPoint(label.center));
     }
     
 }
 
 
-+ (void) setFrame: (UILabel*)label valuesXcoodinates:(NSArray*)valuesXcoodinates index:(int)i count:(int)count {
-    BOOL isCenterAlign = valuesXcoodinates.count == count + 1;      // TO BE IMPROVE
-    BOOL isBetweenAlign = valuesXcoodinates.count == count * 2;     // TO BE IMPROVE
-    
-    float contentX = [self getXcoordinate: valuesXcoodinates index:i];
-    if (isCenterAlign) {
-        float contentNextX = [self getXcoordinate: valuesXcoodinates index:i + 1];
-        contentX = (contentX + contentNextX) / 2;
-    } else if (isBetweenAlign){
-        contentX = [self getXcoordinate: valuesXcoodinates index:i * 2];
-        float contentNextX = [self getXcoordinate: valuesXcoodinates index:i * 2 + 1];
-        contentX = (contentX + contentNextX) / 2;
-    }
++ (void)setFrame: (UILabel*)label valuesXcoordinates:(NSArray*)valuesXcoordinates index:(int)i count:(int)count {
+    float contentX = [self getXcoordinate: valuesXcoordinates index:i];
     
     CGRect labelCanvas = CGRectMake(contentX, 0, label.frame.size.width, 25);
     [FrameHelper translateCanvas: labelCanvas view:label];
-    if (isCenterAlign || isBetweenAlign) {
-        [label setCenterX: [label.canvasFrame CGRectValue].origin.x];
-    } else {
-        label.frame = [label.canvasFrame CGRectValue];
-    }
+    label.frame = [label.canvasFrame CGRectValue];
     
 //    [ColorHelper setBorder:label];
     [FrameHelper translateFontLabel:label];     // the same as [FrameTranslater translateFontSize:]
 }
 
 
-+ (float)getXcoordinate: (NSArray*)valuesXcoodinates index:(int)index
++ (float)getXcoordinate: (NSArray*)valuesXcoordinates index:(int)index
 {
-    NSNumber* coordinate = valuesXcoodinates.count - 1 < index ? nil : [valuesXcoodinates objectAtIndex: index];
-    float coordinateX = coordinate ? [coordinate floatValue] : 50;
+    NSNumber* coordinate = valuesXcoordinates.count - 1 < index ? nil : [valuesXcoordinates objectAtIndex: index];
+    float coordinateX = coordinate ? [coordinate floatValue] : 100 * index;
     return coordinateX;
 }
 
