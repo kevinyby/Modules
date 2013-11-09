@@ -107,7 +107,7 @@
 
 + (void)setFrame: (UILabel*)label xcoordinates:(NSArray*)xCoordinates index:(int)i {
     
-    NSNumber* coordinate = xCoordinates.count > i ? nil : [xCoordinates objectAtIndex: i];
+    NSNumber* coordinate = xCoordinates.count > i ? [xCoordinates objectAtIndex: i] : nil;
     float coordinateX = coordinate ? [coordinate floatValue] : 100 * i;
     
     CGRect labelCanvas = CGRectMake(coordinateX, 0, label.frame.size.width, 25);
