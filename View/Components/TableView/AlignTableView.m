@@ -64,7 +64,7 @@
         [label adjustWidth];
         
         // set frame by FrameHelper
-        [self setFrame:label valuesXcoordinates:headersXcoordinates index:i count:count];
+        [self setFrame:label xcoordinates:headersXcoordinates index:i];
         
         [label setOriginY: [FrameTranslater convertCanvasY:[[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone  ? 8 : 0]];
     }
@@ -90,7 +90,7 @@
                 [cell addSubview:label];
             }
             
-            [self setFrame:label valuesXcoordinates:valuesXcoordinates index:i count:count];
+            [self setFrame:label xcoordinates:valuesXcoordinates index:i];
             [label setOriginY: [FrameTranslater convertCanvasY: 10]];
         }
     
@@ -105,23 +105,17 @@
 }
 
 
-+ (void)setFrame: (UILabel*)label valuesXcoordinates:(NSArray*)valuesXcoordinates index:(int)i count:(int)count {
-    float contentX = [self getXcoordinate: valuesXcoordinates index:i];
++ (void)setFrame: (UILabel*)label xcoordinates:(NSArray*)xCoordinates index:(int)i {
     
-    CGRect labelCanvas = CGRectMake(contentX, 0, label.frame.size.width, 25);
+    NSNumber* coordinate = xCoordinates.count > i ? nil : [xCoordinates objectAtIndex: i];
+    float coordinateX = coordinate ? [coordinate floatValue] : 100 * i;
+    
+    CGRect labelCanvas = CGRectMake(coordinateX, 0, label.frame.size.width, 25);
     [FrameHelper translateCanvas: labelCanvas view:label];
     label.frame = [label.canvasFrame CGRectValue];
     
 //    [ColorHelper setBorder:label];
     [FrameHelper translateFontLabel:label];     // the same as [FrameTranslater translateFontSize:]
-}
-
-
-+ (float)getXcoordinate: (NSArray*)valuesXcoordinates index:(int)index
-{
-    NSNumber* coordinate = valuesXcoordinates.count - 1 < index ? nil : [valuesXcoordinates objectAtIndex: index];
-    float coordinateX = coordinate ? [coordinate floatValue] : 100 * index;
-    return coordinateX;
 }
 
 @end
