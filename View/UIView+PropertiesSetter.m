@@ -12,6 +12,18 @@
     self.center = CGPointMake(self.center.x, y);
 }
 
+- (CGFloat)getSizeWidth
+{
+	CGRect frame = self.frame;
+	return frame.size.width ;
+}
+
+- (CGFloat)getSizeHeight
+{
+	CGRect frame = self.frame;
+	return frame.size.height ;
+}
+
 - (void)setSizeWidth: (CGFloat)width
 {
 	CGRect frame = self.frame;
@@ -26,6 +38,17 @@
 	self.frame = frame;
 }
 
+- (CGFloat)getOriginX
+{
+    CGRect frame = self.frame;
+    return frame.origin.x ;
+}
+
+- (CGFloat)getOriginY
+{
+    CGRect frame = self.frame;
+    return frame.origin.y ;
+}
 
 - (void)setOriginX: (CGFloat)x
 {
@@ -33,6 +56,7 @@
 	frame.origin.x = x;
 	self.frame = frame;
 }
+
 
 - (void)setOriginY: (CGFloat)y
 {

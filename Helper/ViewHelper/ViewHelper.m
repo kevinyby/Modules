@@ -1,4 +1,5 @@
 #import "ViewHelper.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation ViewHelper
 

@@ -1,8 +1,9 @@
 #import <Foundation/Foundation.h>
 
-#define DATE_FORMAT @"yyyy-MM-dd"
-#define DATE_TIME_FORMAT @"yyyy-MM-dd HH:mm:ss"
-#define DATA_TIME_ZONE_FORMAT @"yyyy-MM-dd HH:mm:ss Z"
+#define DATE_CLOCK_PATTERN @"HH:mm:ss"
+#define DATE_PATTERN @"yyyy-MM-dd"
+#define DATE_TIME_PATTERN @"yyyy-MM-dd HH:mm:ss"
+#define DATE_TIME_ZONE_PATTERN @"yyyy-MM-dd HH:mm:ss Z"
 
 @interface DateHelper : NSObject
 
@@ -10,7 +11,7 @@
 
 + (NSDate *)dateFromString:(NSString *)string pattern:(NSString*)pattern ;
 
-+(NSString*)stringFromString:(NSString *)sourceString fromPattern:(NSString*)fromPattern toPattern:(NSString*)toPattern ;
++ (NSString*)stringFromString:(NSString *)sourceString fromPattern:(NSString*)fromPattern toPattern:(NSString*)toPattern ;
 
 + (NSDateFormatter*) getLocaleDateFormater: (NSString*)pattern ;
 

@@ -12,12 +12,12 @@
 		self.highlightedTextColor = [UIColor blackColor];
 		self.textAlignment = NSTextAlignmentCenter;
 		self.text = text;
-        [self adjustWidth];
+        [self adjustWidthToFontText];
     }
     return self;
 }
 
--(void) adjustWidth {
+-(void) adjustWidthToFontText {
     CGSize titleSize = [self.text sizeWithFont:self.font];
     CGRect frame = self.frame;
     frame.size.width = titleSize.width;

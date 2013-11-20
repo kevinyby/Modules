@@ -20,7 +20,7 @@
 }
 
 
-+(NSString*)stringFromString:(NSString *)sourceString fromPattern:(NSString*)fromPattern toPattern:(NSString*)toPattern {
++ (NSString*)stringFromString:(NSString *)sourceString fromPattern:(NSString*)fromPattern toPattern:(NSString*)toPattern {
     NSDateFormatter* df = [self getLocaleDateFormater: fromPattern];
     NSDate *date= [df dateFromString:sourceString];
     [df setDateFormat: toPattern];
@@ -38,7 +38,7 @@
     [df setTimeZone: timeZone];
     NSLocale* locale = [NSLocale currentLocale];
     [df setLocale: locale];
-    pattern = pattern == nil ? DATA_TIME_ZONE_FORMAT : pattern;
+    pattern = pattern == nil ? DATE_TIME_ZONE_PATTERN : pattern;
     [df setDateFormat:pattern];
     return df;
 }

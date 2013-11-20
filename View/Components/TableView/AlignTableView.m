@@ -61,7 +61,7 @@
         
         // adjust width by text content
         label.text = labelText;
-        [label adjustWidth];
+        [label adjustWidthToFontText];
         
         // set frame by FrameHelper
         [self setFrame:label xcoordinates:headersXcoordinates index:i];
@@ -101,7 +101,7 @@
         UILabel* label = (UILabel*)[cell viewWithTag:CELL_CONTENT_LABEL_TAG(i)];
         label.text = [texts objectAtIndex: i];
         // adjust width by text content
-        [label adjustWidth];
+        [label adjustWidthToFontText];
     }
     
 }

@@ -4,6 +4,6 @@
 
 - (id)initWithText:(NSString*)text;
 
-- (void)adjustWidth ;
+- (void)adjustWidthToFontText ;
 
 @end
