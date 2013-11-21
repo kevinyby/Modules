@@ -5,6 +5,8 @@
 
 #import "TableViewBase.h"
 
+#import "FilterTableView.h"
+
 #import "AlignTableView.h"
 
 #import "HeaderTableView.h"

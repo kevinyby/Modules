@@ -19,4 +19,8 @@
 
 + (NSDate*) translateDateToCurrentLocale: (NSDate*)date ;
 
+
++ (NSDate*) truncateTime: (NSDate*)date;
++ (NSDate*) truncateToday: (NSDate*)date;
+
 @end

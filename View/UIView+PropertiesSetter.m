@@ -12,6 +12,8 @@
     self.center = CGPointMake(self.center.x, y);
 }
 
+#pragma mark - Size
+
 - (CGFloat)getSizeWidth
 {
 	CGRect frame = self.frame;
@@ -37,6 +39,8 @@
 	frame.size.height = height;
 	self.frame = frame;
 }
+
+#pragma mark - Origin
 
 - (CGFloat)getOriginX
 {
@@ -76,6 +80,13 @@
 {
 	CGRect frame = self.frame;
 	frame.origin.y += y;
+	self.frame = frame;
+}
+
+-(void) setOrigin: (CGPoint)point
+{
+    CGRect frame = self.frame;
+	frame.origin = point;
 	self.frame = frame;
 }
 

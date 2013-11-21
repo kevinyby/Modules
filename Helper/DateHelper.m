@@ -62,5 +62,31 @@
 }
 
 
+// e.g. 2010-10-30 10:14:13 -> 2010-10-30 00:00:00
++ (NSDate*) truncateTime: (NSDate*)date
+{
+    unsigned int flags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    NSDateComponents* components = [calendar components:flags fromDate:date];
+    NSDate* truncateDate = [calendar dateFromComponents:components];
+    //           truncateDate = [[calendar dateFromComponents:components] dateByAddingTimeInterval:[[NSTimeZone localTimeZone] secondsFromGMT]];
+    return truncateDate;
+}
+
+// e.g. 2010-10-30 10:14:13 -> 2013-11-20 10:14:13  (2013-11-20 is today)
++ (NSDate*) truncateToday: (NSDate*)date
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSUInteger preservedTimeComponents = NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+    NSDate* truncateDateTime = [calendar dateFromComponents:[calendar components:preservedTimeComponents fromDate:date]];
+    
+    NSDate *nowDate = [NSDate date];
+    NSCalendarUnit preservedDayComponents = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSDate* truncateDateDay = [calendar dateFromComponents:[calendar components:preservedDayComponents fromDate:nowDate]];
+    
+    NSDate *newDate = [calendar dateByAddingComponents:[calendar components:preservedTimeComponents fromDate:truncateDateTime] toDate:truncateDateDay options:0];
+    return newDate;
+}
+
 
 @end

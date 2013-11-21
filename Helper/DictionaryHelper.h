@@ -6,5 +6,6 @@
 +(void) deepCopy: (NSDictionary*)source to:(NSMutableDictionary*)destination  ;
 
 +(NSArray*) getSortedKeys: (NSDictionary*)dictionary;
++(NSString*) convertToJSONString: (NSDictionary*)dictionary;
 
 @end

@@ -1,4 +1,4 @@
-#import "TableViewBase.h"
+#import "FilterTableView.h"
 
 #define CELL_CONTENT_DELIMITER @","
 #define CELL_CONTENT_LABEL_TAG(_index) (_index + 505)
@@ -17,7 +17,7 @@
 
 
 // import !!! Just for section header
-@interface AlignTableView : TableViewBase
+@interface AlignTableView : FilterTableView
 
 @property (strong) NSArray* headers ;               // array of string @[@"1H",@"2H"] or @[@[@"1H",@"2H"],@[@"1H",@"2H"]]
 @property (strong) NSArray* headersXcoordinates;

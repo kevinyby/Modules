@@ -48,13 +48,16 @@
 
 @property(assign) id<TableViewScrollProxy> scrollProxy;     // For RefreshTableView now
 
-@property(nonatomic, assign) BOOL hideSections;
+@property(assign) BOOL hideSections;
 
 // { @"section_1":@[[@"1",@"2",@"3"],[@"1",@"2",@"3"]], @"section_2":@[[@"1",@"2",@"3"],[@"1",@"2",@"3"]] };
-@property(nonatomic, strong) NSMutableDictionary* contentsDictionary; // the visible contents
+@property (strong) NSMutableDictionary* realContentsDictionary;    // the background/real data of contentsDictionary, be sure has the same sort/order/sequence contentsDictionary
+
+// { @"section_1_Localize":@[[@"1_l",@"2_l",@"3_l"],[@"1_l",@"2_l",@"3_l"]], @"section_2_Localize":@[[@"1_l",@"2_l",@"3_l"],[@"1_l",@"2_l",@"3_l"]] };
+@property(strong, nonatomic) NSMutableDictionary* contentsDictionary; // the show/visible contents to end-user, be sure has the same sort/order/sequence realContentsDictionary
 
 
 /** get the sequential keys of contentsDictionary, against to the table section */
-@property (nonatomic, strong) NSArray* sections;
+-(NSArray *)sections;
 
 @end

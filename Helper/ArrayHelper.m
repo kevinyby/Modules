@@ -45,3 +45,15 @@
 }
 
 @end
+
+
+
+
+@implementation NSArray (SafeGetter)
+
+-(id)objectSafeAtIndex:(NSUInteger)index
+{
+    return ((int)self.count - 1) < (int)index ? nil : [self objectAtIndex: index];
+}
+
+@end

@@ -1,5 +1,6 @@
 #import "TableViewBase.h"
-#import "FrameTranslater.h"
+
+#import "_View.h"
 #import "_Helper.h"
 
 static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
@@ -26,26 +27,15 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     return self;
 }
 
--(void) setContentsDictionary:(NSMutableDictionary *)contentsDictionaryObj
-{
-    if (contentsDictionary) contentsDictionary = nil;
-    contentsDictionary = contentsDictionaryObj;
-}
-
 -(NSArray *)sections
 {
-    if (! _sections || [[DictionaryHelper getSortedKeys: contentsDictionary] count] != _sections.count) {
-        _sections = [DictionaryHelper getSortedKeys: contentsDictionary];
-    }
-    return _sections;
+    return [DictionaryHelper getSortedKeys: contentsDictionary];
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSString *)tableView:(UITableView *)tableViewObj titleForHeaderInSection:(NSInteger)section {
-    NSArray* sections = self.sections;
-    int sectionsHighestIndex = sections.count - 1;
-    return hideSections || sectionsHighestIndex < (int)section ? nil : [sections objectAtIndex: section];
+    return hideSections ? nil : [self.sections objectSafeAtIndex: section];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableViewObj {
@@ -53,9 +43,7 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 }
 
 - (NSInteger)tableView:(UITableView *)tableViewObj numberOfRowsInSection:(NSInteger)section {
-    NSArray* sections = self.sections;
-    int sectionsHighestIndex = sections.count - 1;
-    NSString* sectionKey = sectionsHighestIndex < (int)section ? nil : [sections objectAtIndex: section];
+    NSString* sectionKey = [self.sections objectSafeAtIndex: section];
     NSArray* sectionContents = [contentsDictionary objectForKey: sectionKey];
     int count = sectionContents.count;
     
@@ -69,11 +57,13 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     int row = indexPath.row;
     int section = indexPath.section ;
     
-    NSArray* sections = self.sections;
-    int sectionsHighestIndex = sections.count - 1;
-    NSString* sectionKey = sectionsHighestIndex < section ? nil : [sections objectAtIndex: section];
+    NSString* sectionKey = [self.sections objectSafeAtIndex: section];
     NSArray* sectionContents = [contentsDictionary objectForKey: sectionKey];
-    cell.textLabel.text = [sectionContents objectAtIndex: row];
+    NSString* cellText = [sectionContents objectAtIndex: row];
+    
+    float size = [FrameTranslater translateFontSize: 20];
+    cell.textLabel.font = [UIFont systemFontOfSize: size];
+    cell.textLabel.text = cellText;
     
     if (proxy && [proxy respondsToSelector:@selector(cellForIndexPath:on:)]) {
         cell = [proxy cellForIndexPath: indexPath on:self];

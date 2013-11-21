@@ -40,9 +40,19 @@
     NSArray* allKeys = [dictionary allKeys];
     NSMutableArray* temp = [NSMutableArray arrayWithArray: allKeys];
     NSArray* sortedKeys = [temp sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        return [obj1 caseInsensitiveCompare:obj2];
+        return [obj1 compare:obj2];
     }];
     return sortedKeys;
 }
+
+
++(NSString*) convertToJSONString: (NSDictionary*)dictionary
+{
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
+    NSString *jsonStrings = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    return jsonStrings;
+}
+
 
 @end

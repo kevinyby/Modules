@@ -30,11 +30,11 @@
 {
     UITableViewCell* cell = [super tableView: tableViewObj cellForRowAtIndexPath:indexPath];
     
-    NSString* text = cell.textLabel.text;
+    NSString* cellText = cell.textLabel.text;
     cell.textLabel.hidden = YES;
     
      NSArray* subHeaderCoordinates = [ArrayHelper isTwoDimension: valuesXcoordinates] ? [valuesXcoordinates objectAtIndex: indexPath.section] : valuesXcoordinates;
-    [AlignTableView separateCellTextToAlignHeaders:cell valuesXcoordinates:subHeaderCoordinates text:text];
+    [AlignTableView separateCellTextToAlignHeaders:cell valuesXcoordinates:subHeaderCoordinates text:cellText];
     
     return cell;
 }
