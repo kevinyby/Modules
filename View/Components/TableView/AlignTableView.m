@@ -41,7 +41,6 @@
 
 
 
-
 #pragma mark - AlignTableView Class Object Methods
 
 + (void)setAlignHeaders: (UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates
@@ -102,6 +101,7 @@
         label.text = [texts objectAtIndex: i];
         // adjust width by text content
         [label adjustWidthToFontText];
+//        [ColorHelper setBorder: label];
     }
     
 }

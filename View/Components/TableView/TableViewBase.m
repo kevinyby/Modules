@@ -23,6 +23,7 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
         self.hideSections = YES;
         self.dataSource = self;
         self.delegate = self;
+        if ([self respondsToSelector:@selector(setSeparatorInset:)]) [self setSeparatorInset:UIEdgeInsetsZero];     // ios 7
     }
     return self;
 }

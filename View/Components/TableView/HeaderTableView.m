@@ -1,5 +1,6 @@
 #import "HeaderTableView.h"
-#import "AlignTableView.h"
+
+#import "_View.h"
 
 @implementation HeaderTableView
 
@@ -54,7 +55,8 @@
 
 -(void) setSubviewsConstraints
 {
-    float inset = 0.0f;         // for test
+    float headerHeight = [FrameTranslater convertCanvasHeight: 25];
+    float inset = 0.0f;
     
     [headerView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -73,9 +75,9 @@
     
     
     [self addConstraints:[NSLayoutConstraint
-                          constraintsWithVisualFormat:@"V:|-0-[headerView(25)]"
+                          constraintsWithVisualFormat:@"V:|-0-[headerView(headerHeight)]"
                           options:NSLayoutFormatDirectionLeadingToTrailing
-                          metrics:nil
+                          metrics:@{@"headerHeight":@(headerHeight)}
                           views:NSDictionaryOfVariableBindings(headerView)]];
     
     
