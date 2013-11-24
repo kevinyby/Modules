@@ -7,6 +7,10 @@
 @implementation RotatableViewController
 
 #pragma mark - Override UIViewController Methods
+
+
+//**************Rotate Needed Begin
+
 // for ios5.0 , 6.0 deprecated
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
@@ -25,8 +29,16 @@
     return YES;
 }
 
+//**************Rotate Needed End
+
+
+
 - (void)viewWillAppear:(BOOL)animated {
     [self renderByOrientation: self.interfaceOrientation];
+}
+
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [self renderByOrientation: toInterfaceOrientation];
 }
 
 

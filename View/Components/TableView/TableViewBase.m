@@ -62,7 +62,7 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     NSArray* sectionContents = [contentsDictionary objectForKey: sectionKey];
     NSString* cellText = [sectionContents objectAtIndex: row];
     
-    float size = [FrameTranslater translateFontSize: 20];
+    float size = [FrameTranslater convertFontSize: 20];
     cell.textLabel.font = [UIFont systemFontOfSize: size];
     cell.textLabel.text = cellText;
     

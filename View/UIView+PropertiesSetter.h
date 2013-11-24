@@ -11,6 +11,8 @@
 - (void)setSizeWidth: (CGFloat)width;
 - (void)setSizeHeight: (CGFloat)height;
 
+- (void)setSize: (CGSize)size;
+
 #pragma mark - Origin
 
 - (CGFloat)getOriginX;

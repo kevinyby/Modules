@@ -3,11 +3,12 @@
 #import <objc/runtime.h>
 
 static const char* designFrameKey = "designFrameKey";
-static const char* canvasFrameKey = "canvasFrameKey";
-static const char* rotateCanvasFrameKey = "rotateCanvasFrameKey";
+static const char* actualFrameKey = "actualFrameKey";
+static const char* rotateActualFrameKey = "rotateActualFrameKey";
 
 @implementation UIView (CanvasFrame)
 
+// designFrame == canvasFrame
 -(NSValue *)designFrame {
     return  objc_getAssociatedObject(self, designFrameKey);
 }
@@ -16,20 +17,20 @@ static const char* rotateCanvasFrameKey = "rotateCanvasFrameKey";
     objc_setAssociatedObject(self, designFrameKey, designFrame, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
--(NSValue *)canvasFrame {
-    return  objc_getAssociatedObject(self, canvasFrameKey);
+-(NSValue *)actualFrame {
+    return  objc_getAssociatedObject(self, actualFrameKey);
 }
 
--(void)setCanvasFrame:(NSValue *)canvasFrame {
-    objc_setAssociatedObject(self, canvasFrameKey, canvasFrame, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+-(void)setActualFrame:(NSValue *)actualFrame {
+    objc_setAssociatedObject(self, actualFrameKey, actualFrame, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
--(NSValue *)rotateCanvasFrame {
-    return  objc_getAssociatedObject(self, rotateCanvasFrameKey);
+-(NSValue *)rotateActualFrame {
+    return  objc_getAssociatedObject(self, rotateActualFrameKey);
 }
 
--(void)setRotateCanvasFrame:(NSValue *)rotateCanvasFrame {
-    objc_setAssociatedObject(self, rotateCanvasFrameKey, rotateCanvasFrame, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+-(void)setRotateActualFrame:(NSValue *)rotateCanvasFrame {
+    objc_setAssociatedObject(self, rotateActualFrameKey, rotateCanvasFrame, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

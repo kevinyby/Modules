@@ -4,22 +4,27 @@
 
 
 +(BOOL) isPortraitDesigned ;
-+(void) setIsPortraitDesigned: (BOOL)portraitDesigned ;
++(void) setIsPortraitDesigned: (BOOL)isPortrait ;
 
-+(CGSize) getPortraitCanvasSize ;
-+(CGSize) getLandscapeCanvasSize ;
++(CGSize) portraitCanvasSize ;
++(CGSize) landscapeCanvasSize ;
 +(void) setPortraitCanvasSize: (CGSize)size ;
 +(void) setLandscapeCanvasSize: (CGSize)size ;
 
 
 +(CGRect) getFrame: (CGRect)canvasFrame ;
 
-+(void) adjustLabelSize: (UILabel*)label canvasFrame:(CGRect)canvasFrame ;
 
-+(CGFloat) translateFontSize: (CGFloat)fontSize ;
++(void) transformLabel: (UILabel*)label canvas:(CGRect)canvas ;
 
-+(CGFloat) canvasScreenRatioX ;
-+(CGFloat) canvasScreenRatioY ;
+
++(NSArray*) screenCanvasRatio ;
+
+
++(CGFloat) convertFontSize: (CGFloat)fontSize ;
+
++(CGSize) convertCanvasSize: (CGSize)size;
++(CGPoint) convertCanvasPoint: (CGPoint)point;
 
 +(CGFloat) convertCanvasHeight: (CGFloat)y ;
 +(CGFloat) convertCanvasWidth: (CGFloat)x ;

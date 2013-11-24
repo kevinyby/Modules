@@ -40,6 +40,13 @@
 	self.frame = frame;
 }
 
+- (void)setSize: (CGSize)size
+{
+	CGRect frame = self.frame;
+	frame.size = size;
+	self.frame = frame;
+}
+
 #pragma mark - Origin
 
 - (CGFloat)getOriginX
@@ -60,7 +67,6 @@
 	frame.origin.x = x;
 	self.frame = frame;
 }
-
 
 - (void)setOriginY: (CGFloat)y
 {

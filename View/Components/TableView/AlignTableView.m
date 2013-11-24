@@ -63,11 +63,9 @@
         [label adjustWidthToFontText];
         
         // set frame by FrameHelper
-        [self setFrame:label xcoordinates:headersXcoordinates index:i];
-        
-        [label setOriginY: [FrameTranslater convertCanvasY:[[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone  ? 8 : 0]];
-        
-        [FrameHelper translateFontLabel:label];
+        CGRect labelCanvas = [self getCanvas:label xcoordinates:headersXcoordinates index:i];
+        [FrameHelper translateLabel: label canvas:labelCanvas];
+        [label setOriginY: [FrameTranslater convertCanvasY:[[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone  ? 0 : 8]];
     }
 }
 
@@ -84,14 +82,15 @@
                 label = [[UILabel alloc] initWithText:nil];
                 label.textAlignment = NSTextAlignmentLeft;
                 // set font size
-                float size = [FrameTranslater translateFontSize: 20];
+                float size = [FrameTranslater convertFontSize: 20];
                 label.font = [UIFont systemFontOfSize: size];
                 // adjust width by text content
                 label.tag = CELL_CONTENT_LABEL_TAG(i);
                 [cell addSubview:label];
             }
             
-            [self setFrame:label xcoordinates:valuesXcoordinates index:i];
+            CGRect labelCanvas = [self getCanvas:label xcoordinates:valuesXcoordinates index:i];
+            [FrameHelper setFrame: labelCanvas view:label];
             [label setOriginY: [FrameTranslater convertCanvasY: 10]];
         }
     
@@ -101,18 +100,16 @@
         label.text = [texts objectAtIndex: i];
         // adjust width by text content
         [label adjustWidthToFontText];
-//        [ColorHelper setBorder: label];
     }
     
 }
 
 
-+ (void)setFrame: (UILabel*)label xcoordinates:(NSArray*)xCoordinates index:(int)i {
++ (CGRect)getCanvas: (UILabel*)label xcoordinates:(NSArray*)xCoordinates index:(int)i {
     NSNumber* coordinate = xCoordinates.count > i ? [xCoordinates objectAtIndex: i] : nil;
     float coordinateX = coordinate ? [coordinate floatValue] : 100 * i;
     CGRect labelCanvas = CGRectMake(coordinateX, 0, label.frame.size.width, 25);
-    [FrameHelper translateCanvas: labelCanvas view:label];
-    label.frame = [label.canvasFrame CGRectValue];
+    return labelCanvas;
 }
 
 @end
