@@ -34,4 +34,26 @@
     
 }
 
+/**
+ *   Sort the view.subviews index by subview.frame.origin.x coordinate
+ */
++(void) sortedSubviewsByXCoordinate: (UIView*)containerView
+{
+    // sort subviews
+    NSMutableArray* array = [NSMutableArray arrayWithArray: containerView.subviews];
+    NSArray* sorteArray = [array sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        UIView* view = (UIView*)obj1;
+        UIView* nextView = (UIView*)obj2;
+        float viewOriginX = view.frame.origin.x;
+        float nextViewOriginX = nextView.frame.origin.x;
+        return [[NSNumber numberWithFloat: viewOriginX] compare: [NSNumber numberWithFloat: nextViewOriginX]];
+    }];
+    
+    // reset index
+    for (int i = 0; i < sorteArray.count; i++) {
+        UIView* view = sorteArray[i];
+        [containerView insertSubview: view atIndex:i];
+    }
+}
+
 @end

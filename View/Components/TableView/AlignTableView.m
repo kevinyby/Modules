@@ -65,7 +65,6 @@
         // set frame by FrameHelper
         CGRect labelCanvas = [self getCanvas:label xcoordinates:headersXcoordinates index:i];
         [FrameHelper translateLabel: label canvas:labelCanvas];
-        [label setOriginY: [FrameTranslater convertCanvasY:[[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone  ? 0 : 8]];
     }
 }
 
