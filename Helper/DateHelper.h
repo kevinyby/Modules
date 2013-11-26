@@ -29,11 +29,26 @@
 
 @interface NSDate(Operator)
 
+// GT for Greate Than
+
+
+/**
+ *  compare with time
+ */
 -(BOOL) GT:(NSDate*)date;
 -(BOOL) LT:(NSDate*)date;
 -(BOOL) EQ:(NSDate*)date;
 -(BOOL) GTEQ:(NSDate*)date;
 -(BOOL) LTEQ:(NSDate*)date;
+
+/**
+ *  compare without time
+ */
+-(BOOL) GTD:(NSDate*)date;
+-(BOOL) LTD:(NSDate*)date;
+-(BOOL) EQD:(NSDate*)date;
+-(BOOL) GTEQD:(NSDate*)date;
+-(BOOL) LTEQD:(NSDate*)date;
 
 
 @end

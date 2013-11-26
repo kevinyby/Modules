@@ -35,6 +35,17 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     return [DictionaryHelper getSortedKeys: contentsDictionary];
 }
 
+-(id) valueForIndexPath: (NSIndexPath*)indexPath
+{
+    return [[self.realContentsDictionary objectForKey:[self.sections objectAtIndex: indexPath.section]] objectAtIndex: indexPath.row];
+}
+
+-(NSString*) contentForIndexPath: (NSIndexPath*)indexPath       // == cell.textLabel.text
+{
+    return [[self.contentsDictionary objectForKey: [self.sections objectAtIndex: indexPath.section]] objectAtIndex: indexPath.row];
+}
+
+
 #pragma mark - UITableViewDataSource
 
 - (NSString *)tableView:(UITableView *)tableViewObj titleForHeaderInSection:(NSInteger)section {

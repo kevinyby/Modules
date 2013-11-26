@@ -67,6 +67,11 @@
     }
 }
 
+-(NSString *)contentForIndexPath:(NSIndexPath *)indexPath
+{
+    return [[backupContentsDictionary objectForKey: [self.sections objectAtIndex: indexPath.section]] objectAtIndex: indexPath.row];
+}
+
 #pragma mark - Public Methods
 
 -(BOOL) isInFilteringMode

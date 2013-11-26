@@ -69,7 +69,7 @@
     NSCalendar* calendar = [NSCalendar currentCalendar];
     NSDateComponents* components = [calendar components:flags fromDate:date];
     NSDate* truncateDate = [calendar dateFromComponents:components];
-    //           truncateDate = [[calendar dateFromComponents:components] dateByAddingTimeInterval:[[NSTimeZone localTimeZone] secondsFromGMT]];
+//           truncateDate = [[calendar dateFromComponents:components] dateByAddingTimeInterval:[[NSTimeZone localTimeZone] secondsFromGMT]];
     return truncateDate;
 }
 
@@ -97,6 +97,10 @@
 
 @implementation NSDate(Operator)
 
+/**
+ *  compare with time
+ */
+
 -(BOOL) GT:(NSDate*)date
 {
     return [self compare: date] == NSOrderedDescending;
@@ -120,6 +124,35 @@
 -(BOOL) LTEQ:(NSDate*)date
 {
     return [self LT: date] || [self EQ:date];
+}
+
+
+/**
+ *  compare without time
+ */
+-(BOOL) GTD:(NSDate*)date
+{
+    return [[DateHelper truncateTime:self] compare: [DateHelper truncateTime:date]] == NSOrderedDescending;
+}
+
+-(BOOL) LTD:(NSDate*)date
+{
+    return [[DateHelper truncateTime:self] compare: [DateHelper truncateTime:date]] == NSOrderedAscending;
+}
+
+-(BOOL) EQD:(NSDate*)date
+{
+    return [[DateHelper truncateTime:self] compare: [DateHelper truncateTime:date]] == NSOrderedSame;
+}
+
+-(BOOL) GTEQD:(NSDate*)date
+{
+    return [self GTD: date] || [self EQD:date];
+}
+
+-(BOOL) LTEQD:(NSDate*)date
+{
+    return [self LTD: date] || [self EQD:date];
 }
 
 
