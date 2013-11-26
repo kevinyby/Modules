@@ -8,6 +8,8 @@
 
 +(BOOL) isTwoDimension: (NSArray*)array;
 
++(NSArray*) sort:(NSArray*)array;
+
 @end
 
 

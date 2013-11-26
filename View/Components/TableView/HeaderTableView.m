@@ -55,8 +55,8 @@
 
 -(void) setSubviewsConstraints
 {
-    float headerHeight = [FrameTranslater convertCanvasHeight: 25];
-    float inset = 0.0f;
+    float headerHeight = [FrameTranslater convertCanvasHeight: 25.0f];
+    float inset = [FrameTranslater convertCanvasHeight: 0.0f];
     
     [headerView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -73,19 +73,12 @@
                           metrics:nil
                           views:NSDictionaryOfVariableBindings(tableView)]];
     
-    
     [self addConstraints:[NSLayoutConstraint
-                          constraintsWithVisualFormat:@"V:|-0-[headerView(headerHeight)]"
+                          constraintsWithVisualFormat:@"V:|-0-[headerView(headerHeight)]-(inset)-[tableView]-0-|"
                           options:NSLayoutFormatDirectionLeadingToTrailing
-                          metrics:@{@"headerHeight":@(headerHeight)}
-                          views:NSDictionaryOfVariableBindings(headerView)]];
-    
-    
-    [self addConstraints:[NSLayoutConstraint
-                          constraintsWithVisualFormat:@"V:[headerView]-(inset)-[tableView]-0-|"
-                          options:NSLayoutFormatDirectionLeadingToTrailing
-                          metrics:@{@"inset":@(inset)}
+                          metrics:@{@"headerHeight":@(headerHeight),@"inset":@(inset)}
                           views:NSDictionaryOfVariableBindings(headerView,tableView)]];
+    
 }
 
 @end

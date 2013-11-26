@@ -44,7 +44,19 @@
     return [obj isKindOfClass: [NSArray class]];
 }
 
+
++(NSArray*) sort:(NSArray*)array
+{
+    NSMutableArray* temp = [NSMutableArray arrayWithArray: array];
+    NSArray* result = [temp sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1 compare: obj2];
+    }];
+    return result;
+}
+
+
 @end
+
 
 
 

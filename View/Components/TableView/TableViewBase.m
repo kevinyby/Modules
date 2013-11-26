@@ -23,6 +23,8 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
         self.hideSections = YES;
         self.dataSource = self;
         self.delegate = self;
+        //http://stackoverflow.com/questions/14520185/ios-uitableview-displaying-empty-cells-at-the-end
+        self.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
         if ([self respondsToSelector:@selector(setSeparatorInset:)]) [self setSeparatorInset:UIEdgeInsetsZero];     // ios 7
     }
     return self;
@@ -47,7 +49,6 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     NSString* sectionKey = [self.sections objectSafeAtIndex: section];
     NSArray* sectionContents = [contentsDictionary objectForKey: sectionKey];
     int count = sectionContents.count;
-    
     return count;
 }
 

@@ -24,3 +24,9 @@
 + (NSDate*) truncateToday: (NSDate*)date;
 
 @end
+
+
+
+@interface NSDate(Operator)
+
+@end

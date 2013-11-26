@@ -1,4 +1,5 @@
 #import "FilterTableView.h"
+#import "_Helper.h"
 
 @implementation FilterTableView {
     NSString* predicateString ;
@@ -38,7 +39,7 @@
             NSArray* contents = [backupContentsDictionary objectForKey: key];
             NSArray* filteredContents = [contents filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:predicateString, filterText]];
             if (filteredContents.count) {
-                [searchContentsDictionary setObject:[self sort: filteredContents] forKey:key];
+                [searchContentsDictionary setObject:[ArrayHelper sort: filteredContents] forKey:key];
             } else {
                 [searchContentsDictionary removeObjectForKey: key];
             }
@@ -51,15 +52,26 @@
         super.contentsDictionary = backupContentsDictionary;
     }
     
-    [self reloadData];
+    [super reloadData];
 }
 
+-(void)reloadData
+{
+    self.filterText = self.filterText;
+}
+
+- (void)tableView:(UITableView *)tableViewObj didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([self isInFilteringMode]) indexPath = [self traslateIndexPathInFilterMode: indexPath];
+    if (self.proxy && [self.proxy respondsToSelector:@selector(didSelectIndexPath:on:)]) {
+        [self.proxy didSelectIndexPath: indexPath on:self];
+    }
+}
 
 #pragma mark - Public Methods
 
 -(BOOL) isInFilteringMode
 {
-    return _filterText != nil && ![_filterText isEqualToString:@""];
+    return self.filterText != nil && ![self.filterText isEqualToString:@""];
 }
 
 -(NSIndexPath*) traslateIndexPathInFilterMode: (NSIndexPath*)indexPath
@@ -73,23 +85,11 @@
         NSUInteger row = [sectionContents indexOfObject: cellText];
         if (row != NSNotFound) {
             return [NSIndexPath indexPathForRow: row inSection:section];
-        } else {
-            NSLog(@"Error! Check it!");
         }
     }
-    return indexPath;
-}
-
-
-#pragma mark - Private Methods
-
--(NSArray*) sort:(NSArray*)array
-{
-    NSMutableArray* temp = [NSMutableArray arrayWithArray: array];
-    NSArray* result = [temp sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        return [obj1 compare: obj2];
-    }];
-    return result;
+    
+    NSLog(@"Error!!!!!");
+    return [NSIndexPath indexPathForRow: -1 inSection:-1];
 }
 
 @end

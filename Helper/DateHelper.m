@@ -90,3 +90,41 @@
 
 
 @end
+
+
+
+
+
+@implementation NSDate(Operator)
+
+-(BOOL) GT:(NSDate*)date
+{
+    return [self compare: date] == NSOrderedDescending;
+}
+
+-(BOOL) LT:(NSDate*)date
+{
+    return [self compare: date] == NSOrderedAscending;
+}
+
+-(BOOL) EQ:(NSDate*)date
+{
+    return [self compare: date] == NSOrderedSame;
+}
+
+-(BOOL) GTEQ:(NSDate*)date
+{
+    return [self GT: date] || [self EQ:date];
+}
+
+-(BOOL) LTEQ:(NSDate*)date
+{
+    return [self LT: date] || [self EQ:date];
+}
+
+
+@end
+
+
+
+
