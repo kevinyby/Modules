@@ -52,6 +52,14 @@
     return newDate;
 }
 
++ (NSDate*) date: (NSDate*)date addDay: (int)day {
+    NSDateComponents* dateComponents = [[NSDateComponents alloc] init];
+    [dateComponents setDay:day];
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    NSDate* newDate = [calendar dateByAddingComponents:dateComponents toDate:date options:0];
+    return newDate;
+}
+
 
 + (NSDate*) translateDateToCurrentLocale: (NSDate*)date {           //TODO: Have something wrong . Failed
     NSDateFormatter *dateFormatter = [self getLocaleDateFormater: nil];

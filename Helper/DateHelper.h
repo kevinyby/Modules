@@ -15,6 +15,7 @@
 
 + (NSDateFormatter*) getLocaleDateFormater: (NSString*)pattern ;
 
++ (NSDate*) date: (NSDate*)date addDay: (int)day ;
 + (NSDate*) date: (NSDate*)date addMonth: (int)month ;
 
 + (NSDate*) translateDateToCurrentLocale: (NSDate*)date ;
