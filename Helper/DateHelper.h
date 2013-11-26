@@ -29,4 +29,10 @@
 
 @interface NSDate(Operator)
 
+-(BOOL) GT:(NSDate*)date;
+-(BOOL) LT:(NSDate*)date;
+-(BOOL) EQ:(NSDate*)date;
+-(BOOL) GTEQ:(NSDate*)date;
+-(BOOL) LTEQ:(NSDate*)date;
+
 @end
