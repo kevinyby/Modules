@@ -3,6 +3,8 @@
 @interface DictionaryHelper : NSObject
 
 +(void) combine: (NSMutableDictionary*)destination with:(NSDictionary*)source ;
+
++(NSMutableDictionary*) deepCopy: (NSDictionary*)source ;
 +(void) deepCopy: (NSDictionary*)source to:(NSMutableDictionary*)destination  ;
 
 +(NSArray*) getSortedKeys: (NSDictionary*)dictionary;

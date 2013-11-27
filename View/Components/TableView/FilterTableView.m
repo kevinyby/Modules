@@ -6,6 +6,15 @@
     NSMutableDictionary* backupContentsDictionary;
 }
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.filterMode = FilterModeContains;
+    }
+    return self;
+}
+
 -(void)setContentsDictionary:(NSMutableDictionary *)contentsDictionary
 {
     super.contentsDictionary = contentsDictionary;

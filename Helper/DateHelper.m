@@ -22,7 +22,7 @@
 
 + (NSString*)stringFromString:(NSString *)sourceString fromPattern:(NSString*)fromPattern toPattern:(NSString*)toPattern {
     NSDateFormatter* df = [self getLocaleDateFormater: fromPattern];
-    NSDate *date= [df dateFromString:sourceString];
+    NSDate *date = [df dateFromString:sourceString];
     [df setDateFormat: toPattern];
     NSString *string = [df stringFromDate:date];
     return string;

@@ -25,6 +25,13 @@
 @property (nonatomic, strong) NSArray* valuesXcoordinates; //here one dimension
 
 
+#pragma mark - Public Methods
 -(void) reloadData ;
+
+
+#pragma mark - Subclass Override Methods
+-(void) initializeSubviews;
+-(void) initializeSubviewsHConstraints;
+-(void) initializeSubviewsVConstraints;
 
 @end

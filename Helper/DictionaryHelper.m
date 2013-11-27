@@ -16,21 +16,22 @@
     }
 }
 
+// Note here , this method do not copy the deepest element object
++(NSMutableDictionary*) deepCopy: (NSDictionary*)source {
+    NSMutableDictionary* destination = [NSMutableDictionary dictionary];
+    [self deepCopy: source to:destination];
+    return destination;
+}
 +(void) deepCopy: (NSDictionary*)source to:(NSMutableDictionary*)destination  {
     for (NSString* key in source) {
         id obj = [source objectForKey: key];
         
         if ([obj isKindOfClass: [NSDictionary class]]) {
-            NSMutableDictionary* subDestination = [NSMutableDictionary dictionary];
-            [DictionaryHelper deepCopy:obj to:subDestination];
-            obj = subDestination;
+            obj = [DictionaryHelper deepCopy:obj];
         } else if ([obj isKindOfClass: [NSArray class]]) {
-            NSMutableArray* subDestination = [NSMutableArray array];
-            [ArrayHelper deepCopy: obj to:subDestination];
-            obj = subDestination;
+            obj = [ArrayHelper deepCopy: obj];
         }
         [destination setObject: obj forKey:key];
-        
     }
 }
 

@@ -1,6 +1,7 @@
 #import "HeaderTableView.h"
 
-#import "_View.h"
+// _View.h
+#import "FrameTranslater.h"
 
 @implementation HeaderTableView
 
@@ -13,11 +14,9 @@
 {
     self = [super init];
     if (self) {
-        headerView = [[UIView alloc] init];
-        tableView = [[AlignTableView alloc] init];
-        [self addSubview: tableView];
-        [self addSubview: headerView];
-        [self setSubviewsConstraints];
+        [self initializeSubviews];
+        [self initializeSubviewsHConstraints];
+        [self initializeSubviewsVConstraints];
     }
     return self;
 }
@@ -51,13 +50,18 @@
     [tableView reloadData];
 }
 
-#pragma mark - Private Methods
+#pragma mark - Subclass Override Methods
 
--(void) setSubviewsConstraints
+-(void) initializeSubviews
 {
-    float headerHeight = [FrameTranslater convertCanvasHeight: 25.0f];
-    float inset = [FrameTranslater convertCanvasHeight: 0.0f];
-    
+    headerView = [[UIView alloc] init];
+    tableView = [[AlignTableView alloc] init];
+    [self addSubview: tableView];
+    [self addSubview: headerView];
+}
+
+-(void) initializeSubviewsHConstraints
+{
     [headerView setTranslatesAutoresizingMaskIntoConstraints:NO];
     [tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
     
@@ -72,6 +76,12 @@
                           options:NSLayoutFormatDirectionLeadingToTrailing
                           metrics:nil
                           views:NSDictionaryOfVariableBindings(tableView)]];
+}
+
+-(void) initializeSubviewsVConstraints
+{
+    float headerHeight = [FrameTranslater convertCanvasHeight: 25.0f];
+    float inset = [FrameTranslater convertCanvasHeight: 0.0f];
     
     [self addConstraints:[NSLayoutConstraint
                           constraintsWithVisualFormat:@"V:|-0-[headerView(headerHeight)]-(inset)-[tableView]-0-|"

@@ -3,6 +3,8 @@
 @interface ArrayHelper : NSObject
 
 +(void) add: (NSMutableArray*)repository objs:(id)obj, ... NS_REQUIRES_NIL_TERMINATION;
+
++(NSMutableArray*) deepCopy: (NSArray*)source ;
 +(void) deepCopy: (NSArray*)source to:(NSMutableArray*)destination  ;
 
 
