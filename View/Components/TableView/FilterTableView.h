@@ -9,6 +9,7 @@ typedef enum {
 
 @property (strong, nonatomic) NSString* filterText;
 @property (assign, nonatomic) FilterMode filterMode;
+@property (assign) BOOL disable;
 
 -(BOOL) isInFilteringMode;
 -(NSIndexPath*) traslateIndexPathInFilterMode: (NSIndexPath*)indexPath;

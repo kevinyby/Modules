@@ -85,7 +85,7 @@
 
 -(BOOL) isInFilteringMode
 {
-    return self.filterText != nil && ![self.filterText isEqualToString:@""];
+    return self.filterText != nil && ![self.filterText isEqualToString:@""] && !self.disable;
 }
 
 -(NSIndexPath*) traslateIndexPathInFilterMode: (NSIndexPath*)indexPath
