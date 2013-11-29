@@ -49,11 +49,11 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 #pragma mark - UITableViewDataSource
 
 - (NSString *)tableView:(UITableView *)tableViewObj titleForHeaderInSection:(NSInteger)section {
-    return hideSections ? nil : [self.sections objectSafeAtIndex: section];
+    return [self.sections objectSafeAtIndex: section];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableViewObj {
-    return hideSections ? 1 : self.sections.count;
+    return self.sections.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableViewObj numberOfRowsInSection:(NSInteger)section {
@@ -90,6 +90,10 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return hideSections ? 0 :  25;
+}
 
 - (void)tableView:(UITableView *)tableViewObj willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     // tableViewObj == self
@@ -135,5 +139,7 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
         [scrollProxy didEndDragging: decelerate on:self];
     }
 }
+
+
 
 @end

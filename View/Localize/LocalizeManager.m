@@ -1,45 +1,58 @@
 #import "LocalizeManager.h"
 
+#ifndef LOCALIZE_TABLE_FORMAT
+#define LOCALIZE_TABLE_FORMAT @"_%@"
+#endif
 
-#ifndef Localize
-    #define Localize @"Localize"
+#ifndef LOCALIZE_PREFIX
+#define LOCALIZE_PREFIX @"Localize"
 #endif
 
 #define SIMULATOR @"Simulator"
 
 #define ISSIMULATOR [[[UIDevice currentDevice] model] rangeOfString: SIMULATOR].location != NSNotFound
 
-static NSString* currentLocalize = nil ;
+// NSArray
+#define IOSSupportedLanguages [[NSUserDefaults standardUserDefaults] objectForKey: @"AppleLanguages"]
+
+static NSString* currentLanguage = nil ;
 
 @implementation LocalizeManager
 
 +(void)initialize {
-    currentLocalize = IOSCurrentLocalize;
+    currentLanguage = [[NSLocale preferredLanguages] firstObject];
     
 //    if (ISSIMULATOR) {
-        if ([currentLocalize isEqualToString: Localize_zh_Hans]) currentLocalize = Localize_zh_CN ;
-        else if ([currentLocalize isEqualToString: Localize_zh_Hant]) currentLocalize = Localize_zh_TW ;
+        if ([currentLanguage isEqualToString: LANGUAGE_zh_Hans]) currentLanguage = LANGUAGE_zh_CN ;
+        else if ([currentLanguage isEqualToString: LANGUAGE_zh_Hant]) currentLanguage = LANGUAGE_zh_TW ;
 //    }
     
     [super initialize];
 }
 
-+(void) setCurrentLocalize: (NSString*)localize {
-    if (currentLocalize) {
-        currentLocalize = nil;
-    }
-    currentLocalize = localize;
+
++(NSString*) currentLanguage {
+    return currentLanguage;
+}
+
++(void) setCurrentLanguage: (NSString*)language {
+    currentLanguage = language;
 }
 
 
 +(NSString*) getLocalized: (NSString*)key {
-    return [self getLocalized: key localize:currentLocalize];
+    return [self getLocalized: key category:nil language:currentLanguage];
 }
 
++(NSString*) getLocalized: (NSString*)key category:(NSString*)category {
+    return [self getLocalized: key category:category language:currentLanguage];
+}
 
-+(NSString*) getLocalized: (NSString*)key localize:(NSString*)localize {
-    NSString* tbl = [NSString stringWithFormat: @"%@_%@", Localize, localize];
-    return NSLocalizedStringFromTable(key, tbl, nil);
++(NSString*) getLocalized: (NSString*)key category:(NSString*)category language:(NSString*)language  {
+    NSString* table = LOCALIZE_PREFIX;
+    if (category) table = [table stringByAppendingFormat:LOCALIZE_TABLE_FORMAT, category];
+    if (language) table = [table stringByAppendingFormat:LOCALIZE_TABLE_FORMAT, language];
+    return NSLocalizedStringFromTable(key, table, nil);
 }
 
 @end

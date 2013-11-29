@@ -3,7 +3,6 @@
 
 @implementation ArrayHelper
 
-
 // [ArrayHelper add: array objs:@"1", nil] . Do not forget the "nil"
 +(void) add: (NSMutableArray*)repository objs:(id)obj, ... {
     id arg = nil;

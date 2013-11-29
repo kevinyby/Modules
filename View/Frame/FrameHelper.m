@@ -19,20 +19,21 @@ static Boolean isNeedReserve ;
     isNeedReserve = isNeed;
 }
 
-
 +(void) setFrame: (CGRect)canvas view:(UIView*)view {
     [self translateCanvas: canvas view:view];
     view.frame = [view.actualFrame CGRectValue];
-}
-
-+(void) translateCanvas: (CGRect)canvas view:(UIView*)view {
-    view.actualFrame = [NSValue valueWithCGRect: [FrameTranslater getFrame: canvas]];
-    if (isNeedReserve) view.designFrame = [NSValue valueWithCGRect: canvas];
 }
 
 +(void) translateLabel: (UILabel*)label canvas:(CGRect)canvas
 {
     [FrameTranslater transformLabel: label canvas: canvas];
 }
+
+// deprecated
++(void) translateCanvas: (CGRect)canvas view:(UIView*)view {
+    view.actualFrame = [NSValue valueWithCGRect: [FrameTranslater getFrame: canvas]];
+    if (isNeedReserve) view.designFrame = [NSValue valueWithCGRect: canvas];
+}
+
 
 @end

@@ -35,7 +35,6 @@
     }
 }
 
-
 +(NSArray*) getSortedKeys: (NSDictionary*)dictionary
 {
     NSArray* allKeys = [dictionary allKeys];
@@ -45,7 +44,6 @@
     }];
     return sortedKeys;
 }
-
 
 +(NSString*) convertToJSONString: (NSDictionary*)dictionary
 {

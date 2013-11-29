@@ -22,9 +22,6 @@
 
 
 
-
-
-
 @protocol TableViewScrollProxy <NSObject>
 
 @optional
