@@ -34,4 +34,12 @@
     }
 }
 
++(void) iterateDictionary:(NSDictionary*)dictionary handler:(BOOL (^)(id key, id value))handler
+{
+    for (NSString* key in dictionary) {
+        id value = [dictionary objectForKey: key];
+        if (handler(key, value)) return;
+    }
+}
+
 @end

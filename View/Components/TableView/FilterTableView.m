@@ -3,7 +3,7 @@
 
 @implementation FilterTableView {
     NSString* predicateString ;
-    NSMutableDictionary* backupContentsDictionary;
+    NSMutableDictionary* contentsDictionaryBackUp;
 }
 
 - (id)init
@@ -11,6 +11,7 @@
     self = [super init];
     if (self) {
         self.filterMode = FilterModeContains;
+        self.seletedVisibleIndexPath = nil;
     }
     return self;
 }
@@ -18,7 +19,7 @@
 -(void)setContentsDictionary:(NSMutableDictionary *)contentsDictionary
 {
     super.contentsDictionary = contentsDictionary;
-    backupContentsDictionary = contentsDictionary;
+    contentsDictionaryBackUp = contentsDictionary;
 }
 
 -(void) setFilterMode:(FilterMode)mode
@@ -44,8 +45,8 @@
     // Filter Mode
     if ([self isInFilteringMode]) {
         NSMutableDictionary* searchContentsDictionary = [NSMutableDictionary dictionary];
-        for (NSString* key in backupContentsDictionary) {
-            NSArray* contents = [backupContentsDictionary objectForKey: key];
+        for (NSString* key in contentsDictionaryBackUp) {
+            NSArray* contents = [contentsDictionaryBackUp objectForKey: key];
             NSArray* filteredContents = [contents filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:predicateString, filterText]];
             if (filteredContents.count) {
                 [searchContentsDictionary setObject:[ArrayHelper sort: filteredContents] forKey:key];
@@ -58,7 +59,7 @@
         
     // Normal Mode
     } else {
-        super.contentsDictionary = backupContentsDictionary;
+        super.contentsDictionary = contentsDictionaryBackUp;
     }
     
     [super reloadData];
@@ -70,15 +71,11 @@
 }
 
 - (void)tableView:(UITableView *)tableViewObj didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([self isInFilteringMode]) indexPath = [self traslateIndexPathInFilterMode: indexPath];
+    self.seletedVisibleIndexPath = indexPath;
+    if ([self isInFilteringMode])  indexPath = [self traslateFilterModeIndexPath: indexPath];
     if (self.proxy && [self.proxy respondsToSelector:@selector(didSelectIndexPath:on:)]) {
         [self.proxy didSelectIndexPath: indexPath on:self];
     }
-}
-
--(NSString *)contentForIndexPath:(NSIndexPath *)indexPath
-{
-    return [[backupContentsDictionary objectForKey: [self.sections objectAtIndex: indexPath.section]] objectAtIndex: indexPath.row];
 }
 
 #pragma mark - Public Methods
@@ -88,14 +85,27 @@
     return self.filterText != nil && ![self.filterText isEqualToString:@""] && !self.disable;
 }
 
--(NSIndexPath*) traslateIndexPathInFilterMode: (NSIndexPath*)indexPath
+// get the real index path by view in cell
+-(NSIndexPath*) getRealIndexPath:(UIView*)subview 
+{
+    // get table cell
+    UITableViewCell* cell = (UITableViewCell*)[subview superview];
+    while (cell && ![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell*)[cell superview];
+    
+    // get the index path
+    NSIndexPath* indexPath = [self indexPathForCell: cell];
+    if ([self isInFilteringMode]) indexPath = [self traslateFilterModeIndexPath:indexPath];
+    return indexPath;
+}
+
+-(NSIndexPath*) traslateFilterModeIndexPath: (NSIndexPath*)indexPath
 {
     if (![self isInFilteringMode]) return indexPath;
     
     NSString* cellText = [self cellForRowAtIndexPath: indexPath].textLabel.text;
     for (int section = 0 ; section < self.numberOfSections; section++ ){
         NSString* sectionKey = [self.sections objectAtIndex: section];
-        NSArray* sectionContents = [backupContentsDictionary objectForKey: sectionKey];
+        NSArray* sectionContents = [contentsDictionaryBackUp objectForKey: sectionKey];
         NSUInteger row = [sectionContents indexOfObject: cellText];
         if (row != NSNotFound) {
             return [NSIndexPath indexPathForRow: row inSection:section];

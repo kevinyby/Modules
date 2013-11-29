@@ -106,7 +106,7 @@
 
 + (CGRect)getCanvas: (UILabel*)label xcoordinates:(NSArray*)xCoordinates index:(int)i {
     NSNumber* coordinate = xCoordinates.count > i ? [xCoordinates objectAtIndex: i] : nil;
-    float coordinateX = coordinate ? [coordinate floatValue] : 100 * i;
+    float coordinateX = coordinate ? [coordinate floatValue] : 200 * i;             // default interval 200
     CGRect labelCanvas = CGRectMake(coordinateX, 0, label.frame.size.width, 25);
     return labelCanvas;
 }

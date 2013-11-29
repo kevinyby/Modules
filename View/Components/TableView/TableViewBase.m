@@ -7,14 +7,13 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 
 @implementation TableViewBase
+{
+    NSArray* _sections;
+}
 
 @synthesize proxy;
 
 @synthesize scrollProxy;
-
-@synthesize hideSections;
-
-@synthesize contentsDictionary;
 
 - (id)init
 {
@@ -30,20 +29,29 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     return self;
 }
 
+-(void)setContentsDictionary:(NSMutableDictionary *)contentsDictionary
+{
+    _contentsDictionary = contentsDictionary;
+    _sections = [DictionaryHelper getSortedKeys: _contentsDictionary];
+}
+
 -(NSArray *)sections
 {
-    return [DictionaryHelper getSortedKeys: contentsDictionary];
+    return _sections;
 }
 
--(id) valueForIndexPath: (NSIndexPath*)indexPath
+-(id) realContentForIndexPath: (NSIndexPath*)indexPath
 {
-    return [[self.realContentsDictionary objectForKey:[self.sections objectAtIndex: indexPath.section]] objectAtIndex: indexPath.row];
+    NSString* sectionTitle = [self.sections objectAtIndex: indexPath.section] ;
+    NSString* key = self.keysMap ? [self.keysMap objectForKey: sectionTitle] : sectionTitle;
+    return [[self.realContentsDictionary objectForKey: key] objectAtIndex: indexPath.row];
 }
 
--(NSString*) contentForIndexPath: (NSIndexPath*)indexPath       // == cell.textLabel.text
+-(NSString*) contentForIndexPath: (NSIndexPath*)indexPath
 {
     return [[self.contentsDictionary objectForKey: [self.sections objectAtIndex: indexPath.section]] objectAtIndex: indexPath.row];
 }
+
 
 
 #pragma mark - UITableViewDataSource
@@ -57,25 +65,18 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 }
 
 - (NSInteger)tableView:(UITableView *)tableViewObj numberOfRowsInSection:(NSInteger)section {
-    NSString* sectionKey = [self.sections objectSafeAtIndex: section];
-    NSArray* sectionContents = [contentsDictionary objectForKey: sectionKey];
-    int count = sectionContents.count;
-    return count;
+    NSArray* sectionContents = [self.contentsDictionary objectForKey: [self.sections objectSafeAtIndex: section]];
+    return sectionContents.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableViewObj cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell = [tableViewObj dequeueReusableCellWithIdentifier:RaiseTableViewCellId];
     if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RaiseTableViewCellId];
-    int row = indexPath.row;
-    int section = indexPath.section ;
+
+    NSString* cellText = [self contentForIndexPath: indexPath];     // == cell.textLabel.text , the key point!
     
-    NSString* sectionKey = [self.sections objectSafeAtIndex: section];
-    NSArray* sectionContents = [contentsDictionary objectForKey: sectionKey];
-    NSString* cellText = [sectionContents objectAtIndex: row];
-    
-    float size = [FrameTranslater convertFontSize: 20];
-    cell.textLabel.font = [UIFont systemFontOfSize: size];
+    cell.textLabel.font = [UIFont systemFontOfSize: [FrameTranslater convertFontSize: 20]];
     cell.textLabel.text = cellText;
     
     if (proxy && [proxy respondsToSelector:@selector(cellForIndexPath:on:)]) {
@@ -90,9 +91,10 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 
 #pragma mark - UITableViewDelegate
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return hideSections ? 0 :  25;
+    return self.hideSections ? 0 :  25;
 }
 
 - (void)tableView:(UITableView *)tableViewObj willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {

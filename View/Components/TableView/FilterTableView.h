@@ -7,11 +7,12 @@ typedef enum {
 
 @interface FilterTableView : TableViewBase
 
+@property (assign) BOOL disable;
 @property (strong, nonatomic) NSString* filterText;
 @property (assign, nonatomic) FilterMode filterMode;
-@property (assign) BOOL disable;
+@property (strong) NSIndexPath* seletedVisibleIndexPath;        // when did selected, in filter is the filter index path , in real mode is the real index path
 
 -(BOOL) isInFilteringMode;
--(NSIndexPath*) traslateIndexPathInFilterMode: (NSIndexPath*)indexPath;
+-(NSIndexPath*) getRealIndexPath:(UIView*)subview ;
 
 @end

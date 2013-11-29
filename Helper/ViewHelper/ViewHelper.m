@@ -56,4 +56,56 @@
     }
 }
 
+/**
+ *  make the fist responser(u don't know who) loose it focus
+ *
+ *  @param containerView the view visible
+ */
++(void) resignFirstResponserOnView: (UIView*)containerView
+{
+    // just a trick , make the fist responser(u don't know who) loose it focus
+    UITextField* invisibleTextField = [[UITextField alloc] init];
+    invisibleTextField.hidden = YES;
+    invisibleTextField.frame = CGRectZero;
+    [containerView addSubview: invisibleTextField];
+    [invisibleTextField becomeFirstResponder];
+    [invisibleTextField resignFirstResponder];
+    [invisibleTextField removeFromSuperview];
+}
+
+
++(void) tableViewRowInsert:(UITableView*)tableView insertIndexPaths:(NSArray*)insertIndexPaths animation:(UITableViewRowAnimation)animation completion:(void (^)(BOOL finished))completion
+{
+    tableView.bounces = NO;
+    [UIView animateWithDuration:0.5
+                     animations:^(){
+                         // Perform insertRowsAtIndexPaths here
+                         [tableView beginUpdates];
+                         [tableView insertRowsAtIndexPaths:insertIndexPaths withRowAnimation:animation];
+                         [tableView endUpdates];
+                     }
+                     completion:^(BOOL finished) {
+                         // This will be called when the animation is complete
+                         tableView.bounces = YES;
+                         if (completion) completion(finished);
+                     }];
+}
+
++(void) tableViewRowDelete:(UITableView*)tableView deleteIndexPaths:(NSArray*)deleteIndexPaths animation:(UITableViewRowAnimation)animation completion:(void (^)(BOOL finished))completion
+{
+    tableView.bounces = NO;
+    [UIView animateWithDuration:0.5
+                     animations:^(){
+                         // Perform insertRowsAtIndexPaths here
+                         [tableView beginUpdates];
+                         [tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:animation];
+                         [tableView endUpdates];
+                     }
+                     completion:^(BOOL finished) {
+                         // This will be called when the animation is complete
+                         tableView.bounces = YES;
+                         if (completion) completion(finished);
+                     }];
+}
+
 @end
