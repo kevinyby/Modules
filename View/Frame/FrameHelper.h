@@ -7,9 +7,17 @@
 
 +(void) setFrame: (CGRect)canvas view:(UIView*)view ;
 
++(void) translateLabel:(UILabel *)label;
+
 +(void) translateLabel: (UILabel*)label canvas:(CGRect)canvas;
 
-// deprecated
-+(void) translateCanvas: (CGRect)canvas view:(UIView*)view ;
+
+/**
+ *  Description Deprecated
+ *
+ *  @param canvas canvas description
+ *  @param view   view description
+ */
++(void) translateCanvas: (CGRect)canvas view:(UIView*)view NS_DEPRECATED_IOS(3_0,7_0);
 
 @end

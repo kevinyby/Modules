@@ -24,6 +24,12 @@ static Boolean isNeedReserve ;
     view.frame = [view.actualFrame CGRectValue];
 }
 
++(void) translateLabel:(UILabel *)label
+{
+    CGRect canvas = [label.designFrame CGRectValue];    // after label has design frame
+    [FrameTranslater transformLabel: label canvas: canvas];
+}
+
 +(void) translateLabel: (UILabel*)label canvas:(CGRect)canvas
 {
     [FrameTranslater transformLabel: label canvas: canvas];
