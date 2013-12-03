@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 
 #define NSBUNDLE_PATH [[NSBundle mainBundle] resourcePath]
-#define JSONFILE_PATH(__file_name) [NSBUNDLE_PATH stringByAppendingPathComponent: __file_name]
+#define BUNDLEFILE_PATH(__file_name) [NSBUNDLE_PATH stringByAppendingPathComponent: __file_name]
 
 @interface JsonFileManager : NSObject
 

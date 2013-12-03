@@ -3,6 +3,8 @@
 
 - (void)setCenterX: (CGFloat)x;
 - (void)setCenterY: (CGFloat)y;
+- (CGFloat)getCenterX;
+- (CGFloat)getCenterY;
 
 #pragma mark - Size
 - (CGFloat)getSizeWidth;

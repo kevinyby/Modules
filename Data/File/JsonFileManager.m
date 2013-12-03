@@ -5,7 +5,7 @@
 /** @return Could be NSDictionary or NSArray */
 +(id) getJson: (NSString*)jsonFileName
 {
-    NSString* jsonFilePath = JSONFILE_PATH(jsonFileName);
+    NSString* jsonFilePath = BUNDLEFILE_PATH(jsonFileName);
     NSData* jsonData = [NSData dataWithContentsOfFile: jsonFilePath];
     NSError* error = nil;
     id content = [NSJSONSerialization JSONObjectWithData: jsonData options: NSJSONReadingAllowFragments error:&error];

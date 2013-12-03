@@ -15,7 +15,7 @@
 +(CGRect) getFrame: (CGRect)canvasFrame ;
 
 
-+(void) transformLabel: (UILabel*)label canvas:(CGRect)canvas ;
++(void) transformLabel: (UILabel*)label;
 
 
 +(NSArray*) screenCanvasRatio ;

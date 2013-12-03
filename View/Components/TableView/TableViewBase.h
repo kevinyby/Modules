@@ -5,17 +5,17 @@
 
 @protocol TableViewTableProxy <NSObject>
 
-
 @optional
 
-- (void)didSelectIndexPath:(NSIndexPath *)indexPath on:(TableViewBase *)tableViewObj;
+- (void)didSelectIndexPath:(NSIndexPath*)indexPath on:(TableViewBase *)tableViewObj;
 
 - (void)willShowIndexPath:(NSIndexPath*)indexPath withCell:(UITableViewCell*)cell on:(TableViewBase *)tableViewObj;
 
-- (CGFloat)heightAtIndexPath:(NSIndexPath *)indexPath on:(TableViewBase *)tableViewObj;
-
+- (CGFloat)heightAtIndexPath:(NSIndexPath*)indexPath on:(TableViewBase *)tableViewObj;
 
 - (UITableViewCell*)cellForIndexPath:(NSIndexPath *)indexPath on:(TableViewBase *)tableViewObj;
+
+- (void)didDeleteIndexPath:(NSIndexPath*)indexPath on:(TableViewBase*)tableViewObj;
 
 @end
 

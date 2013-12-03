@@ -86,12 +86,7 @@ static CGFloat statusBarVerticalHeight;
 
 
 #pragma mark - About Font (In UILable)
-
-+(void) transformLabel: (UILabel*)label canvas:(CGRect)canvas {
-    [self transformLabel: label];
-    label.frame = [self getFrame: canvas ];
-}
-
+// transform label , then getFrame
 +(void) transformLabel: (UILabel*)label
 {
     float ratioX = self.ratioX;
@@ -120,6 +115,7 @@ static CGFloat statusBarVerticalHeight;
     return [self getRatios: isPortraitDesigned];
 }
 
+// convert size for label(then getFrame), textfield ... 
 +(CGFloat) convertFontSize: (CGFloat)fontSize {
     float ratioX = self.ratioX;
     float ratioY = self.ratioY;

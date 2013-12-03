@@ -28,7 +28,9 @@
 }
 
 +(NSString*) documentsPath {
-    return [NSHomeDirectory() stringByAppendingPathComponent: Documents];
+//    return [NSHomeDirectory() stringByAppendingPathComponent: Documents];
+    NSArray* documentsPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask , YES);
+    return [documentsPaths firstObject];
 }
 
 +(NSString*) libraryCachesPath: (NSString*)subPath {

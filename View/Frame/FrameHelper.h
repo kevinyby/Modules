@@ -7,7 +7,6 @@
 
 +(void) setFrame: (CGRect)canvas view:(UIView*)view ;
 
-+(void) translateLabel:(UILabel *)label;
 
 +(void) translateLabel: (UILabel*)label canvas:(CGRect)canvas;
 

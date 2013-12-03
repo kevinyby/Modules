@@ -24,16 +24,22 @@ static Boolean isNeedReserve ;
     view.frame = [view.actualFrame CGRectValue];
 }
 
-+(void) translateLabel:(UILabel *)label
-{
-    CGRect canvas = [label.designFrame CGRectValue];    // after label has design frame
-    [FrameTranslater transformLabel: label canvas: canvas];
-}
+/**
+ *
+ *  Important, Font Size and Transform ,  choose one of them !!!
+ *
+ *  Both of them are need getFrame:
+ *
+ *  @param label The label you want to fit
+ */
 
 +(void) translateLabel: (UILabel*)label canvas:(CGRect)canvas
 {
-    [FrameTranslater transformLabel: label canvas: canvas];
+    [FrameTranslater transformLabel: label];
+    label.frame = [FrameTranslater getFrame: canvas ];
 }
+
+
 
 // deprecated
 +(void) translateCanvas: (CGRect)canvas view:(UIView*)view {

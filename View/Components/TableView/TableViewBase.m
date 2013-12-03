@@ -87,6 +87,41 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 }
 
 
+// This method if for the delete function and its animation
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        // A . delete the contents dictionary row data
+        NSString* sectionTitle = [self.sections objectSafeAtIndex: indexPath.section];
+        NSMutableArray* sectionContents = [self.contentsDictionary objectForKey: sectionTitle];
+        if (![sectionContents isKindOfClass:[NSMutableArray class]]) {
+            sectionContents = [ArrayHelper deepCopy: sectionContents];
+            [self.contentsDictionary setObject: sectionContents forKey:sectionTitle];
+        }
+        [sectionContents removeObjectAtIndex: indexPath.row];
+        
+        // B . delete the real contents dictionary row data
+        NSString* key = self.keysMap ? [self.keysMap objectForKey: sectionTitle] : sectionTitle;
+        NSMutableArray* realSectionContents = [self.realContentsDictionary objectForKey: key];
+        [realSectionContents removeObjectAtIndex: indexPath.row];
+        
+        
+        // C . apply the animation
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        
+        if (proxy && [proxy respondsToSelector:@selector(didDeleteIndexPath:on:)]) {
+            [proxy didDeleteIndexPath: indexPath on:self];
+        }
+        
+    }}
+
+//- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(3_0)
+//{
+//    return @"Download";
+//}
+
 
 
 

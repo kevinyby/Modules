@@ -12,6 +12,16 @@
     self.center = CGPointMake(self.center.x, y);
 }
 
+- (CGFloat)getCenterX
+{
+    return self.center.x;
+}
+
+- (CGFloat)getCenterY
+{
+    return self.center.y;
+}
+
 #pragma mark - Size
 
 - (CGFloat)getSizeWidth

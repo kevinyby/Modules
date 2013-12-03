@@ -108,6 +108,14 @@
 #pragma mark - 
 #pragma mark - Convenient Methods
 
++(void) setBorderRecursive: (UIView*)view
+{
+    for (UIView* subview in view.subviews) {
+        [ColorHelper setBorderRecursive: subview];
+    }
+    [ColorHelper setBorder: view];
+}
+
 +(void) setBorder: (UIView*)view
 {
     view.layer.borderWidth = 1.0f;
