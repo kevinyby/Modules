@@ -57,7 +57,7 @@
 @implementation PopupViewHelper
 
 
-+(void) popAlert: (NSString*)title message:(NSString*)message actionBlock:(PopupViewActionBlock)actionBlock buttons:(NSString*)button, ... NS_REQUIRES_NIL_TERMINATION
++(UIAlertView*) popAlert: (NSString*)title message:(NSString*)message actionBlock:(PopupViewActionBlock)actionBlock buttons:(NSString*)button, ... NS_REQUIRES_NIL_TERMINATION
 {
     PopAlertView* popupView = [[PopAlertView alloc] init];
     popupView.actionBlock = actionBlock;
@@ -83,10 +83,12 @@
     
     
     [popupView show];
+    
+    return popupView;
 }
 
 
-+(void) popSheet: (NSString*)title inView:(UIView*)inView actionBlock:(PopupViewActionBlock)actionBlock buttons:(NSString*)button, ... NS_REQUIRES_NIL_TERMINATION
++(UIActionSheet*) popSheet: (NSString*)title inView:(UIView*)inView actionBlock:(PopupViewActionBlock)actionBlock buttons:(NSString*)button, ... NS_REQUIRES_NIL_TERMINATION
 {
     PopActionSheet* popupView = [[PopActionSheet alloc] init];
     popupView.actionBlock = actionBlock;
@@ -107,6 +109,8 @@
     
     if (!inView) inView = [UIApplication sharedApplication].keyWindow.subviews.firstObject;
 	[popupView showInView:inView];
+    
+    return popupView;
 }
 
 
