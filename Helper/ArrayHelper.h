@@ -14,13 +14,3 @@
 
 @end
 
-
-
-
-
-@interface NSArray (SafeGetter)
-
-/** @return if index >= array.count , will return nil **/
--(id)objectSafeAtIndex:(NSUInteger)index;
-
-@end

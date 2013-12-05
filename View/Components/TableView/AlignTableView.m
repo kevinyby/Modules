@@ -10,6 +10,7 @@
 @synthesize headersXcoordinates;
 @synthesize valuesXcoordinates;
 
+
 #pragma mark - UITableViewDelegate
 // this header is for sections, not for the whole table
 // Use HeaderTable instead if you want a table header
@@ -29,21 +30,38 @@
 - (UITableViewCell *)tableView:(UITableView *)tableViewObj cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell* cell = [super tableView: tableViewObj cellForRowAtIndexPath:indexPath];
+
+    NSArray* coordinates = valuesXcoordinates ? valuesXcoordinates : headersXcoordinates;
+     NSArray* valueXCoordinates = [ArrayHelper isTwoDimension: coordinates] ? [coordinates objectAtIndex: indexPath.section] : coordinates;
     
-    NSString* cellText = cell.textLabel.text;
-    cell.textLabel.hidden = YES;
-    
-     NSArray* subHeaderCoordinates = [ArrayHelper isTwoDimension: valuesXcoordinates] ? [valuesXcoordinates objectAtIndex: indexPath.section] : valuesXcoordinates;
-    [AlignTableView separateCellTextToAlignHeaders:cell valuesXcoordinates:subHeaderCoordinates text:cellText];
+    [AlignTableView separateCellTextToAlignHeaders: self cell:cell valuesXcoordinates:valueXCoordinates];
     
     return cell;
 }
 
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString* cellText = cell.textLabel.text;
+    NSArray* texts = [cellText componentsSeparatedByString: CELL_CONTENT_DELIMITER];
+    if (texts.count == 1) {
+        UILabel* label = (UILabel*)[cell viewWithTag:CELL_CONTENT_LABEL_TAG(0)];
+        [label setCenterX: tableView.bounds.size.width/2];
+    }
+    
+    [super tableView:tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
+}
+
+
+
+
+
+
+
 
 #pragma mark - AlignTableView Class Object Methods
 
-+ (void)setAlignHeaders: (UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates
++ (void)setAlignHeaders: (UITableView*)tableView headerView:(UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates
 {
     // set up contents & labels with x coordinate
     int count = headers.count;
@@ -69,33 +87,45 @@
 }
 
 
-+ (void)separateCellTextToAlignHeaders: (UITableViewCell*)cell valuesXcoordinates:(NSArray*)valuesXcoordinates text:(NSString*)text
++ (void)separateCellTextToAlignHeaders: (UITableView*)tableView cell:(UITableViewCell*)cell valuesXcoordinates:(NSArray*)valuesXcoordinates
 {
-    NSArray* texts = [text componentsSeparatedByString: CELL_CONTENT_DELIMITER];
+    cell.textLabel.hidden = YES;
+    NSString* cellText = cell.textLabel.text;
+    
+    NSArray* texts = [cellText componentsSeparatedByString: CELL_CONTENT_DELIMITER];
     int count = texts.count;        // == headers count
-        for (int i = 0; i < count;  i++) {
-            
-            // init label
-            UILabel* label = (UILabel*)[cell viewWithTag:CELL_CONTENT_LABEL_TAG(i)] ;
-            if (!label) {
-                label = [[UILabel alloc] initWithText:nil];
-                label.textAlignment = NSTextAlignmentLeft;
-                // set font size
-                float size = [FrameTranslater convertFontSize: 20];
-                label.font = [UIFont systemFontOfSize: size];
-                // adjust width by text content
-                label.tag = CELL_CONTENT_LABEL_TAG(i);
-                [cell addSubview:label];
-            }
-            
-            CGRect labelCanvas = [self getCanvas:label xcoordinates:valuesXcoordinates index:i];
-            [FrameHelper setFrame: labelCanvas view:label];
-            [label setOriginY: [FrameTranslater convertCanvasY: 10]];
+    for (int i = 0; i < count;  i++) {
+        
+        // init label
+        UILabel* label = (UILabel*)[cell viewWithTag:CELL_CONTENT_LABEL_TAG(i)] ;
+        if (!label) {
+            label = [[UILabel alloc] initWithText:nil];
+            label.textAlignment = NSTextAlignmentLeft;
+            // set font size
+            float size = [FrameTranslater convertFontSize: 20];
+            label.font = [UIFont systemFontOfSize: size];
+            // adjust width by text content
+            label.tag = CELL_CONTENT_LABEL_TAG(i);
+            [cell.contentView addSubview:label];
         }
+        
+        CGRect labelCanvas = [self getCanvas:label xcoordinates:valuesXcoordinates index:i];
+        [FrameHelper setFrame: labelCanvas view:label];
+        [label setOriginY: [FrameTranslater convertCanvasY: 10]];
+    }
     
+    // hidden
+    for (UIView* label in cell.contentView.subviews) {          // ios 7 [cell addSubview:label], the label add to the firstObject is [UITableViewCellScrollerView]
+        if([label isKindOfClass: [UILabel class]]) {            // ios 6 no  problem ,add to cell , and its firstObject is [UITableViewCellContentView]
+            if (label == cell.textLabel) continue;
+            label.hidden = YES;
+        }
+    }
     
+    // show
     for (int i = 0; i < count; i++) {
         UILabel* label = (UILabel*)[cell viewWithTag:CELL_CONTENT_LABEL_TAG(i)];
+        label.hidden = NO;
         label.text = [texts objectAtIndex: i];
         // adjust width by text content
         [label adjustWidthToFontText];

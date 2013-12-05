@@ -15,6 +15,8 @@
 
 - (UITableViewCell*)cellForIndexPath:(NSIndexPath *)indexPath on:(TableViewBase *)tableViewObj;
 
+- (BOOL)shouldDeleteIndexPath:(NSIndexPath*)indexPath on:(TableViewBase*)tableViewObj;
+
 - (void)didDeleteIndexPath:(NSIndexPath*)indexPath on:(TableViewBase*)tableViewObj;
 
 @end
@@ -66,5 +68,10 @@
 -(id) realContentForIndexPath: (NSIndexPath*)indexPath;
 /** the visible content by indexPath , equals to the cell.textLabel.text */
 -(NSString*) contentForIndexPath: (NSIndexPath*)indexPath;
+
+-(NSMutableArray*) contentsForSection: (NSUInteger)section;
+
+-(NSMutableArray*) realContentsForSection: (NSUInteger)section;
+
 
 @end

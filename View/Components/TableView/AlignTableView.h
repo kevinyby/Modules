@@ -25,8 +25,8 @@
 
 
 
-+ (void)setAlignHeaders: (UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates;
++ (void)setAlignHeaders: (UITableView*)tableView headerView:(UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates;
 
-+ (void)separateCellTextToAlignHeaders: (UITableViewCell*)cell valuesXcoordinates:(NSArray*)valuesXcoordinates text:(NSString*)text;
++ (void)separateCellTextToAlignHeaders: (UITableView*)tableView cell:(UITableViewCell*)cell valuesXcoordinates:(NSArray*)valuesXcoordinates ;
 
 @end

@@ -24,19 +24,19 @@
 -(void)setHeaders:(NSArray *)headers
 {
     tableView.headers = headers;
-    if (!tableView.headersXcoordinates) [AlignTableView setAlignHeaders:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates];
+    if (!tableView.headersXcoordinates) [AlignTableView setAlignHeaders: tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates];
 }
 
 -(void) setHeadersXcoordinates:(NSArray *)headersXcoordinates
 {
     tableView.headersXcoordinates = headersXcoordinates;
-    [AlignTableView setAlignHeaders:headerView headers:tableView.headers headersXcoordinates:tableView.headersXcoordinates];
+    [AlignTableView setAlignHeaders:tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.headersXcoordinates];
 }
 
 -(void)setValuesXcoordinates:(NSArray *)valuesXcoordinates
 {
     tableView.valuesXcoordinates = valuesXcoordinates;
-    if (!tableView.headersXcoordinates) [AlignTableView setAlignHeaders:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates];
+    if (!tableView.headersXcoordinates) [AlignTableView setAlignHeaders:tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates];
 }
 
 -(void)setDelegate:(id<HeaderTableViewDelegate>)delegateObj {
@@ -58,6 +58,8 @@
     tableView = [[AlignTableView alloc] init];
     [self addSubview: tableView];
     [self addSubview: headerView];
+    
+    headerView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.2];
 }
 
 -(void) initializeSubviewsHConstraints

@@ -1,7 +1,6 @@
 #import "HeaderSearchTableView.h"
 
-// _View.h
-#import "FrameTranslater.h"
+#import "_View.h"
 
 @interface HeaderSearchTableView () <UISearchBarDelegate>
 
@@ -12,6 +11,25 @@
 @implementation HeaderSearchTableView
 
 @synthesize searchBar;
+
+-(void)setHideSearchBar:(BOOL)hideSearchBar
+{
+    _hideSearchBar = hideSearchBar;
+    
+    if (hideSearchBar) {
+        searchBar.hidden = YES;
+        [searchBar removeFromSuperview];
+        [self removeConstraints: self.constraints];
+        [super initializeSubviewsHConstraints];
+        [super initializeSubviewsVConstraints];
+    } else {
+        searchBar.hidden = NO;
+        [self addSubview: searchBar];
+        [self removeConstraints: self.constraints];
+        [self initializeSubviewsHConstraints];
+        [self initializeSubviewsVConstraints];
+    }
+}
 
 
 -(void) initializeSubviews
@@ -39,7 +57,6 @@
                           views:NSDictionaryOfVariableBindings(searchBar)]];
 }
 
-// Have some repeat code !!! Can be optimize
 -(void) initializeSubviewsVConstraints
 {
     UIView* headerView = super.headerView;
@@ -47,7 +64,6 @@
     
     float headerHeight = [FrameTranslater convertCanvasHeight: 25.0f];
     float inset = [FrameTranslater convertCanvasHeight: 0.0f];
-    
     
     [self addConstraints:[NSLayoutConstraint
                           constraintsWithVisualFormat:@"V:|-0-[searchBar][headerView(headerHeight)]-(inset)-[tableView]-0-|"

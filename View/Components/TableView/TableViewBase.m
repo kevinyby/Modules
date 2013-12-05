@@ -1,6 +1,7 @@
 #import "TableViewBase.h"
 
 #import "_View.h"
+#import "_Data.h"
 #import "_Helper.h"
 
 static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
@@ -42,14 +43,24 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 -(id) realContentForIndexPath: (NSIndexPath*)indexPath
 {
-    NSString* sectionTitle = [self.sections objectAtIndex: indexPath.section] ;
-    NSString* key = self.keysMap ? [self.keysMap objectForKey: sectionTitle] : sectionTitle;
-    return [[self.realContentsDictionary objectForKey: key] objectAtIndex: indexPath.row];
+    return [[self realContentsForSection: indexPath.section] objectAtIndex: indexPath.row];
 }
 
 -(NSString*) contentForIndexPath: (NSIndexPath*)indexPath
 {
-    return [[self.contentsDictionary objectForKey: [self.sections objectAtIndex: indexPath.section]] objectAtIndex: indexPath.row];
+    return [[self contentsForSection: indexPath.section] objectAtIndex: indexPath.row];
+}
+
+-(NSMutableArray*) realContentsForSection: (NSUInteger)section
+{
+    NSString* sectionTitle = [self.sections objectAtIndex: section] ;
+    NSString* key = self.keysMap ? [self.keysMap objectForKey: sectionTitle] : sectionTitle;
+    return [self.realContentsDictionary objectForKey: key];
+}
+
+-(NSMutableArray*) contentsForSection: (NSUInteger)section
+{
+    return [self.contentsDictionary objectForKey: [self.sections objectAtIndex: section]];
 }
 
 
@@ -57,7 +68,7 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 #pragma mark - UITableViewDataSource
 
 - (NSString *)tableView:(UITableView *)tableViewObj titleForHeaderInSection:(NSInteger)section {
-    return [self.sections objectSafeAtIndex: section];
+    return [self.sections safeObjectAtIndex: section];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableViewObj {
@@ -65,7 +76,7 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 }
 
 - (NSInteger)tableView:(UITableView *)tableViewObj numberOfRowsInSection:(NSInteger)section {
-    NSArray* sectionContents = [self.contentsDictionary objectForKey: [self.sections objectSafeAtIndex: section]];
+    NSArray* sectionContents = [self.contentsDictionary objectForKey: [self.sections safeObjectAtIndex: section]];
     return sectionContents.count;
 }
 
@@ -87,18 +98,24 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 }
 
 
-// This method if for the delete function and its animation
+// Deletion A .
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (proxy && [proxy respondsToSelector:@selector(shouldDeleteIndexPath:on:)]) {
+        return [proxy shouldDeleteIndexPath: indexPath on:self];
+    }
+    return NO;
+}
+
+// Deletion B . This method if for the delete function and its animation
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
         // A . delete the contents dictionary row data
-        NSString* sectionTitle = [self.sections objectSafeAtIndex: indexPath.section];
+        NSString* sectionTitle = [self.sections safeObjectAtIndex: indexPath.section];
         NSMutableArray* sectionContents = [self.contentsDictionary objectForKey: sectionTitle];
-        if (![sectionContents isKindOfClass:[NSMutableArray class]]) {
-            sectionContents = [ArrayHelper deepCopy: sectionContents];
-            [self.contentsDictionary setObject: sectionContents forKey:sectionTitle];
-        }
         [sectionContents removeObjectAtIndex: indexPath.row];
         
         // B . delete the real contents dictionary row data
@@ -115,12 +132,8 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
             [proxy didDeleteIndexPath: indexPath on:self];
         }
         
-    }}
-
-//- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(3_0)
-//{
-//    return @"Download";
-//}
+    }
+}
 
 
 

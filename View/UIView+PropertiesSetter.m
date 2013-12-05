@@ -106,4 +106,10 @@
 	self.frame = frame;
 }
 
+-(CGPoint) getOrigin
+{
+    CGRect frame = self.frame;
+	return frame.origin ;
+}
+
 @end
