@@ -1,5 +1,6 @@
 #import "TableViewHelper.h"
 
+
 @implementation TableViewHelper
 
 +(NSIndexPath*) getLastIndexPath: (UITableView*)tableView
@@ -13,5 +14,8 @@
     int lastRow = [tableView numberOfRowsInSection: section] - 1;
     return [NSIndexPath indexPathForRow: lastRow inSection:section];
 }
+
+
+
 
 @end

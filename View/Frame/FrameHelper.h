@@ -10,6 +10,7 @@
 
 +(void) translateLabel: (UILabel*)label canvas:(CGRect)canvas;
 
++(void) setComponentFrame: (NSArray*)frame component:(UIView*)view;
 
 /**
  *  Description Deprecated

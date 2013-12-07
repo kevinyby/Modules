@@ -2,7 +2,7 @@
 
 // Be carefule , zh-Hans & zh-Hant can recognize by Mac , but not iphone
 
-#define LANGUAGE_en      @"en"
+#define LANGUAGE_en         @"en"
 #define LANGUAGE_zh_Hans    @"zh-Hans"      // on mac
 #define LANGUAGE_zh_Hant    @"zh-Hant"      // on mac
 #define LANGUAGE_zh_CN      @"zh_CN"        // on ios

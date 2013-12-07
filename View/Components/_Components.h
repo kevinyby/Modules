@@ -3,6 +3,8 @@
 
 #import "_Label.h"
 
+#import "_Button.h"
+
 #import "_TextView.h"
 
 #import "_TableView.h"

@@ -7,5 +7,7 @@
 
 #import "TableViewHelper.h"
 
+#import "TableViewBaseHelper.h"
+
 #import "PopupViewHelper.h"
 

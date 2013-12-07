@@ -51,7 +51,7 @@
     [FileManager createFolderIfNotExist: sqlFile];
     if (sqlite3_open([sqlFile UTF8String], sqlite3)==SQLITE_OK)
     {
-        NSLog(@"open sqlite db ok.");
+//        NSLog(@"open sqlite db ok.");
     }
     else
     {

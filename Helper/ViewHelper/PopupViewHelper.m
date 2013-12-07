@@ -90,22 +90,32 @@
 
 +(UIActionSheet*) popSheet: (NSString*)title inView:(UIView*)inView actionBlock:(PopupViewActionBlock)actionBlock buttons:(NSString*)button, ... NS_REQUIRES_NIL_TERMINATION
 {
+
+    NSMutableArray* buttonTitles = [NSMutableArray array];
+    if (button) [buttonTitles addObject: button];
+    
+    va_list list ;
+    va_start(list, button);
+    NSString* nextButton = nil;
+    while((nextButton = va_arg(list, NSString*))){
+        [buttonTitles addObject: nextButton];
+    }
+    va_end(list);
+    
+    return [self popSheet:title inView:inView actionBlock:actionBlock buttonTitles:buttonTitles];
+}
+
++(UIActionSheet*) popSheet: (NSString*)title inView:(UIView*)inView actionBlock:(PopupViewActionBlock)actionBlock buttonTitles:(NSArray*)buttonTitles
+{
     PopActionSheet* popupView = [[PopActionSheet alloc] init];
     popupView.actionBlock = actionBlock;
     popupView.delegate = popupView;
     popupView.title = title;
     
-    if (button) [popupView addButtonWithTitle: LOCALIZE_KEY(button)];
-    
-    va_list list ;
-    va_start(list, button);
-    
-    NSString* nextButton = nil;
-    while((nextButton = va_arg(list, NSString*))){
-        [popupView addButtonWithTitle: LOCALIZE_KEY(nextButton)];
+    for (int i = 0; i < buttonTitles.count; i++) {
+        NSString* buttonTitle = buttonTitles[i];
+        [popupView addButtonWithTitle: LOCALIZE_KEY(buttonTitle)];
     }
-    
-    va_end(list);
     
     if (!inView) inView = [UIApplication sharedApplication].keyWindow.subviews.firstObject;
 	[popupView showInView:inView];

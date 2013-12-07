@@ -4,4 +4,6 @@
 
 @property (strong) UIView* contentView;
 
+-(NSArray*) subViews ;
+
 @end

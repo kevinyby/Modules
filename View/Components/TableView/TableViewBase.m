@@ -20,14 +20,28 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 {
     self = [super init];
     if (self) {
-        self.hideSections = YES;
-        self.dataSource = self;
-        self.delegate = self;
-        //http://stackoverflow.com/questions/14520185/ios-uitableview-displaying-empty-cells-at-the-end
-        self.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-        if ([self respondsToSelector:@selector(setSeparatorInset:)]) [self setSeparatorInset:UIEdgeInsetsZero];     // ios 7
+        [self setDefaultVariables];
     }
     return self;
+}
+
+-(id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setDefaultVariables];
+    }
+    return self;
+}
+
+-(void) setDefaultVariables
+{
+    self.hideSections = YES;
+    self.dataSource = self;
+    self.delegate = self;
+    //http://stackoverflow.com/questions/14520185/ios-uitableview-displaying-empty-cells-at-the-end
+    self.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    if ([self respondsToSelector:@selector(setSeparatorInset:)]) [self setSeparatorInset:UIEdgeInsetsZero];     // ios 7
 }
 
 -(void)setContentsDictionary:(NSMutableDictionary *)contentsDictionary

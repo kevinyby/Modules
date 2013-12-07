@@ -99,6 +99,20 @@
 	self.frame = frame;
 }
 
+- (void)minusOriginX: (CGFloat)x
+{
+	CGRect frame = self.frame;
+	frame.origin.x -= x;
+	self.frame = frame;
+}
+
+- (void)minusOriginY: (CGFloat)y
+{
+	CGRect frame = self.frame;
+	frame.origin.y -= y;
+	self.frame = frame;
+}
+
 -(void) setOrigin: (CGPoint)point
 {
     CGRect frame = self.frame;
