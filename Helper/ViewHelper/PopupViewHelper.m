@@ -1,5 +1,4 @@
 #import "PopupViewHelper.h"
-#import "CategoriesLocalizer.h"
 
 #import "_View.h"
 #import "_Helper.h"
@@ -66,7 +65,7 @@
     popupView.title = title;
     
     
-    if (button) [popupView addButtonWithTitle: LOCALIZE_KEY(button)];
+    if (button) [popupView addButtonWithTitle: button];
     
     // button not in list , list is for ...
     // button just indicates where the compiler needs to go in memory to find the start of args
@@ -76,7 +75,7 @@
     
     NSString* nextButton = nil;
     while((nextButton = va_arg(list, NSString*))){
-        [popupView addButtonWithTitle: LOCALIZE_KEY(nextButton)];
+        [popupView addButtonWithTitle: nextButton];
     }
     
     va_end(list);
@@ -114,7 +113,7 @@
     
     for (int i = 0; i < buttonTitles.count; i++) {
         NSString* buttonTitle = buttonTitles[i];
-        [popupView addButtonWithTitle: LOCALIZE_KEY(buttonTitle)];
+        [popupView addButtonWithTitle: buttonTitle];
     }
     
     if (!inView) inView = [UIApplication sharedApplication].keyWindow.subviews.firstObject;

@@ -1,10 +1,8 @@
 #import "TableViewBaseHelper.h"
 
-#import "TableViewHelper.h"
-
 #import "TableViewBase.h"
 
-#import "_Data.h"
+#import "_Helper.h"
 
 @implementation TableViewBaseHelper
 

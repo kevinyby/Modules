@@ -1,4 +1,6 @@
 #import "TextFormatter.h"
+
+// _View.h -> _Components.h -> _Label.h
 #import "GradientLabel.h"
 
 @implementation TextFormatter
@@ -16,7 +18,7 @@
         float size = [[config objectForKey: @"SIZE"] floatValue] ;
         float rotate = [[config objectForKey: @"Rotate"] floatValue];
         
-        label.textAlignment = NSTextAlignmentCenter; // UITextAlignmentCenter, Deprecatet ios 6.0
+        label.textAlignment = NSTextAlignmentCenter;
         label.font = [UIFont fontWithName: fontName size:size];
         label.textColor = [UIColor colorWithRed: R green:G blue:B alpha:alpha];
         CGRect rect = label.bounds;

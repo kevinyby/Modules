@@ -1,6 +1,9 @@
 //
 //  _Helper.h
 
+#import "_NSCategories.h"
+
+
 #import "_ViewHelper.h"
 
 
