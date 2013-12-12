@@ -35,7 +35,7 @@
 {
     self = [super init];
     if (self) {
-        databasePath = [[FileManager documentsPath] stringByAppendingPathComponent: @"SQLite/sqlite3.sql"];     // default
+        databasePath = [[FileManager documentsPath] stringByAppendingPathComponent: @"App/caches.db"];     // default
     }
     return self;
 }
