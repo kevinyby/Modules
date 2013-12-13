@@ -24,7 +24,7 @@
 -(void)setHeaders:(NSArray *)headers
 {
     tableView.headers = headers;
-    if (!tableView.headersXcoordinates) [AlignTableView setAlignHeaders: tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates];
+    [AlignTableView setAlignHeaders: tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates];
 }
 
 -(void) setHeadersXcoordinates:(NSArray *)headersXcoordinates
@@ -36,7 +36,7 @@
 -(void)setValuesXcoordinates:(NSArray *)valuesXcoordinates
 {
     tableView.valuesXcoordinates = valuesXcoordinates;
-    if (!tableView.headersXcoordinates) [AlignTableView setAlignHeaders:tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates];
+    [AlignTableView setAlignHeaders:tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates];
 }
 
 -(void)setDelegate:(id<HeaderTableViewDelegate>)delegateObj {
