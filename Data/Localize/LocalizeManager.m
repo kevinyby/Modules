@@ -36,6 +36,7 @@ static NSString* currentLanguage = nil ;
 }
 
 +(void) setCurrentLanguage: (NSString*)language {
+    if (! language) return;
     currentLanguage = language;
 }
 

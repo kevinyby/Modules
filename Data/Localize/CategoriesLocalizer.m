@@ -1,5 +1,4 @@
 #import "CategoriesLocalizer.h"
-#import "LocalizeManager.h"
 
 #define GLOBAL_LOCALIZE_PRE @"G"
 

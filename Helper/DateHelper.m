@@ -2,6 +2,8 @@
 
 @implementation DateHelper
 
+static NSString* defautPattern = DATE_TIME_PATTERN;
+static NSDateFormatter* defaultFormatter = nil;
 
 #pragma mark - String To Date / Date To String / Format Transform
 
@@ -28,6 +30,19 @@
     return string;
 }
 
++ (void) setDefaultDatePattern: (NSString*)pattern {
+    if (pattern) {
+        defautPattern = pattern;
+        defaultFormatter = [DateHelper getLocaleDateFormater: defautPattern];
+    }
+}
+
++ (NSDateFormatter*) getDefaultDateFormater {
+    if (! defaultFormatter) {
+        defaultFormatter = [DateHelper getLocaleDateFormater: defautPattern];
+    }
+    return defaultFormatter;
+}
 
 + (NSDateFormatter*) getLocaleDateFormater: (NSString*)pattern {
     //    NSLog(@"%@", [NSLocale availableLocaleIdentifiers]);

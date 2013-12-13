@@ -13,6 +13,8 @@
 
 + (NSString*)stringFromString:(NSString *)sourceString fromPattern:(NSString*)fromPattern toPattern:(NSString*)toPattern ;
 
++ (void) setDefaultDatePattern: (NSString*)pattern ;
++ (NSDateFormatter*) getDefaultDateFormater ;
 + (NSDateFormatter*) getLocaleDateFormater: (NSString*)pattern ;
 
 + (NSDate*) date: (NSDate*)date addDay: (int)day ;
