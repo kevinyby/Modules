@@ -13,6 +13,7 @@
         [self setSize:[FrameTranslater convertCanvasSize:(CGSize){50,50}]];    // default
         [self setTitleColor: [UIColor blackColor] forState: UIControlStateNormal];
         [self setTitle:@"" forState:UIControlStateNormal];
+        self.titleLabel.font  = [UIFont fontWithName:@"Arial" size:[FrameTranslater convertFontSize: 20]];
         
         [self addTarget: self action:@selector(buttonTapAction:) forControlEvents:UIControlEventTouchUpInside];
     }
