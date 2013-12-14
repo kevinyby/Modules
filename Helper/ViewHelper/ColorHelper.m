@@ -1,4 +1,7 @@
 #import "ColorHelper.h"
+
+#import "UIColor+FlatColors.h"
+
 #import <QuartzCore/QuartzCore.h>
 
 @implementation ColorHelper
@@ -111,6 +114,7 @@
 +(void) setBorderRecursive: (UIView*)view
 {
     for (UIView* subview in view.subviews) {
+        if (subview.layer.borderWidth != 0) continue;
         [ColorHelper setBorderRecursive: subview];
     }
     [ColorHelper setBorder: view];
@@ -128,6 +132,12 @@
     view.layer.borderColor = [color CGColor];
 }
 
++(void) setBorder: (UIView*)view colorIndex:(int)index
+{
+    view.layer.borderWidth = 1.0f;
+    view.layer.borderColor = [[ColorHelper color:index] CGColor];
+}
+
 +(void) setBackGround: (UIView*)view
 {
     view.backgroundColor = [UIColor yellowColor];
@@ -136,6 +146,78 @@
 +(void) setBackGround: (UIView*)view color:(UIColor*)color
 {
     view.backgroundColor = color;
+}
+
++(UIColor*) color: (int)chosenColor
+{
+    UIColor *color;
+    switch (chosenColor) {
+        case 0:
+            color = [UIColor flatRedColor];
+            break;
+        case 1:
+            color = [UIColor flatGreenColor];
+            break;
+        case 2:
+            color = [UIColor flatBlueColor];
+            break;
+        case 3:
+            color = [UIColor flatTealColor];
+            break;
+        case 4:
+            color = [UIColor flatPurpleColor];
+            break;
+        case 5:
+            color = [UIColor flatYellowColor];
+            break;
+        case 6:
+            color = [UIColor flatOrangeColor];
+            break;
+        case 7:
+            color = [UIColor flatGrayColor];
+            break;
+        case 8:
+            color = [UIColor flatWhiteColor];
+            break;
+        case 9:
+            color = [UIColor flatBlackColor];
+            break;
+        case 10:
+            color = [UIColor flatDarkRedColor];
+            break;
+        case 11:
+            color = [UIColor flatDarkGreenColor];
+            break;
+        case 12:
+            color = [UIColor flatDarkBlueColor];
+            break;
+        case 13:
+            color = [UIColor flatDarkTealColor];
+            break;
+        case 14:
+            color = [UIColor flatDarkPurpleColor];
+            break;
+        case 15:
+            color = [UIColor flatDarkYellowColor];
+            break;
+        case 16:
+            color = [UIColor flatDarkOrangeColor];
+            break;
+        case 17:
+            color = [UIColor flatDarkGrayColor];
+            break;
+        case 18:
+            color = [UIColor flatDarkWhiteColor];
+            break;
+        case 19:
+            color = [UIColor flatDarkBlackColor];
+            break;
+        case 20:
+        default:
+            NSAssert(0, @"Unrecognized color selected as random color");
+            break;
+    }
+    return color;
 }
 
 @end

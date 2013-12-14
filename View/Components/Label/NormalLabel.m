@@ -8,7 +8,7 @@
 {
     self = [super init];
     if (self) {
-        self.font = [UIFont fontWithName:@"Arial" size:[FrameTranslater convertFontSize: 25]];
+        self.font = [UIFont fontWithName:@"Arial" size:[FrameTranslater convertFontSize: 20]];
 		self.textColor = [UIColor blackColor];
 		self.backgroundColor = [UIColor clearColor];
 		self.highlightedTextColor = [UIColor blackColor];

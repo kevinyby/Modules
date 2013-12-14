@@ -2,6 +2,7 @@
 
 #import "_Frame.h"
 
+// TODO : Subclass a inner shadow view.
 @implementation NormalTextField
 
 - (id)init
