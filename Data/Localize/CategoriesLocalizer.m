@@ -13,6 +13,11 @@ static NSDictionary* categories;
     categories = _categories;
 }
 
++(NSDictionary*) categories
+{
+    return categories;
+}
+
 
 +(NSString*) getLocalize: (NSString*)order attribute:(NSString*)attribute
 {
@@ -30,6 +35,7 @@ static NSDictionary* categories;
  */
 +(NSString*) getLocalize: (NSString*)key
 {
+    
     NSArray* array = [key componentsSeparatedByString:ITEM_ATTR_CONNECTOR];
     NSString* item = [array firstObject];
     NSString* attr = [array lastObject];
@@ -52,7 +58,6 @@ static NSDictionary* categories;
             if ([result isEqualToString: key]) result = [CategoriesLocalizer getGlobalLocalize: attr];
             
         } else {
-            
             // get from the categories
             result = [LocalizeManager getLocalized: key category:category];
             

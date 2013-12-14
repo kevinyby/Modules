@@ -8,6 +8,7 @@
 
 @interface CategoriesLocalizer : LocalizeManager
 
++(NSDictionary*) categories;
 +(void) setCategories: (NSDictionary*)categories;
 
 +(NSString*) getLocalize: (NSString*)key;
