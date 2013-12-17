@@ -9,6 +9,12 @@ typedef void(^PopupViewActionBlock)(UIView* popView, NSInteger index);
 
 +(UIActionSheet*) popSheet: (NSString*)title inView:(UIView*)inView actionBlock:(PopupViewActionBlock)actionBlock buttons:(NSString*)button, ... NS_REQUIRES_NIL_TERMINATION;
 
++(void) popView: (UIView*)view;
++(void) dissmissCurrentPopView;
+
+
+
+// ------------------
 +(void) popoverView:(UIView*)view inView:(UIView*)inView;
 +(void) popoverView:(UIView*)view inView:(UIView*)inView inRect:(CGRect)inRect arrowDirections:(UIPopoverArrowDirection)arrowDirections;
 +(void) dissmissCurrentPopover;

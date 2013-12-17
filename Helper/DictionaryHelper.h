@@ -10,4 +10,9 @@
 +(NSArray*) getSortedKeys: (NSDictionary*)dictionary;
 +(NSString*) convertToJSONString: (NSDictionary*)dictionary;
 
+
+#pragma mark -
+
++(NSMutableDictionary*) filterModel: (NSDictionary*)dictionary filterContent:(id)filterObj ;
+
 @end

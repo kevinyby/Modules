@@ -70,7 +70,6 @@
 -(NSString*) contentForIndexPath: (NSIndexPath*)indexPath;
 
 -(NSMutableArray*) contentsForSection: (NSUInteger)section;
-
 -(NSMutableArray*) realContentsForSection: (NSUInteger)section;
 
 

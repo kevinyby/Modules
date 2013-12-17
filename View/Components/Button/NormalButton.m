@@ -6,18 +6,32 @@
 
 @implementation NormalButton
 
+
++ (id)buttonWithType:(UIButtonType)buttonType {
+    NormalButton* button = [super buttonWithType:buttonType];
+    [button initializeValues];
+    return button;
+}
+
 - (id)init
 {
     self = [super init];
     if (self) {
-        [self setSize:[FrameTranslater convertCanvasSize:(CGSize){50,50}]];    // default
-        [self setTitleColor: [UIColor blackColor] forState: UIControlStateNormal];
-        [self setTitle:@"" forState:UIControlStateNormal];
-        self.titleLabel.font  = [UIFont fontWithName:@"Arial" size:[FrameTranslater convertFontSize: 20]];
-        
-        [self addTarget: self action:@selector(buttonTapAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self initializeValues];
     }
     return self;
+}
+
+
+-(void) initializeValues
+{
+    [self setSize:[FrameTranslater convertCanvasSize:(CGSize){50,50}]];    // default
+    [self setTitleColor: [UIColor blackColor] forState: UIControlStateNormal];
+    [self setTitle:@"" forState:UIControlStateNormal];
+    self.titleLabel.font  = [UIFont fontWithName:@"Arial" size:[FrameTranslater convertFontSize: 20]];
+    
+    [self addTarget: self action:@selector(buttonTapAction:) forControlEvents:UIControlEventTouchUpInside];
+    
 }
 
 

@@ -122,9 +122,51 @@
     return popupView;
 }
 
+#define GRAYVIEW_TAG 3031
++(void) popView: (UIView*)view
+{
+    CGRect screenSize = [UIScreen mainScreen].bounds;
+    float screenWidth = screenSize.size.width;
+    float screenHeight = screenSize.size.height;
+    
+    UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] subviews] firstObject];
+    UIViewController* rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    UIInterfaceOrientation orientation = rootViewController.interfaceOrientation;
+    CGRect rect = UIInterfaceOrientationIsPortrait(orientation) ? (CGRect){{0,0},{screenWidth,screenHeight}} : (CGRect){{0,0},{screenHeight,screenWidth}};
+    
+    
+    UIControl* _overlayView = (UIControl*)[rootView viewWithTag: GRAYVIEW_TAG];
+    if (! _overlayView) {
+        _overlayView = [[UIControl alloc] initWithFrame:rect];
+        _overlayView.backgroundColor = [UIColor colorWithRed:.16 green:.17 blue:.21 alpha:.5];
+        [_overlayView addTarget:self
+                         action:@selector(dissmissCurrentPopView)
+               forControlEvents:UIControlEventTouchUpInside];
+    }
+    _overlayView.tag = GRAYVIEW_TAG;
+    [rootView addSubview: _overlayView];
+    
+    [_overlayView addSubview: view];
+    
+}
+
++(void) dissmissCurrentPopView
+{
+    UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] subviews] firstObject];
+    UIView* grayView = [rootView viewWithTag: GRAYVIEW_TAG];
+    [UIView animateWithDuration:0.2
+                     animations:^{grayView.alpha = 0.0;}
+                     completion:^(BOOL finished){ [grayView removeFromSuperview]; }];
+}
 
 
 
+
+
+
+
+
+//////////////////___________________________________
 
 static UIActionSheet* actionSheet;
 static UIPopoverController* popoverController = nil;        // http://stackoverflow.com/questions/8895071/uipopovercontroller-dealloc-reached-while-popover-is-still-visible
@@ -155,9 +197,9 @@ static UIPopoverController* popoverController = nil;        // http://stackoverf
 }
 
 
-// ---- Begin (Just for Pad) ------------------------------------------------------------
+// ---- Begin ------------------------------------------------------------
 
-
+// (Just for Pad)
 // arrowDirections = 0 for no direction , the popoverController.contentViewController's would be same as [FromRect]'s center
 +(void) popoverView:(UIView*)view inView:(UIView*)inView inRect:(CGRect)inRect arrowDirections:(UIPopoverArrowDirection)arrowDirections
 {

@@ -54,4 +54,24 @@
 }
 
 
+#pragma mark -
+
+
++(NSMutableDictionary*) filterModel: (NSDictionary*)dictionary filterContent:(id)filterObj {
+    NSMutableDictionary* filterResult = [NSMutableDictionary dictionary];
+    for (id key in dictionary) {
+        id value = [dictionary objectForKey: key];
+        
+        if (value == filterObj) continue;
+        
+        if ([filterObj isKindOfClass:[NSString class]]) {
+            if ([filterObj isEqualToString: value]) continue;
+        }
+        
+        [filterResult setObject: value forKey:key];
+    }
+    return filterResult;
+}
+
+
 @end
