@@ -12,5 +12,8 @@
 
 +(NSArray*) sort:(NSArray*)array;
 
+
++(void) subtract:(NSMutableArray*)array with:(NSArray*)subtracts;
+
 @end
 

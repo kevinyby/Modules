@@ -8,6 +8,7 @@
     id key;
     while ((key = [enumerator nextObject])) {
         NSObject* contains = [source objectForKey: key];
+        
         if ([contains isKindOfClass: [NSDictionary class]] && [destination objectForKey: key]) {
             [self combine: [destination objectForKey: key] with:(NSDictionary*)contains];
         } else {
@@ -74,6 +75,15 @@
     return result;
 }
 
+
++(void) replace: (NSMutableDictionary*)dictionary keys:(NSArray*)keys with:(NSArray*)replacements
+{
+    for (int i = 0; i < keys.count; i ++) {
+        NSString* key = keys[i];
+        id content = [dictionary objectForKey: key];
+        if (content) [dictionary setObject: content forKey:replacements[i]];
+    }
+}
 
 #pragma mark - About Content
 

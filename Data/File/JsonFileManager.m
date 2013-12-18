@@ -1,10 +1,14 @@
 #import "JsonFileManager.h"
 
+
+#define JSON_EXTENTION @"json"
+
 @implementation JsonFileManager
 
 /** @return Could be NSDictionary or NSArray */
 +(id) getJson: (NSString*)jsonFileName
 {
+    jsonFileName = [[jsonFileName pathExtension] length] == 0 ? [jsonFileName stringByAppendingPathExtension: JSON_EXTENTION] : jsonFileName;
     NSString* jsonFilePath = BUNDLEFILE_PATH(jsonFileName);
     NSData* jsonData = [NSData dataWithContentsOfFile: jsonFilePath];
     NSError* error = nil;

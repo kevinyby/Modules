@@ -55,6 +55,18 @@
 }
 
 
+#pragma mark - Handler Contents
+
++(void) subtract:(NSMutableArray*)array with:(NSArray*)subtracts
+{
+    for (id element in subtracts) {
+        if ([array containsObject: element]){
+            [array removeObject: element];
+        }
+    }
+}
+
+
 @end
 
 
