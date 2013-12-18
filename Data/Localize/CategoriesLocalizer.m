@@ -1,6 +1,6 @@
 #import "CategoriesLocalizer.h"
 
-#define LOCALIZE_GLOBAL_PRE @"GLOBAL"
+#define LOCALIZE_GLOBAL_PRE  @"GLOBAL"
 #define LOCALIZE_MESSAGE_PRE @"MESSAGE"
 
 // dic with array in it
@@ -17,12 +17,6 @@ static NSDictionary* categories;
 +(NSDictionary*) categories
 {
     return categories;
-}
-
-
-+(NSString*) getLocalize: (NSString*)order attribute:(NSString*)attribute
-{
-    return [CategoriesLocalizer getLocalize: [NSString stringWithFormat:@"%@%@%@", order, ITEM_ATTR_CONNECTOR, attribute]];
 }
 
 
@@ -48,7 +42,7 @@ static NSDictionary* categories;
         
     } else
     {
-        NSString* category = [CategoriesLocalizer getCategory:item];
+        NSString* category = [CategoriesLocalizer getCategoryByItem:item];
         
         if (category == nil || [category length] == 0) {
             
@@ -75,9 +69,10 @@ static NSDictionary* categories;
     return result;
 }
 
-
-
-#pragma mark - Private Methods
++(NSString*) connectKeys: (NSString*) item attribute:(NSString*)attribute
+{
+    return [item stringByAppendingFormat:@"%@%@", ITEM_ATTR_CONNECTOR, attribute];
+}
 
 +(NSString*) getGlobalLocalize: (NSString*)key
 {
@@ -89,7 +84,7 @@ static NSDictionary* categories;
     return [LocalizeManager getLocalized: key category:LOCALIZE_MESSAGE_PRE];
 }
 
-+(NSString*) getCategory: (NSString*)item
++(NSString*) getCategoryByItem: (NSString*)item
 {
     for (NSString* category in categories) {
         NSArray* items = [categories objectForKey: category];
