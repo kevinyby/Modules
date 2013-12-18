@@ -12,6 +12,9 @@ typedef void(^PopupViewActionBlock)(UIView* popView, NSInteger index);
 +(void) popView: (UIView*)view;
 +(void) dissmissCurrentPopView;
 
++(void) dropDownView: (UIView*)view belowView:(UIView*)belowView;
++(void) dissmissCurrentDropDownView;
+
 
 
 // ------------------

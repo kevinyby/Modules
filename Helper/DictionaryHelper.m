@@ -35,6 +35,17 @@
     }
 }
 
+
++(NSString*) convertToJSONString: (NSDictionary*)dictionary
+{
+    NSError *error = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
+    NSString *jsonStrings = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    return jsonStrings;
+}
+
+#pragma mark = About Key
+
 +(NSArray*) getSortedKeys: (NSDictionary*)dictionary
 {
     NSArray* allKeys = [dictionary allKeys];
@@ -45,20 +56,30 @@
     return sortedKeys;
 }
 
-+(NSString*) convertToJSONString: (NSDictionary*)dictionary
+
++(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary with:(NSString*)tail
 {
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
-    NSString *jsonStrings = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    return jsonStrings;
+    return [self tailKeys: dictionary with:tail excepts:nil];
 }
 
 
-#pragma mark -
++(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary with:(NSString*)tail excepts:(NSArray*)excepts
+{
+    NSMutableDictionary* result = [NSMutableDictionary dictionary];
+    for (id key in dictionary) {
+        id value = [dictionary objectForKey: key];
+        NSString* newKey = [excepts containsObject: key] ? key : [key stringByAppendingString:tail];
+        [result setObject: value forKey:newKey];
+    }
+    return result;
+}
+
+
+#pragma mark - About Content
 
 
 +(NSMutableDictionary*) filterModel: (NSDictionary*)dictionary filterContent:(id)filterObj {
-    NSMutableDictionary* filterResult = [NSMutableDictionary dictionary];
+    NSMutableDictionary* result = [NSMutableDictionary dictionary];
     for (id key in dictionary) {
         id value = [dictionary objectForKey: key];
         
@@ -68,9 +89,9 @@
             if ([filterObj isEqualToString: value]) continue;
         }
         
-        [filterResult setObject: value forKey:key];
+        [result setObject: value forKey:key];
     }
-    return filterResult;
+    return result;
 }
 
 

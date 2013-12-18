@@ -2,6 +2,8 @@
 
 @implementation UIView (PropertiesSetter)
 
+
+#pragma mark - Center
 - (void)setCenterX: (CGFloat)x
 {
     self.center = CGPointMake(x, self.center.y);
@@ -20,6 +22,12 @@
 - (CGFloat)getCenterY
 {
     return self.center.y;
+}
+
+
+-(CGPoint) getMiddlePoint
+{
+    return CGPointMake([self getSizeWidth]/2, [self getSizeHeight]/2);
 }
 
 #pragma mark - Size

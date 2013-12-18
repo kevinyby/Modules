@@ -122,6 +122,8 @@
     return popupView;
 }
 
+
+
 #define GRAYVIEW_TAG 3031
 +(void) popView: (UIView*)view
 {
@@ -139,9 +141,7 @@
     if (! _overlayView) {
         _overlayView = [[UIControl alloc] initWithFrame:rect];
         _overlayView.backgroundColor = [UIColor colorWithRed:.16 green:.17 blue:.21 alpha:.5];
-        [_overlayView addTarget:self
-                         action:@selector(dissmissCurrentPopView)
-               forControlEvents:UIControlEventTouchUpInside];
+        [_overlayView addTarget:self action:@selector(dissmissCurrentPopView) forControlEvents:UIControlEventTouchUpInside];
     }
     _overlayView.tag = GRAYVIEW_TAG;
     [rootView addSubview: _overlayView];
@@ -163,6 +163,23 @@
 
 
 
+#define DROPDOWNVIEW_TAG 2021
++(void) dropDownView: (UIView*)view belowView:(UIView*)belowView
+{
+    [self dissmissCurrentDropDownView];
+    UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] subviews] firstObject];
+    [view setOrigin: [belowView convertPoint: (CGPoint){0, belowView.frame.size.height} toView:rootView]];
+    
+    view.tag = DROPDOWNVIEW_TAG;
+    [rootView addSubview: view];
+}
+
++(void) dissmissCurrentDropDownView
+{
+    UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] subviews] firstObject];
+    UIView* view = [rootView viewWithTag: DROPDOWNVIEW_TAG];
+    [view removeFromSuperview];
+}
 
 
 

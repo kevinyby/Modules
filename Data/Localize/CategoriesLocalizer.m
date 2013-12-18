@@ -1,6 +1,7 @@
 #import "CategoriesLocalizer.h"
 
-#define GLOBAL_LOCALIZE_PRE @"G"
+#define LOCALIZE_GLOBAL_PRE @"GLOBAL"
+#define LOCALIZE_MESSAGE_PRE @"MESSAGE"
 
 // dic with array in it
 static NSDictionary* categories;
@@ -80,7 +81,12 @@ static NSDictionary* categories;
 
 +(NSString*) getGlobalLocalize: (NSString*)key
 {
-    return [LocalizeManager getLocalized: key category:GLOBAL_LOCALIZE_PRE];
+    return [LocalizeManager getLocalized: key category:LOCALIZE_GLOBAL_PRE];
+}
+    
++(NSString*) getMessageLocalize: (NSString*)key
+{
+    return [LocalizeManager getLocalized: key category:LOCALIZE_MESSAGE_PRE];
 }
 
 +(NSString*) getCategory: (NSString*)item

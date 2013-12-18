@@ -36,7 +36,7 @@
 -(void)setValuesXcoordinates:(NSArray *)valuesXcoordinates
 {
     tableView.valuesXcoordinates = valuesXcoordinates;
-    [AlignTableView setAlignHeaders:tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates];
+//    [tableView reloadData];       // need it or not ?
 }
 
 -(void)setDelegate:(id<HeaderTableViewDelegate>)delegateObj {

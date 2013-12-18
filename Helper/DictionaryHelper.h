@@ -7,11 +7,15 @@
 +(NSMutableDictionary*) deepCopy: (NSDictionary*)source ;
 +(void) deepCopy: (NSDictionary*)source to:(NSMutableDictionary*)destination  ;
 
-+(NSArray*) getSortedKeys: (NSDictionary*)dictionary;
 +(NSString*) convertToJSONString: (NSDictionary*)dictionary;
 
+#pragma mark = About Key
 
-#pragma mark -
++(NSArray*) getSortedKeys: (NSDictionary*)dictionary;
++(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary with:(NSString*)tail;
++(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary with:(NSString*)tail excepts:(NSArray*)excepts;
+
+#pragma mark - About Content
 
 +(NSMutableDictionary*) filterModel: (NSDictionary*)dictionary filterContent:(id)filterObj ;
 

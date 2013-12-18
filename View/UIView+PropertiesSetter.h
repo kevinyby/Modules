@@ -6,6 +6,8 @@
 - (CGFloat)getCenterX;
 - (CGFloat)getCenterY;
 
+-(CGPoint) getMiddlePoint;
+
 #pragma mark - Size
 - (CGFloat)getSizeWidth;
 - (CGFloat)getSizeHeight;

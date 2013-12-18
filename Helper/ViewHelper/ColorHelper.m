@@ -114,7 +114,6 @@
 +(void) setBorderRecursive: (UIView*)view
 {
     for (UIView* subview in view.subviews) {
-        if (subview.layer.borderWidth != 0) continue;
         [ColorHelper setBorderRecursive: subview];
     }
     [ColorHelper setBorder: view];

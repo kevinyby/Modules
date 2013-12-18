@@ -65,9 +65,10 @@
     [super reloadData];
 }
 
+#pragma mark - Override UITableView Methods
 -(void)reloadData
 {
-    self.filterText = self.filterText;
+    self.filterText = self.filterText;  // [setFilterText: ] to reload
 }
 
 - (void)tableView:(UITableView *)tableViewObj didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
