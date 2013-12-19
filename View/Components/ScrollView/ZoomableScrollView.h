@@ -4,6 +4,11 @@
 
 @property (strong) UIView* contentView;
 
--(NSArray*) subViews ;
+-(NSArray*) contentViewSubviews;
+-(void) addSubviewToContentView: (UIView*)view;
+
+
+#pragma mark - Subclass Override Methods
+-(void) initializeVariables;
 
 @end

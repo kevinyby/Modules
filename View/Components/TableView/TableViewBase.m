@@ -124,6 +124,10 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
+    if (proxy && [proxy respondsToSelector:@selector(commitEditingStyle:forRowAtIndexPath:on:)]) {
+        [proxy commitEditingStyle: editingStyle forRowAtIndexPath:indexPath on:self];
+    }
+    
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
         // A . delete the contents dictionary row data
@@ -145,6 +149,21 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
             [proxy didDeleteIndexPath: indexPath on:self];
         }
         
+    }
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (proxy && [proxy respondsToSelector:@selector(editingStyleForRowAtIndexPath:on:)]) {
+        return [proxy editingStyleForRowAtIndexPath: indexPath on:self];
+    }
+    return UITableViewCellEditingStyleNone;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    if (proxy && [proxy respondsToSelector:@selector(moveRowAtIndexPath:toIndexPath:on:)]) {
+        [proxy moveRowAtIndexPath:sourceIndexPath toIndexPath:destinationIndexPath on:self];
     }
 }
 
