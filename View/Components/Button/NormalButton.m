@@ -13,6 +13,15 @@
     return button;
 }
 
+-(id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self initializeValues];
+    }
+    return self;
+}
+
 - (id)init
 {
     self = [super init];
