@@ -1,7 +1,13 @@
 #import "TableViewBase.h"
 
 #import "_View.h"
+#import "NSArray+Additions.h"
+
+#import "_Frame.h"
+#import "FrameTranslater.h"
+
 #import "_Helper.h"
+#import "DictionaryHelper.h"
 
 static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 

@@ -15,5 +15,11 @@
 
 +(void) subtract:(NSMutableArray*)array with:(NSArray*)subtracts;
 
+
+
++(CGRect) convertToRect: (NSArray *)array;
+
++(UIEdgeInsets) convertToEdgeInsets: (NSArray *)array;
+
 @end
 

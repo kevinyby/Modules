@@ -12,6 +12,14 @@
 
 +(void) setComponentFrame: (NSArray*)frame component:(UIView*)view;
 
+
++(UIEdgeInsets) convertCanvasEdgeInsets: (UIEdgeInsets)insets;
+
+
++(void) setSubViewsFrames: (UIView*)view config:(NSDictionary*)config;
+
+
+
 /**
  *  Description Deprecated
  *

@@ -119,10 +119,24 @@
     [ColorHelper setBorder: view];
 }
 
++(void) clearBorderRecursive: (UIView*)view
+{
+    for (UIView* subview in view.subviews) {
+        [ColorHelper clearBorderRecursive: subview];
+    }
+    [ColorHelper clearBorder: view];
+}
+
 +(void) setBorder: (UIView*)view
 {
     view.layer.borderWidth = 1.0f;
     view.layer.borderColor = [[UIColor greenColor] CGColor];
+}
+
++(void) clearBorder: (UIView*)view
+{
+    view.layer.borderWidth = 0.0f;
+    view.layer.borderColor = [[UIColor clearColor] CGColor];
 }
 
 +(void) setBorder: (UIView*)view color:(UIColor*)color

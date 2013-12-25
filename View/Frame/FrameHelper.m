@@ -8,6 +8,8 @@
 
 #import "UIView+PropertiesSetter.h"
 
+#import "ArrayHelper.h"
+
 @implementation FrameHelper
 
 static Boolean isNeedReserve ;
@@ -68,7 +70,7 @@ static Boolean isNeedReserve ;
     
     if ( !isIgnoreX && !isIgnoreY && !isIgnoreWidth && !isIgnoreHeight){
         
-        CGRect canvas = [FrameManager convertToRect: frame];
+        CGRect canvas = [ArrayHelper convertToRect: frame];
         [FrameHelper setFrame: canvas view:view];
         
     } else {
@@ -79,6 +81,54 @@ static Boolean isNeedReserve ;
     }
 }
 
+
++(UIEdgeInsets) convertCanvasEdgeInsets: (UIEdgeInsets)insets
+{
+    return UIEdgeInsetsMake([FrameTranslater convertCanvasHeight: insets.top],
+                            [FrameTranslater convertCanvasWidth: insets.left],
+                            [FrameTranslater convertCanvasHeight: insets.bottom],
+                            [FrameTranslater convertCanvasWidth: insets.right]);
+}
+
+
+/**
+ Convention :
+ i.e.
+ {
+ "GameView" : {
+ "HeaderView": [50, 20, 900, 100],
+ "ContainerView": [50, 150, 900, 550],
+ "HeaderView+" : {
+ "UILabel0" : [0,0, 100, 50],
+ "UILabel1" : [200,0, 100, 50]
+ }
+ }
+ }
+ */
++(void) setSubViewsFrames: (UIView*)view config:(NSDictionary*)config
+{
+    NSArray* subviews = [view subviews];
+    for (UIView* subview in subviews) {
+        // get rect array
+        NSString* key = NSStringFromClass([subview class]);
+        NSArray* rectArray = config[key];
+        if (!rectArray) {
+            int index = [subviews indexOfObject: subview];
+            NSString* realKey = [key stringByAppendingFormat:@"%d", index];
+            rectArray = config[realKey];
+        }
+        
+        // rect array to cgrect
+        CGRect rect = [ArrayHelper convertToRect: rectArray];
+        [FrameHelper setFrame: rect view:subview];
+        //        [BorderHelper setBorder: subview];
+        
+        // recursively set subviews frames
+        NSString* subKey = [key stringByAppendingString:@"+"];
+        NSDictionary* subConfig = config[subKey];
+        [self setSubViewsFrames: subview config:subConfig];
+    }
+}
 
 
 // deprecated

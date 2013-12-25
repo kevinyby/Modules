@@ -53,7 +53,13 @@ static NSString* currentLanguage = nil ;
     NSString* table = LOCALIZE_PREFIX;
     if (category) table = [table stringByAppendingFormat:LOCALIZE_TABLE_FORMAT, category];
     if (language) table = [table stringByAppendingFormat:LOCALIZE_TABLE_FORMAT, language];
-    return NSLocalizedStringFromTable(key, table, nil);
+    
+    NSString* localizeValue = NSLocalizedStringFromTable(key, table, nil);
+    
+    // when the same , return nill , so , be sure the key-value are not the same
+    if ([localizeValue isEqualToString: key]) localizeValue = nil;
+    
+    return localizeValue;
 }
 
 @end

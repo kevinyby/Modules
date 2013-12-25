@@ -30,41 +30,28 @@ static NSDictionary* categories;
  */
 +(NSString*) getLocalize: (NSString*)key
 {
-    
-    NSArray* array = [key componentsSeparatedByString:ITEM_ATTR_CONNECTOR];
-    NSString* item = [array firstObject];
-    NSString* attr = [array lastObject];
-    
     NSString* result = nil;
-    if (array.count == 0)
-    {
+    
+    if ([key rangeOfString: ITEM_ATTR_CONNECTOR].location == NSNotFound) {
         result = [CategoriesLocalizer getGlobalLocalize: key];
         
-    } else
-    {
+    } else {
+        
+        NSArray* array = [key componentsSeparatedByString:ITEM_ATTR_CONNECTOR];
+        NSString* item = [array firstObject];
+        NSString* attr = [array lastObject];
+        
+        // get category by item
         NSString* category = [CategoriesLocalizer getCategoryByItem:item];
+        // get from the categories by connected key
+        if (category) result = [LocalizeManager getLocalized: key category:category];
         
-        if (category == nil || [category length] == 0) {
-            
-            // get from global
-            result = [CategoriesLocalizer getGlobalLocalize: key];
-            
-            // cannot find again ? ok , make attr as key, and continue find
-            if ([result isEqualToString: key]) result = [CategoriesLocalizer getGlobalLocalize: attr];
-            
-        } else {
-            // get from the categories
-            result = [LocalizeManager getLocalized: key category:category];
-            
-            // if not find  , go to the GLOBAL_LOCALIZE to continue find it
-            if ([result isEqualToString: key]) result = [CategoriesLocalizer getGlobalLocalize: key];
-            
-            // cannot find again ? ok , make attr as key, and continue find
-            if ([result isEqualToString: key]) result = [CategoriesLocalizer getGlobalLocalize: attr];
-            
-        }
-        
+        // if not find  , go to the GLOBAL_LOCALIZE to continue find it
+        if (!result) result = [CategoriesLocalizer getGlobalLocalize: attr];
+        if (!result) result = [CategoriesLocalizer getGlobalLocalize: key];
     }
+    
+    if (!result) result = key;
     
     return result;
 }

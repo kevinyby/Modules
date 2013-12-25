@@ -1,6 +1,8 @@
 #import "NormalLabel.h"
 
-#import "_View.h"
+#import "_Frame.h"
+#import "UIView+PropertiesSetter.h"
+#import "UILabel+AdjustWidth.h"
 
 @implementation NormalLabel
 

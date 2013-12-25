@@ -1,6 +1,8 @@
 #import "ArrayHelper.h"
 #import "DictionaryHelper.h"
 
+#import "NSArray+Additions.h"
+
 @implementation ArrayHelper
 
 // [ArrayHelper add: array objs:@"1", nil] . Do not forget the "nil"
@@ -64,6 +66,26 @@
             [array removeObject: element];
         }
     }
+}
+
+
+#pragma mark - 
+
+/** @prama rectArray @[@(0),@(0), @(200), @(50)] */
++(CGRect) convertToRect: (NSArray *)array
+{
+    return CGRectMake([[array safeObjectAtIndex: 0] floatValue],
+                      [[array safeObjectAtIndex: 1] floatValue],
+                      [[array safeObjectAtIndex: 2] floatValue],
+                      [[array safeObjectAtIndex: 3] floatValue]);
+}
+
++(UIEdgeInsets) convertToEdgeInsets: (NSArray *)array
+{
+    return UIEdgeInsetsMake([[array safeObjectAtIndex: 0] floatValue],
+                            [[array safeObjectAtIndex: 1] floatValue],
+                            [[array safeObjectAtIndex: 2] floatValue],
+                            [[array safeObjectAtIndex: 3] floatValue]);
 }
 
 
