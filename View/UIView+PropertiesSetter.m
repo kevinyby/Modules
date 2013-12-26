@@ -58,12 +58,27 @@
 	self.frame = frame;
 }
 
+- (CGSize)getSize
+{
+	return self.frame.size;
+}
+
 - (void)setSize: (CGSize)size
 {
 	CGRect frame = self.frame;
 	frame.size = size;
 	self.frame = frame;
 }
+
+
+- (void)addSizeWidth: (CGFloat)width
+{
+	CGRect frame = self.frame;
+	frame.size.width += width;
+	self.frame = frame;
+}
+
+
 
 #pragma mark - Origin
 
@@ -130,8 +145,7 @@
 
 -(CGPoint) getOrigin
 {
-    CGRect frame = self.frame;
-	return frame.origin ;
+    return self.frame.origin;
 }
 
 @end

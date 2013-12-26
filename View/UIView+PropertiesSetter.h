@@ -15,7 +15,10 @@
 - (void)setSizeWidth: (CGFloat)width;
 - (void)setSizeHeight: (CGFloat)height;
 
+- (CGSize)getSize;
 - (void)setSize: (CGSize)size;
+
+- (void)addSizeWidth: (CGFloat)width;
 
 #pragma mark - Origin
 

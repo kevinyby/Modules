@@ -4,10 +4,14 @@
 
 +(int) numberOfUpperCaseCharacter: (NSString*)string ;
 
-+(NSMutableString*) separateChinese:(NSString*)string space:(int)space;
++(BOOL) isContainsChinese:(NSString*)string;
 
-+(NSMutableString*) separateChinese:(NSString*)string spaceMeta:(NSString*)spaceMeta;
++(NSMutableString*) getChinese:(NSString*)string;
 
 +(NSMutableString*) insertSpace: (NSString*)string atIndex:(NSUInteger)index spaceCount:(NSUInteger)spaceCount;
+
++(NSMutableString*) separateChinese:(NSString*)string spaceMeta:(NSString*)spaceMeta;
++(NSMutableString*) separateEnglish:(NSString*)string spaceMeta:(NSString*)spaceMeta;
++(NSMutableString*) separate:(NSString*)string spaceMeta:(NSString*)spaceMeta;
 
 @end
