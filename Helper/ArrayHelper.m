@@ -71,6 +71,12 @@
 
 #pragma mark - 
 
++(CGPoint) convertToPoint: (NSArray *)array
+{
+    return CGPointMake([[array safeObjectAtIndex: 0] floatValue],
+                      [[array safeObjectAtIndex: 1] floatValue]);
+}
+
 /** @prama rectArray @[@(0),@(0), @(200), @(50)] */
 +(CGRect) convertToRect: (NSArray *)array
 {

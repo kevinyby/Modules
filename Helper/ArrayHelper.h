@@ -16,6 +16,7 @@
 +(void) subtract:(NSMutableArray*)array with:(NSArray*)subtracts;
 
 
++(CGPoint) convertToPoint: (NSArray *)array;
 
 +(CGRect) convertToRect: (NSArray *)array;
 

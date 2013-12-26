@@ -151,4 +151,33 @@
     return width;
 }
 
+
+
+#pragma mark - About Subviews
+
++(void) iterateSubView: (UIView*)superView class:(Class)clazz handler:(BOOL (^)(id subView))handler {
+    for (UIView* subView in [superView subviews]) {
+        if ([subView isKindOfClass:clazz]) {
+            if (handler(subView)) return;
+        } else {
+            [ViewHelper iterateSubView: subView class:clazz handler:handler];
+        }
+    }
+}
+
++(void) iterateSubView: (UIView*)superView classes:(NSArray*)clazzes handler:(void (^)(id subView))handler {
+    for (UIView* subView in [superView subviews]) {
+        BOOL flag = NO;
+        for (Class clazz in clazzes) {
+            flag = [subView isKindOfClass: clazz];
+            if (flag) break;
+        }
+        if (flag) {
+            handler(subView);
+        } else {
+            [ViewHelper iterateSubView: subView classes:clazzes handler:handler];
+        }
+    }
+}
+
 @end

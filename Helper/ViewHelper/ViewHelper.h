@@ -20,4 +20,9 @@
 +(void) resizeWidthBySubviewsOccupiedWidth: (UIView*)superview;
 +(float) getSubViewsOccupyLongestWidth: (UIView*)superView;
 
+
+#pragma mark - About Subviews
++(void) iterateSubView: (UIView*)superView class:(Class)clazz handler:(BOOL (^)(id subView))handler ;
++(void) iterateSubView: (UIView*)superView classes:(NSArray*)clazzes handler:(void (^)(id subView))handler ;
+
 @end
