@@ -6,7 +6,7 @@
 
 +(UIColor*) parseColor: (id)config ;
 +(CAGradientLayer*) assembleGradientLayer: (NSDictionary*)config ;
-+(void) parseColor: (id)config red:(float*)red green:(float*)green blue:(float*)blue alpha:(float*)alpha ;
++(void) parseColor: (id)config red:(float*)red green:(float*)green blue:(float*)blue alpha:(float*)alpha;
 
 
 

@@ -114,6 +114,7 @@
 #pragma mark - About Width
 // i.e. when you chang localize text in label
 // the width of the label change, you can invoke this to fix
+// resize it recursive
 +(void) resizeWidthBySubviewsOccupiedWidth: (UIView*)superview
 {
     for (UIView* view in superview.subviews) {

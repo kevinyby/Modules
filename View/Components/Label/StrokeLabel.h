@@ -1,22 +1,15 @@
 #import <UIKit/UIKit.h>
 
-@interface StrokeLabel : UILabel {
-    @private
-    @protected
-}
+@interface StrokeLabel : UILabel
 
-#pragma mark - Public Properties 
-@property (assign) float red ;
-@property (assign) float green ;
-@property (assign) float blue ;
-@property (assign) float alpha ;
-@property (assign) float width ;
+
+@property (assign) float strokeR ;
+@property (assign) float strokeG ;
+@property (assign) float strokeB ;
+@property (assign) float strokeAlpha ;
+
+@property (assign) float strokeWidth ;
 @property (assign) int drawingMode ;  // CGTextDrawingMode
 
-#pragma mark - Public Methods 
-
-#pragma mark - Protected Methods
-
-#pragma mark - Private Methods
 
 @end

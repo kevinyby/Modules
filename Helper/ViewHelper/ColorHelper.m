@@ -54,41 +54,37 @@
     return nil;
 }
 
-+(UIColor*) parseColor: (id)config {  // config - dic or array
++(UIColor*) parseColor: (id)config {
+    if (! config) return nil;
+    if (! ([config isKindOfClass: [NSArray class]] || [config isKindOfClass: [NSDictionary class]])) return nil;
+    
     float red = 0.0, green = 0.0, blue = 0.0 ,alpha = 1.0;
-    if ([config isKindOfClass: [NSDictionary class]]) {
-        red = [[config objectForKey: @"R"] floatValue] ;
-        green = [[config objectForKey: @"G"] floatValue] ;
-        blue = [[config objectForKey: @"B"] floatValue] ;
-        NSNumber* alphaNum = [config objectForKey: @"alpha"];
-        if (alphaNum) alpha = [alphaNum floatValue];
-    } else if ([config isKindOfClass: [NSArray class]]) {
-        for (int i = 0 ; i < [config count]; i++ ) {
-            if (i == 0) red = [[config objectAtIndex: i] floatValue];
-            if (i == 1) green = [[config objectAtIndex: i] floatValue];
-            if (i == 2) blue = [[config objectAtIndex: i] floatValue];
-            if (i == 3) alpha = [[config objectAtIndex: i] floatValue];
-        }
-    }
-    return config ? [UIColor colorWithRed: red green:green blue:blue alpha:alpha] : nil;
+    [self parseColor: config red:&red green:&green blue:&blue alpha:&alpha];
+    return [UIColor colorWithRed: red green:green blue:blue alpha:alpha] ;
 }
 
-+(void) parseColor: (id)config red:(float*)red green:(float*)green blue:(float*)blue alpha:(float*)alpha {  // config - dic or array
+// config - dic or array
++(void) parseColor: (id)config red:(float*)red green:(float*)green blue:(float*)blue alpha:(float*)alpha
+{
     *red = 0.0 , *green = 0.0, *blue = 0.0, *alpha = 1.0;
     if ([config isKindOfClass: [NSDictionary class]]) {
-        *red = [[config objectForKey: @"R"] floatValue] ;
+        *red = [[config objectForKey:   @"R"] floatValue] ;
         *green = [[config objectForKey: @"G"] floatValue] ;
-        *blue = [[config objectForKey: @"B"] floatValue] ;
-        NSNumber* alphaNum = [config objectForKey: @"alpha"];
+        *blue = [[config objectForKey:  @"B"] floatValue] ;
+        NSNumber* alphaNum = [config objectForKey:  @"alpha"];
         if (alphaNum) *alpha = [alphaNum floatValue];
     } else if ([config isKindOfClass: [NSArray class]]) {
         for (int i = 0 ; i < [config count]; i++ ) {
             if (i == 0) *red = [[config objectAtIndex: i] floatValue];
+            else
             if (i == 1) *green = [[config objectAtIndex: i] floatValue];
+            else
             if (i == 2) *blue = [[config objectAtIndex: i] floatValue];
+            else
             if (i == 3) *alpha = [[config objectAtIndex: i] floatValue];
         }
     }
+    *red = *red > 1.0 ? *red/255.0 : *red,  *green = *green > 1.0 ? *green/255.0 : *green,  *blue = *blue > 1.0 ? *blue/255.0 : *blue;
 }
 
 #pragma mark - Private Methods

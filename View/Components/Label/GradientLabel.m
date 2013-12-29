@@ -3,10 +3,12 @@
 @implementation GradientLabel
 
 @synthesize gradientCount;
+
 @synthesize gradientStartR;
 @synthesize gradientStartG;
 @synthesize gradientStartB;
 @synthesize gradientStartAlpah;
+
 @synthesize gradientEndR;
 @synthesize gradientEndG;
 @synthesize gradientEndB;
@@ -14,6 +16,7 @@
 
 @synthesize gradientStartPointX;
 @synthesize gradientStartPointY;
+
 @synthesize gradientEndPointX;
 @synthesize gradientEndPointY;
 
