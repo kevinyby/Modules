@@ -6,4 +6,5 @@
 
 +(NSIndexPath*) getLastIndexPath: (UITableView*)tableView inSection: (NSUInteger)section;
 
++(NSIndexPath*) getIndexPath: (UITableView*)tableView cellSubView:(UIView*)subview;
 @end

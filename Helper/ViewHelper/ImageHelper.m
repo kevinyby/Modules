@@ -37,4 +37,15 @@
     return newImage;
 }
 
++ (NSData *)resizeWithImage:(UIImage*)image scale:(CGFloat)scale compression:(CGFloat)compression{
+    CGSize newSize = CGSizeMake(image.size.width * scale, image.size.height * scale);
+    
+    UIGraphicsBeginImageContext(newSize);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return UIImageJPEGRepresentation(newImage, compression);
+}
+
 @end
