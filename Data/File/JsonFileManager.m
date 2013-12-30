@@ -1,7 +1,18 @@
 #import "JsonFileManager.h"
 
-
 #define JSON_EXTENTION @"json"
+
+#if defined __IPHONE_OS_VERSION_MAX_ALLOWED
+#define __PLATFORM_IPHONE_OS
+#else
+#define __PLATFORM_MAC_X_OS
+#endif
+
+#ifdef __PLATFORM_IPHONE_OS
+#import <UIKit/UIKit.h>
+#else
+#import <Cocoa/Cocoa.h>
+#endif
 
 @implementation JsonFileManager
 
@@ -14,6 +25,7 @@
     NSError* error = nil;
     id content = [NSJSONSerialization JSONObjectWithData: jsonData options: NSJSONReadingAllowFragments error:&error];
     
+#ifdef __PLATFORM_IPHONE_OS
     if (error) {
         NSString* message = [NSString stringWithFormat:@"Check your %@ json file or json format please", jsonFileName];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle: @"JASON PARSE ERROR"
@@ -23,6 +35,12 @@
                                               otherButtonTitles: nil];
         [alert show];
     }
+#else
+    if (error) {
+        NSString* message = [NSString stringWithFormat:@"Check your %@ json file or json format please", jsonFileName];
+        NSRunAlertPanel(@"JASON PARSE ERROR", message, @"OK", nil, nil);
+    }
+#endif
     
     return content;
 }

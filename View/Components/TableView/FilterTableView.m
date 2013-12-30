@@ -89,12 +89,8 @@
 // get the real index path by view in cell
 -(NSIndexPath*) getRealIndexPath:(UIView*)subview 
 {
-    // get table cell
-    UITableViewCell* cell = (UITableViewCell*)[subview superview];
-    while (cell && ![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell*)[cell superview];
-    
     // get the index path
-    NSIndexPath* indexPath = [self indexPathForCell: cell];
+    NSIndexPath* indexPath = [TableViewHelper getIndexPath: self cellSubView:subview];
     if ([self isInFilteringMode]) indexPath = [self traslateFilterModeIndexPath:indexPath];
     return indexPath;
 }

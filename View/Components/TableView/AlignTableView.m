@@ -1,7 +1,14 @@
 #import "AlignTableView.h"
 #import "UIView+PropertiesSetter.h"
+
+
 #import "_Frame.h"
+#import "FrameHelper.h"
+#import "FrameTranslater.h"
+
 #import "_Helper.h"
+#import "ArrayHelper.h"
+
 #import "_Label.h"
 
 @implementation AlignTableView

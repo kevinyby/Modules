@@ -2,34 +2,34 @@
 
 @implementation StrokeLabel
 
-@synthesize red;
-@synthesize green;
-@synthesize blue;
-@synthesize alpha;
-@synthesize width;
+@synthesize strokeR;
+@synthesize strokeG;
+@synthesize strokeB;
+@synthesize strokeAlpha;
+
+@synthesize strokeWidth;
 @synthesize drawingMode;
 
 - (void)drawTextInRect:(CGRect)rect {
-    self.adjustsFontSizeToFitWidth = YES;
     CGSize shadowOffset = self.shadowOffset;
     UIColor* textColor = self.textColor;
     
     CGContextRef context  = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(context, width);
+    CGContextSetLineWidth(context, strokeWidth);
     CGContextSetLineJoin(context, kCGLineJoinRound);
     
     CGContextSetTextDrawingMode(context, drawingMode);  // default kCGTextStroke
-    self.textColor = [UIColor colorWithRed: red green:green blue:blue alpha:alpha];
+    self.textColor = [UIColor colorWithRed: strokeR green:strokeG blue:strokeB alpha:strokeAlpha];
     [super drawTextInRect:rect];
     
+    
+    // the original text
     CGContextSetTextDrawingMode(context, kCGTextFill);
     self.textColor = textColor;
     self.shadowOffset = CGSizeMake(0, 0);
     [super drawTextInRect:rect];
     
     self.shadowOffset = shadowOffset;
-    
-//    [self gradient: rect context:context];  // gradient the text  // Test the context in subclass
 }
 
 @end

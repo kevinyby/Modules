@@ -9,7 +9,9 @@
     int count = array.count;
     NSMutableArray* localizes = [NSMutableArray arrayWithCapacity: count];
     for (int i = 0; i < count; i++) {
-        [localizes addObject: LOCALIZE_KEY(array[i])];
+        NSString* key = array[i];
+        NSString* localizeValue = LOCALIZE_KEY(key);
+        [localizes addObject: localizeValue];
     }
     return localizes;
 }

@@ -9,6 +9,16 @@
 #define CONNECT_KEYS(_item, _attr) [CategoriesLocalizer connectKeys:_item attribute:_attr]
 
 
+// Convention:
+
+// First :
+// categories forbid that two different keys have the same value . i.e.
+// @{@"HumanResource":[@"item_A", @"item_B"], @"Finance":[@"item_A",@"item_C"]}
+// the @"item_A" is duplicated , avoid that !!! importmant .
+
+// Second :
+// in .strings files , key and localize value do not use the same charachters. i.e.
+
 @interface CategoriesLocalizer : LocalizeManager
 
 +(NSDictionary*) categories;

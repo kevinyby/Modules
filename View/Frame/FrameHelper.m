@@ -8,6 +8,8 @@
 
 #import "UIView+PropertiesSetter.h"
 
+#import "ArrayHelper.h"
+
 @implementation FrameHelper
 
 static Boolean isNeedReserve ;
@@ -49,17 +51,36 @@ static Boolean isNeedReserve ;
 
 
 
+// deprecated
++(void) translateCanvas: (CGRect)canvas view:(UIView*)view {
+    view.actualFrame = [NSValue valueWithCGRect: [FrameTranslater getFrame: canvas]];
+    if (isNeedReserve) view.designFrame = [NSValue valueWithCGRect: canvas];
+}
 
-+(void) setComponentFrame: (NSArray*)frame component:(UIView*)view
+
+#pragma mark -
+
++(CGRect) getScreenRectByOrientation
 {
-    if (frame.count != 4) return;
+    CGRect screenSize = [UIScreen mainScreen].bounds;
+    float screenWidth = screenSize.size.width;
+    float screenHeight = screenSize.size.height;
+    UIViewController* controller = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    UIInterfaceOrientation orientation = controller.interfaceOrientation;
+    CGRect rect = UIInterfaceOrientationIsPortrait(orientation) ? (CGRect){{0,0},{screenWidth,screenHeight}} : (CGRect){{0,0},{screenHeight,screenWidth}};
+    return rect;
+}
+
++(void) setComponentFrame: (NSArray*)values component:(UIView*)view
+{
+    if (values.count != 4) return;
     
     float ingore_value = -1.1f;
     
-    float x = [frame[0] floatValue];
-    float y = [frame[1] floatValue];
-    float width = [frame[2] floatValue];
-    float height = [frame[3] floatValue];
+    float x = [values[0] floatValue];
+    float y = [values[1] floatValue];
+    float width = [values[2] floatValue];
+    float height = [values[3] floatValue];
     
     bool isIgnoreX      = x         == ingore_value;
     bool isIgnoreY      = y         == ingore_value;
@@ -67,8 +88,7 @@ static Boolean isNeedReserve ;
     bool isIgnoreHeight = height    == ingore_value;
     
     if ( !isIgnoreX && !isIgnoreY && !isIgnoreWidth && !isIgnoreHeight){
-        
-        CGRect canvas = [FrameManager convertToRect: frame];
+        CGRect canvas = [ArrayHelper convertToRect: values];
         [FrameHelper setFrame: canvas view:view];
         
     } else {
@@ -79,12 +99,78 @@ static Boolean isNeedReserve ;
     }
 }
 
++(void) setComponentCenter: (NSArray*)values component:(UIView*)view
+{
+    if (values.count != 2) return;
+    
+    float ingore_value = -1.1f;
+    
+    float x = [values[0] floatValue];
+    float y = [values[1] floatValue];
+    
+    bool isIgnoreX      = x         == ingore_value;
+    bool isIgnoreY      = y         == ingore_value;
+    
+    
+    if ( !isIgnoreX && !isIgnoreY){
+        CGPoint point = [ArrayHelper convertToPoint: values];
+        CGPoint center = [FrameTranslater getPoint: point];
+        view.center = center;
+        
+    } else {
+        if (!isIgnoreX) [view setCenterX:[FrameTranslater convertCanvasX:x]];
+        if (!isIgnoreY) [view setCenterY:[FrameTranslater convertCanvasY:y]];
+    }
+    
+}
 
 
-// deprecated
-+(void) translateCanvas: (CGRect)canvas view:(UIView*)view {
-    view.actualFrame = [NSValue valueWithCGRect: [FrameTranslater getFrame: canvas]];
-    if (isNeedReserve) view.designFrame = [NSValue valueWithCGRect: canvas];
++(UIEdgeInsets) convertCanvasEdgeInsets: (UIEdgeInsets)insets
+{
+    return UIEdgeInsetsMake([FrameTranslater convertCanvasHeight: insets.top],
+                            [FrameTranslater convertCanvasWidth: insets.left],
+                            [FrameTranslater convertCanvasHeight: insets.bottom],
+                            [FrameTranslater convertCanvasWidth: insets.right]);
+}
+
+
+/**
+ Convention :
+ i.e.
+ {
+ "GameView" : {
+ "HeaderView": [50, 20, 900, 100],
+ "ContainerView": [50, 150, 900, 550],
+ "HeaderView+" : {
+ "UILabel0" : [0,0, 100, 50],
+ "UILabel1" : [200,0, 100, 50]
+ }
+ }
+ }
+ */
++(void) setSubViewsFrames: (UIView*)view config:(NSDictionary*)config
+{
+    NSArray* subviews = [view subviews];
+    for (UIView* subview in subviews) {
+        // get rect array
+        NSString* key = NSStringFromClass([subview class]);
+        NSArray* rectArray = config[key];
+        if (!rectArray) {
+            int index = [subviews indexOfObject: subview];
+            NSString* realKey = [key stringByAppendingFormat:@"%d", index];
+            rectArray = config[realKey];
+        }
+        
+        // rect array to cgrect
+        CGRect rect = [ArrayHelper convertToRect: rectArray];
+        [FrameHelper setFrame: rect view:subview];
+        //        [BorderHelper setBorder: subview];
+        
+        // recursively set subviews frames
+        NSString* subKey = [key stringByAppendingString:@"+"];
+        NSDictionary* subConfig = config[subKey];
+        [self setSubViewsFrames: subview config:subConfig];
+    }
 }
 
 

@@ -17,11 +17,16 @@
     return self;
 }
 
+// Take a look :
+// iOS Development: You're Doing It Wrong
+//http://doing-it-wrong.mikeweller.com/2012/07/youre-doing-it-wrong-2-sizing-labels.html
+// Am i doing wrong here ?
+// https://github.com/MikeWeller/ButtonInsetsPlayground   comment line 159 [self sizeButtonToFit] to see .
 -(void) adjustWidthToFontText {
     CGSize titleSize = [self.text sizeWithFont:self.font];
     CGRect frame = self.frame;
     frame.size.width = titleSize.width;
-    self.frame = frame;
+    self.frame = frame;                     // when you change the frame , the center will be changed. when you change the center, the frame's origin will be changed
 }
 
 @end

@@ -1,6 +1,8 @@
 #import "ViewHelper.h"
 #import <QuartzCore/QuartzCore.h>
 
+#import "UIView+PropertiesSetter.h"
+
 @implementation ViewHelper
 
 /**
@@ -106,6 +108,77 @@
                          tableView.bounces = YES;
                          if (completion) completion(finished);
                      }];
+}
+
+
+#pragma mark - About Width
+// i.e. when you chang localize text in label
+// the width of the label change, you can invoke this to fix
+// resize it recursive
++(void) resizeWidthBySubviewsOccupiedWidth: (UIView*)superview
+{
+    for (UIView* view in superview.subviews) {
+        [ViewHelper resizeWidthBySubviewsOccupiedWidth: view];
+    }
+    
+    float width = [ViewHelper getSubViewsOccupyLongestWidth: superview];
+    // must have subviews
+    //    if (superview.subviews.count) [superview setSizeWidth: width];
+    if (width != 0) [superview setSizeWidth: width];    // the same as above
+}
+
+// superview must have subviews
++(float) getSubViewsOccupyLongestWidth: (UIView*)superView
+{
+    return [ViewHelper getSubViewsOccupyLongestWidth: superView originX:0];
+}
+
++(float) getSubViewsOccupyLongestWidth: (UIView*)originView originX: (float)originX
+{
+    float width = 0.0f;
+    for (UIView* subview in originView.subviews) {
+        float right = 0.0f;
+        
+        if (subview.subviews.count != 0) {
+            float x = [subview getOriginX] + originX;
+            right = [ViewHelper getSubViewsOccupyLongestWidth: subview originX: x];
+        } else {
+            right = [subview getOriginX] + [subview getSizeWidth] + originX;
+        }
+        
+        width = width < right ? right : width;
+    }
+    
+    return width;
+}
+
+
+
+#pragma mark - About Subviews
+
++(void) iterateSubView: (UIView*)superView class:(Class)clazz handler:(BOOL (^)(id subView))handler {
+    for (UIView* subView in [superView subviews]) {
+        if ([subView isKindOfClass:clazz]) {
+            if (handler(subView)) return;
+        } else {
+            [ViewHelper iterateSubView: subView class:clazz handler:handler];
+        }
+    }
+}
+
++(void) iterateSubView: (UIView*)superView classes:(NSArray*)clazzes handler:(void (^)(id subView))handler {
+    for (UIView* subView in [superView subviews]) {
+        BOOL flag = NO;
+        for (Class clazz in clazzes) {
+            flag = [subView isKindOfClass: clazz];
+            if (flag) break;
+        }
+        if (flag) {
+            handler(subView);
+        } else {
+            [ViewHelper iterateSubView: subView classes:clazzes handler:handler];
+        }
+    }
 }
 
 @end

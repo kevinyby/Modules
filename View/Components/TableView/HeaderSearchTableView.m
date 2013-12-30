@@ -1,6 +1,8 @@
 #import "HeaderSearchTableView.h"
 
-#import "_View.h"
+//#import "_View.h"
+//#import "_Frame.h"
+#import "FrameTranslater.h"
 
 @interface HeaderSearchTableView () <UISearchBarDelegate>
 

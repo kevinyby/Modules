@@ -6,14 +6,16 @@
 
 +(UIColor*) parseColor: (id)config ;
 +(CAGradientLayer*) assembleGradientLayer: (NSDictionary*)config ;
-+(void) parseColor: (id)config red:(float*)red green:(float*)green blue:(float*)blue alpha:(float*)alpha ;
++(void) parseColor: (id)config red:(float*)red green:(float*)green blue:(float*)blue alpha:(float*)alpha;
 
 
 
 #pragma mark -
 #pragma mark -  Convenient Methods
-+(void) setBorderRecursive: (UIView*)view;
++(void) clearBorderRecursive: (UIView*)view;
++(void) clearBorder: (UIView*)view;
 
++(void) setBorderRecursive: (UIView*)view;
 +(void) setBorder: (UIView*)view;
 +(void) setBorder: (UIView*)view color:(UIColor*)color;
 +(void) setBorder: (UIView*)view colorIndex:(int)index;

@@ -33,9 +33,10 @@
     self.maximumZoomScale = 2.0f;
     self.decelerationRate = UIScrollViewDecelerationRateNormal;
     self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleHeight;
+    self.backgroundColor = [UIColor clearColor];
     
     contentView = [[UIView alloc] init];
-    contentView.backgroundColor = [UIColor whiteColor];
+    contentView.backgroundColor = [UIColor clearColor];
     contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleHeight;
     [super addSubview: contentView];
     

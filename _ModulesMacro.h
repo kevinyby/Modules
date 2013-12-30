@@ -8,10 +8,3 @@
 #else
 #define DLOG(_format,args...)
 #endif
-
-
-#define DLOGSize(size) NSLog(@"(%f,%f)", size.width, size.height)
-
-#define DLOGRect(rect) NSLog(@"(%f,%f,%f,%f)", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height)
-
-#define DLOGFloat(_x)  NSLog(@"%f", _x)
