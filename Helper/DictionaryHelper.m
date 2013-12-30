@@ -4,15 +4,16 @@
 @implementation DictionaryHelper
 
 +(void) combine: (NSMutableDictionary*)destination with:(NSDictionary*)source {
-    NSEnumerator* enumerator = [source keyEnumerator];
+    NSEnumerator* sourceEnumerator = [source keyEnumerator];
     id key;
-    while ((key = [enumerator nextObject])) {
-        NSObject* contains = [source objectForKey: key];
+    while ((key = [sourceEnumerator nextObject])) {
+        NSObject* sourceContains = [source objectForKey: key];
+        NSObject* destinationContains = [destination objectForKey: key];
         
-        if ([contains isKindOfClass: [NSDictionary class]] && [destination objectForKey: key]) {
-            [self combine: [destination objectForKey: key] with:(NSDictionary*)contains];
+        if ([sourceContains isKindOfClass: [NSDictionary class]] && [destinationContains isKindOfClass: [NSDictionary class]]) {
+            [self combine: (NSMutableDictionary*)destinationContains with:(NSDictionary*)sourceContains];
         } else {
-            [destination setObject: contains forKey: key];
+            [destination setObject: sourceContains forKey: key];
         }
     }
 }
