@@ -19,5 +19,6 @@
 #pragma mark - About Content
 
 +(NSMutableDictionary*) filterModel: (NSDictionary*)dictionary filterContent:(id)filterObj ;
++(NSMutableDictionary*)filterNumberToString: (NSDictionary*)dictionary;
 
 @end

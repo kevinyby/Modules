@@ -106,4 +106,19 @@
 }
 
 
+
++(NSMutableDictionary*)filterNumberToString: (NSDictionary*)dictionary
+{
+    NSMutableDictionary* result = [NSMutableDictionary dictionary];
+    for (id key in dictionary) {
+        id value = dictionary[key];
+        if ([value isKindOfClass:[NSNumber class]]) {
+            value = [value stringValue];
+        }
+        [result setObject: value forKey:key];
+    }
+    return result;
+}
+
+
 @end
