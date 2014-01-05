@@ -21,10 +21,6 @@
 
 - (void) commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath on:(TableViewBase*)tableViewObj;
 
-- (UITableViewCellEditingStyle) editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath on:(TableViewBase*)tableViewObj;
-
-- (void) moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath on:(TableViewBase*)tableViewObj;
-
 @end
 
 

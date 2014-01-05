@@ -2,6 +2,9 @@
 
 @interface ViewHelper : NSObject
 
++(void) logViewRecursive: (UIView*)view;
+
++ (void) setCornerRadius: (UIView*)view config:(NSDictionary*)config;
 +(void) appendShadowView: (UIView*)view config:(NSDictionary*)config ;
 
 +(void) sortedSubviewsByXCoordinate: (UIView*)view;
@@ -14,6 +17,14 @@
 
 
 +(void) tableViewRowDelete:(UITableView*)tableView deleteIndexPaths:(NSArray*)deleteIndexPaths animation:(UITableViewRowAnimation)animation completion:(void (^)(BOOL finished))completion;
+
+
+
+#pragma mark - About View Hierarchy
++(UIView*) getTopView;
++(UIView*) getRootView;
++(CGRect) getScreenBoundsByOrientation;
++(UIViewController*) getRootViewController;
 
 
 #pragma mark - About Width

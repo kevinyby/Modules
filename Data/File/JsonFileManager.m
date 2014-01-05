@@ -17,17 +17,23 @@
 @implementation JsonFileManager
 
 /** @return Could be NSDictionary or NSArray */
-+(id) getJson: (NSString*)jsonFileName
++(id) getJsonFromFile: (NSString*)jsonFileName
 {
     jsonFileName = [[jsonFileName pathExtension] length] == 0 ? [jsonFileName stringByAppendingPathExtension: JSON_EXTENTION] : jsonFileName;
     NSString* jsonFilePath = BUNDLEFILE_PATH(jsonFileName);
+    return [JsonFileManager getJsonFromPath: jsonFilePath];
+}
+
+
++(id) getJsonFromPath: (NSString*)jsonFilePath
+{
     NSData* jsonData = [NSData dataWithContentsOfFile: jsonFilePath];
     NSError* error = nil;
     id content = [NSJSONSerialization JSONObjectWithData: jsonData options: NSJSONReadingAllowFragments error:&error];
     
 #ifdef __PLATFORM_IPHONE_OS
     if (error) {
-        NSString* message = [NSString stringWithFormat:@"Check your %@ json file or json format please", jsonFileName];
+        NSString* message = [NSString stringWithFormat:@"Check your %@ json file or json format please", [jsonFilePath lastPathComponent]];
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle: @"JASON PARSE ERROR"
                                                         message: message
                                                        delegate: nil

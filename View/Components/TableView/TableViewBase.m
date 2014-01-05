@@ -158,21 +158,6 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     }
 }
 
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (proxy && [proxy respondsToSelector:@selector(editingStyleForRowAtIndexPath:on:)]) {
-        return [proxy editingStyleForRowAtIndexPath: indexPath on:self];
-    }
-    return UITableViewCellEditingStyleNone;
-}
-
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
-{
-    if (proxy && [proxy respondsToSelector:@selector(moveRowAtIndexPath:toIndexPath:on:)]) {
-        [proxy moveRowAtIndexPath:sourceIndexPath toIndexPath:destinationIndexPath on:self];
-    }
-}
-
 
 
 

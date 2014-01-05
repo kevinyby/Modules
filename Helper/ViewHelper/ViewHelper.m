@@ -5,10 +5,30 @@
 
 @implementation ViewHelper
 
+
++(void) logViewRecursive: (UIView*)view
+{
+    NSLog(@"%@", view);
+    for (UIView* subview in view.subviews) {
+        [ViewHelper logViewRecursive: subview];
+    }
+}
+
+
++ (void) setCornerRadius: (UIView*)view config:(NSDictionary*)config
+{
+    NSNumber* radiusNumber = config[@"CornerRadius"];
+    float cornerRadius = radiusNumber ? [radiusNumber floatValue] : 10.0f;
+    view.layer.cornerRadius = cornerRadius ;
+    view.clipsToBounds = YES;
+}
+
 /**
- * This method just make you know that , if you want radius and shadow exist at the same time
+ * This method just make you know that , if you want radius(cause you have to set clipsToBounds/setMasksToBounds YES) and shadow exist at the same time
  * For the setMasksToBounds and clipsToBounds sake , they cannot exist at the same time 
- * So , you should create a shadow view to show the shadow
+ * So , you should create a shadow view to show the shadow for your view(cornerRadius and clipsToBounds/masksToBounds)
+ *
+ * the view should have frame first.
  */
 + (void) appendShadowView: (UIView*)view config:(NSDictionary*)config
 {
@@ -33,7 +53,6 @@
     
     [shadowView addSubview:view];
     [superView addSubview:shadowView];
-    
 }
 
 /**
@@ -109,6 +128,45 @@
                          if (completion) completion(finished);
                      }];
 }
+
+
+
+#pragma mark - About View Hierarchy
+
++(UIView*) getTopView
+{
+    UIViewController* rootViewController = [self getRootViewController];
+    UIView* topView = nil ;
+    if ([rootViewController isKindOfClass:[UINavigationController class]]) {
+        topView = ((UINavigationController*)rootViewController).topViewController.view;
+    } else {
+        topView = rootViewController.view;
+    }
+    return topView;
+}
+
++(UIView*) getRootView
+{
+    return [[[[UIApplication sharedApplication] keyWindow] subviews] firstObject];
+}
+
++(UIViewController*) getRootViewController
+{
+    return [[[UIApplication sharedApplication] keyWindow] rootViewController];
+}
+
++(CGRect) getScreenBoundsByOrientation
+{
+    CGRect screenSize = [UIScreen mainScreen].bounds;
+    float screenWidth = screenSize.size.width;
+    float screenHeight = screenSize.size.height;
+    
+    UIViewController* rootViewController = [self getRootViewController];
+    UIInterfaceOrientation orientation = rootViewController.interfaceOrientation;
+    CGRect rect = UIInterfaceOrientationIsPortrait(orientation) ? (CGRect){{0,0},{screenWidth,screenHeight}} : (CGRect){{0,0},{screenHeight,screenWidth}};
+    return rect;
+}
+
 
 
 #pragma mark - About Width

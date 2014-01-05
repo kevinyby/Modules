@@ -1,7 +1,10 @@
 #import "StringHelper.h"
 
 
-#define SPACE_META      @"."
+#define SPACE_META_CONNECTOR      @"|"
+#define SPACE_TAIL_CONNECTOR      @","
+#define SPACE_ATOM_CONNECTOR      @"."
+
 #define SPACE_STRING    @" "
 
 
@@ -50,80 +53,19 @@
 
 #pragma mark -
 
-// space = 1.0 , means every chinese will separate by 1 space
-// space = 1.23, means every chinese will separate by 1 space, and the 2nd chinese (tail) will have 3 more space additional.
-// space = 0.03, means that every chinese have 0 space , and the 1st (head) will have 3 space . (in this case , prefix will be 3 space)
-// space = 0.0345, ...., the 4st (tail) will have 5 space.
-+(NSMutableString*) separateChinese:(NSString*)string spaceMeta:(NSString*)spaceMeta
-{
-    NSArray* array = [spaceMeta componentsSeparatedByString: SPACE_META];
-    int everyspace = [[array firstObject] intValue];
-    
-    NSString* tails = [array lastObject];
-    
-    NSMutableString* separateString = [[NSMutableString alloc] init];
-    [StringHelper iterateChineseWord: string handler:^BOOL(int length, int index, NSString *word) {
-
-        /**
-        // tails
-        if (index == 0) {                   // the first one
-            int num = [StringHelper getSpaceNumber: tails index: index];
-            for (int i = 0; i < num; i++) {
-                [separateString appendString: SPACE_STRING];
-            }
-        }
-        
-        
-        [separateString appendString: word];
-        
-        
-        // every space between word
-        if (index != length-1) {            // not the last one
-            for (int i = 0; i < everyspace; i++) {
-                [separateString appendString: SPACE_STRING];
-            }
-        }
-        
-        // tails
-        int num = [StringHelper getSpaceNumber: tails index: index+1];
-        for (int i = 0; i < num; i++) {
-            [separateString appendString: SPACE_STRING];
-        }
-         **/
-        [StringHelper appendSpace: separateString space:everyspace tails:tails length:length index:index word:word];
-        
-        return NO;
-    }];
-    return separateString;
-}
-
-+(NSMutableString*) separateEnglish:(NSString*)string spaceMeta:(NSString*)spaceMeta
-{
-    NSArray* array = [spaceMeta componentsSeparatedByString: SPACE_META];
-    int everyspace = [[array firstObject] intValue];
-    
-    NSString* tails = [array lastObject];
-    
-    NSMutableString* separateString = [[NSMutableString alloc] init];
-    [StringHelper iterateEnglishWord: string handler:^BOOL(int length, int index, NSString *word) {
-        [StringHelper appendSpace: separateString space:everyspace tails:tails length:length index:index word:word];
-        return NO;
-    }];
-    return separateString;
-}
-
+// space = 1, means every chinese will separate by 1 space
+// space = 1|23, means every chinese will separate by 1 space, and the 2nd chinese (tail) will have 3 more space additional.
+// space = 0|03, means that every chinese have 0 space , and the 1st (head) will have 3 space . (in this case , prefix will be 3 space)
+// space = 0|0.3,4.5, ...., the 4st (tail) will have 5 space.
 +(NSMutableString*) separate:(NSString*)string spaceMeta:(NSString*)spaceMeta
 {
-    
-    NSArray* array = [spaceMeta componentsSeparatedByString: SPACE_META];
+    NSArray* array = [spaceMeta componentsSeparatedByString: SPACE_META_CONNECTOR];
     int everyspace = [[array firstObject] intValue];
-    
-    NSString* tails = [array lastObject];
+    NSArray* tails = array.count == 2 ? [[array lastObject] componentsSeparatedByString:SPACE_TAIL_CONNECTOR] : nil;
     
     NSMutableString* separateString = [[NSMutableString alloc] init];
-    
     BOOL isChinese = [StringHelper isContainsChinese: string];
-    if (isChinese) {
+    if (isChinese) {                                                                // Here , has to be optimized
         [StringHelper iterateChineseWord: string handler:^BOOL(int length, int index, NSString *word) {
             [StringHelper appendSpace: separateString space:everyspace tails:tails length:length index:index word:word];
             return NO;
@@ -140,7 +82,7 @@
 #pragma mark -
 
 // util method
-+(void) appendSpace: (NSMutableString*)separateString space:(int)space tails:(NSString*)tails length:(int)length index:(int)index word:(NSString*)word
++(void) appendSpace: (NSMutableString*)separateString space:(int)space tails:(NSArray*)tails length:(int)length index:(int)index word:(NSString*)word
 {
     // tails
     if (index == 0) {                   // the first one
@@ -168,14 +110,15 @@
     }
 }
 
-+(int) getSpaceNumber: (NSString*)tails index:(int)index
++(int) getSpaceNumber: (NSArray*)tails index:(int)index
 {
-    int length = tails.length/2;
+    int length = tails.count;
     for (int i = 0; i < length; i++) {
-        NSString* string = [tails substringWithRange:(NSRange){i*2, 2}];
+        NSString* string = tails[i];
+        NSArray* atoms = [string componentsSeparatedByString:SPACE_ATOM_CONNECTOR];
         
-        NSString* seqStr = [string substringWithRange:(NSRange){0,1}];
-        NSString* numStr = [string substringWithRange:(NSRange){1,1}];
+        NSString* seqStr = [atoms firstObject];
+        NSString* numStr = [atoms lastObject];
         
         int seq = [seqStr intValue];
         int num = [numStr intValue];

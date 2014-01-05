@@ -6,6 +6,7 @@
 @interface JsonFileManager : NSObject
 
 
-+(id) getJson: (NSString*)jsonFileName;
++(id) getJsonFromFile: (NSString*)jsonFileName;
++(id) getJsonFromPath: (NSString*)jsonFilePath;
 
 @end

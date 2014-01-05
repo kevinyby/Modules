@@ -154,7 +154,7 @@ static NSMutableArray* currentPopingViews = nil;
 {
     OverlayView* overlayView = [[OverlayView alloc] init];
     overlayView.backgroundColor = [UIColor colorWithRed:.16 green:.17 blue:.21 alpha:.5];
-    CGRect bounds = [PopupViewHelper getScreenBoundsByOrientation];
+    CGRect bounds = [ViewHelper getScreenBoundsByOrientation];
     overlayView.frame = bounds;
     
     overlayView.didDidTapActionBlock = ^void(OverlayView* view) {
@@ -162,8 +162,8 @@ static NSMutableArray* currentPopingViews = nil;
     };
     [overlayView addSubview: view];
     
-    UIView* rootView = [self getRootView];
-    [rootView addSubview: overlayView];
+    UIView* topView = [ViewHelper getTopView];
+    [topView addSubview: overlayView];
     
     if (!currentPopingViews) currentPopingViews = [NSMutableArray array];
     [currentPopingViews addObject: overlayView];
@@ -179,7 +179,6 @@ static NSMutableArray* currentPopingViews = nil;
 {
     UIView* overlayView = [currentPopingViews firstObject];
     if (overlayView) {
-        
         [currentPopingViews removeObjectAtIndex: 0];
         id block = [currentPopingViews firstObject];
         if (block) {
@@ -190,42 +189,7 @@ static NSMutableArray* currentPopingViews = nil;
             }
         }
     }
-    [UIView animateWithDuration:0.2 animations:^{overlayView.alpha = 0.0;} completion:^(BOOL finished){ [overlayView removeFromSuperview]; }];
-}
-
-+(UIView*) getTopview
-{
-    UIViewController* rootViewController = [self getRootViewController];
-    UIView* topView = nil ;
-    if ([rootViewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController* navigationController = (UINavigationController*)rootViewController;
-        topView = navigationController.topViewController.view;
-    } else {
-        topView = rootViewController.view;
-    }
-    return topView;
-}
-
-+(UIView*) getRootView
-{
-    return [[[[UIApplication sharedApplication] keyWindow] subviews] firstObject];
-}
-
-+(UIViewController*) getRootViewController
-{
-    return [[[UIApplication sharedApplication] keyWindow] rootViewController];
-}
-
-+(CGRect) getScreenBoundsByOrientation
-{
-    CGRect screenSize = [UIScreen mainScreen].bounds;
-    float screenWidth = screenSize.size.width;
-    float screenHeight = screenSize.size.height;
-    
-    UIViewController* rootViewController = [self getRootViewController];
-    UIInterfaceOrientation orientation = rootViewController.interfaceOrientation;
-    CGRect rect = UIInterfaceOrientationIsPortrait(orientation) ? (CGRect){{0,0},{screenWidth,screenHeight}} : (CGRect){{0,0},{screenHeight,screenWidth}};
-    return rect;
+    [UIView animateWithDuration:0.3 animations:^{overlayView.alpha = 0.0;} completion:^(BOOL finished){ [overlayView removeFromSuperview]; }];
 }
 
 
@@ -235,7 +199,7 @@ static NSMutableArray* currentPopingViews = nil;
 #define DROPDOWN_OVERLAYVIEW_TAG 2021
 +(void) dropDownView: (UIView*)view belowView:(UIView*)belowView
 {
-    [self dropDownView: view belowView:belowView overlayFrame:[self getTopview].bounds];
+    [self dropDownView: view belowView:belowView overlayFrame:[ViewHelper getTopView].bounds];
 }
 
 +(void) dropDownView: (UIView*)view belowView:(UIView*)belowView overlayFrame:(CGRect)overlayFrame
@@ -250,7 +214,7 @@ static NSMutableArray* currentPopingViews = nil;
     };
     
     overlayView.frame = overlayFrame;
-    UIView* topView = [self getTopview];
+    UIView* topView = [ViewHelper getTopView];
     [topView addSubview:overlayView];
     
     [view setOrigin: [belowView convertPoint: (CGPoint){0, belowView.frame.size.height} toView:overlayView]];
@@ -261,7 +225,7 @@ static NSMutableArray* currentPopingViews = nil;
 
 +(void) dissmissCurrentDropDownView
 {
-    UIView* topView = [self getTopview];
+    UIView* topView = [ViewHelper getTopView];
     UIView* overlayView = [topView viewWithTag: DROPDOWN_OVERLAYVIEW_TAG];
     [overlayView removeFromSuperview];
 }

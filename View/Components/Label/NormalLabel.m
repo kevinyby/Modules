@@ -14,7 +14,7 @@
 		self.textColor = [UIColor blackColor];
 		self.backgroundColor = [UIColor clearColor];
 		self.highlightedTextColor = [UIColor blackColor];
-		self.textAlignment = NSTextAlignmentCenter;
+//		self.textAlignment = NSTextAlignmentCenter;
         
         [self setSizeHeight: [FrameTranslater convertCanvasHeight: 30]]; // default
     }

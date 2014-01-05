@@ -17,14 +17,6 @@ typedef void(^PopupViewActionBlock)(UIView* popView, NSInteger index);
 +(void) dissmissCurrentDropDownView;
 
 
-
-
-+(UIView*) getTopview;
-+(UIView*) getRootView;
-+(CGRect) getScreenBoundsByOrientation;
-+(UIViewController*) getRootViewController;
-
-
 // ------------------
 +(void) popoverView:(UIView*)view inView:(UIView*)inView;
 +(void) popoverView:(UIView*)view inView:(UIView*)inView inRect:(CGRect)inRect arrowDirections:(UIPopoverArrowDirection)arrowDirections;

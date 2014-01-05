@@ -123,11 +123,6 @@
     [ColorHelper clearBorder: view];
 }
 
-+(void) setBorder: (UIView*)view
-{
-    view.layer.borderWidth = 1.0f;
-    view.layer.borderColor = [[UIColor greenColor] CGColor];
-}
 
 +(void) clearBorder: (UIView*)view
 {
@@ -135,12 +130,21 @@
     view.layer.borderColor = [[UIColor clearColor] CGColor];
 }
 
+
+
+
+
+
++(void) setBorder: (UIView*)view
+{
+    view.layer.borderWidth = 1.0f;
+    view.layer.borderColor = [[UIColor greenColor] CGColor];
+}
 +(void) setBorder: (UIView*)view color:(UIColor*)color
 {
     view.layer.borderWidth = 1.0f;
     view.layer.borderColor = [color CGColor];
 }
-
 +(void) setBorder: (UIView*)view colorIndex:(int)index
 {
     view.layer.borderWidth = 1.0f;
@@ -149,12 +153,15 @@
 
 +(void) setBackGround: (UIView*)view
 {
-    view.backgroundColor = [UIColor yellowColor];
+    view.backgroundColor = [UIColor greenColor];
 }
-
 +(void) setBackGround: (UIView*)view color:(UIColor*)color
 {
     view.backgroundColor = color;
+}
++(void) setBackGround: (UIView*)view colorIndex:(int)index
+{
+    view.backgroundColor = [ColorHelper color:index];
 }
 
 +(UIColor*) color: (int)chosenColor
@@ -162,7 +169,7 @@
     UIColor *color;
     switch (chosenColor) {
         case 0:
-            color = [UIColor flatRedColor];
+            color = [UIColor clearColor]; // 0.0 white, 0.0 alpha
             break;
         case 1:
             color = [UIColor flatGreenColor];
@@ -192,7 +199,7 @@
             color = [UIColor flatBlackColor];
             break;
         case 10:
-            color = [UIColor flatDarkRedColor];
+            color = [UIColor flatRedColor];
             break;
         case 11:
             color = [UIColor flatDarkGreenColor];
@@ -222,8 +229,57 @@
             color = [UIColor flatDarkBlackColor];
             break;
         case 20:
+            color = [UIColor flatDarkRedColor];
+            break;
+            
+            
+            
+        case 21:
+            color = [UIColor darkGrayColor]; // 0.333 white
+            break;
+        case 22:
+            color = [UIColor lightGrayColor]; // 0.667 white
+            break;
+        case 23:
+            color = [UIColor whiteColor]; // 1.0 white
+            break;
+        case 24:
+            color = [UIColor grayColor]; // 0.5 white
+            break;
+        case 25:
+            color = [UIColor redColor]; // 1.0, 0.0, 0.0 RGB
+            break;
+        case 26:
+            color = [UIColor greenColor]; // 0.0, 1.0, 0.0 RGB
+            break;
+        case 27:
+            color = [UIColor blueColor]; // 0.0, 0.0, 1.0 RGB
+            break;
+        case 28:
+            color = [UIColor cyanColor]; // 0.0, 1.0, 1.0 RGB
+            break;
+        case 29:
+            color = [UIColor yellowColor]; // 1.0, 1.0, 0.0 RGB
+            break;
+        case 30:
+            color = [UIColor magentaColor]; // 1.0, 0.0, 1.0 RGB
+            break;
+        case 31:
+            color = [UIColor orangeColor]; // 1.0, 0.5, 0.0 RGB
+            break;
+        case 32:
+            color = [UIColor purpleColor]; // 0.5, 0.0, 0.5 RGB
+            break;
+        case 33:
+            color = [UIColor brownColor]; // 0.6, 0.4, 0.2 RGB
+            break;
+        case 34:
+            color = [UIColor blackColor]; // 0.0 white
+            break;
+            
         default:
-            NSAssert(0, @"Unrecognized color selected as random color");
+            
+//            NSAssert(0, @"Unrecognized color selected as random color");
             break;
     }
     return color;
