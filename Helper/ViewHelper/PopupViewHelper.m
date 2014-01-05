@@ -49,6 +49,32 @@
 @end
 
 
+/**
+ * Overlay View
+ */
+@interface OverlayView : UIControl
+
+@property (copy) void(^didDidTapActionBlock)(OverlayView* overlayView);
+
+@end
+
+@implementation OverlayView
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        [self addTarget:self action:@selector(didDidTapAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return self;
+}
+
+-(void) didDidTapAction
+{
+    if(self.didDidTapActionBlock) self.didDidTapActionBlock(self);
+}
+
+@end
 
 /**
  *  PopupViewHelper
@@ -123,63 +149,128 @@
 }
 
 
-
-#define GRAYVIEW_TAG 3031
-+(void) popView: (UIView*)view
+static NSMutableArray* currentPopingViews = nil;
++(void) popView: (UIView*)view willDissmiss:(void(^)(UIView* view))block
 {
-    CGRect screenSize = [UIScreen mainScreen].bounds;
-    float screenWidth = screenSize.size.width;
-    float screenHeight = screenSize.size.height;
+    OverlayView* overlayView = [[OverlayView alloc] init];
+    overlayView.backgroundColor = [UIColor colorWithRed:.16 green:.17 blue:.21 alpha:.5];
+    CGRect bounds = [PopupViewHelper getScreenBoundsByOrientation];
+    overlayView.frame = bounds;
     
-    UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] subviews] firstObject];
-    UIViewController* rootViewController = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-    UIInterfaceOrientation orientation = rootViewController.interfaceOrientation;
-    CGRect rect = UIInterfaceOrientationIsPortrait(orientation) ? (CGRect){{0,0},{screenWidth,screenHeight}} : (CGRect){{0,0},{screenHeight,screenWidth}};
+    overlayView.didDidTapActionBlock = ^void(OverlayView* view) {
+        [self dissmissCurrentPopView];
+    };
+    [overlayView addSubview: view];
     
+    UIView* rootView = [self getRootView];
+    [rootView addSubview: overlayView];
     
-    UIControl* _overlayView = (UIControl*)[rootView viewWithTag: GRAYVIEW_TAG];
-    if (! _overlayView) {
-        _overlayView = [[UIControl alloc] initWithFrame:rect];
-        _overlayView.backgroundColor = [UIColor colorWithRed:.16 green:.17 blue:.21 alpha:.5];
-        [_overlayView addTarget:self action:@selector(dissmissCurrentPopView) forControlEvents:UIControlEventTouchUpInside];
+    if (!currentPopingViews) currentPopingViews = [NSMutableArray array];
+    [currentPopingViews addObject: overlayView];
+    if (block) {
+        [currentPopingViews addObject: block];
+    } else {
+        [currentPopingViews addObject: [NSNull null]];
     }
-    _overlayView.tag = GRAYVIEW_TAG;
-    [rootView addSubview: _overlayView];
-    
-    [_overlayView addSubview: view];
     
 }
 
 +(void) dissmissCurrentPopView
 {
-    UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] subviews] firstObject];
-    UIView* grayView = [rootView viewWithTag: GRAYVIEW_TAG];
-    [UIView animateWithDuration:0.2
-                     animations:^{grayView.alpha = 0.0;}
-                     completion:^(BOOL finished){ [grayView removeFromSuperview]; }];
+    UIView* overlayView = [currentPopingViews firstObject];
+    if (overlayView) {
+        
+        [currentPopingViews removeObjectAtIndex: 0];
+        id block = [currentPopingViews firstObject];
+        if (block) {
+            [currentPopingViews removeObjectAtIndex: 0];
+            if (block != [NSNull null]) {
+                void(^willDissmissBlock)(UIView* view) = block;
+                willDissmissBlock([overlayView.subviews lastObject]);
+            }
+        }
+    }
+    [UIView animateWithDuration:0.2 animations:^{overlayView.alpha = 0.0;} completion:^(BOOL finished){ [overlayView removeFromSuperview]; }];
+}
+
++(UIView*) getTopview
+{
+    UIViewController* rootViewController = [self getRootViewController];
+    UIView* topView = nil ;
+    if ([rootViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController* navigationController = (UINavigationController*)rootViewController;
+        topView = navigationController.topViewController.view;
+    } else {
+        topView = rootViewController.view;
+    }
+    return topView;
+}
+
++(UIView*) getRootView
+{
+    return [[[[UIApplication sharedApplication] keyWindow] subviews] firstObject];
+}
+
++(UIViewController*) getRootViewController
+{
+    return [[[UIApplication sharedApplication] keyWindow] rootViewController];
+}
+
++(CGRect) getScreenBoundsByOrientation
+{
+    CGRect screenSize = [UIScreen mainScreen].bounds;
+    float screenWidth = screenSize.size.width;
+    float screenHeight = screenSize.size.height;
+    
+    UIViewController* rootViewController = [self getRootViewController];
+    UIInterfaceOrientation orientation = rootViewController.interfaceOrientation;
+    CGRect rect = UIInterfaceOrientationIsPortrait(orientation) ? (CGRect){{0,0},{screenWidth,screenHeight}} : (CGRect){{0,0},{screenHeight,screenWidth}};
+    return rect;
 }
 
 
 
 
 
-#define DROPDOWNVIEW_TAG 2021
+#define DROPDOWN_OVERLAYVIEW_TAG 2021
 +(void) dropDownView: (UIView*)view belowView:(UIView*)belowView
 {
+    [self dropDownView: view belowView:belowView overlayFrame:[self getTopview].bounds];
+}
+
++(void) dropDownView: (UIView*)view belowView:(UIView*)belowView overlayFrame:(CGRect)overlayFrame
+{
     [self dissmissCurrentDropDownView];
-    UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] subviews] firstObject];
-    [view setOrigin: [belowView convertPoint: (CGPoint){0, belowView.frame.size.height} toView:rootView]];
     
-    view.tag = DROPDOWNVIEW_TAG;
-    [rootView addSubview: view];
+    OverlayView* overlayView = [[OverlayView alloc] init];
+    overlayView.backgroundColor = [UIColor clearColor];
+//    [ColorHelper setBorder: overlayView];
+    overlayView.didDidTapActionBlock = ^void(OverlayView* view) {
+        [self dissmissCurrentDropDownView];
+    };
+    
+    overlayView.frame = overlayFrame;
+    UIView* topView = [self getTopview];
+    [topView addSubview:overlayView];
+    
+    [view setOrigin: [belowView convertPoint: (CGPoint){0, belowView.frame.size.height} toView:overlayView]];
+    
+    overlayView.tag = DROPDOWN_OVERLAYVIEW_TAG;
+    [overlayView addSubview: view];
 }
 
 +(void) dissmissCurrentDropDownView
 {
-    UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] subviews] firstObject];
-    UIView* view = [rootView viewWithTag: DROPDOWNVIEW_TAG];
-    [view removeFromSuperview];
+    UIView* topView = [self getTopview];
+    UIView* overlayView = [topView viewWithTag: DROPDOWN_OVERLAYVIEW_TAG];
+    [overlayView removeFromSuperview];
 }
+
+
+
+
+
+
 
 
 
