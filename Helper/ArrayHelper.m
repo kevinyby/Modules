@@ -59,6 +59,16 @@
 
 #pragma mark - Handler Contents
 
+// array: ["4","5","6","1","2"], frontContents:["1","2"]
+// return ["1","2", "4","5","6"], just put the frontContents to front
++(NSArray*) rerangeContents: (NSArray*)array frontContents:(NSArray*)frontContents
+{
+    NSMutableArray* newContents = [ArrayHelper deepCopy: array];
+    [ArrayHelper subtract: newContents with: frontContents];             // remove the front keys in all keys
+    [newContents insertObjects: frontContents atIndexes:[NSIndexSet indexSetWithIndexesInRange:(NSRange){0, frontContents.count}]];  // then insert the front keys in the front
+    return newContents;
+}
+
 +(void) subtract:(NSMutableArray*)array with:(NSArray*)subtracts
 {
     for (id element in subtracts) {
