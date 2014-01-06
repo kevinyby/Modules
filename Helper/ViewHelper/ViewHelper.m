@@ -163,8 +163,7 @@
     
     UIViewController* rootViewController = [self getRootViewController];
     UIInterfaceOrientation orientation = rootViewController.interfaceOrientation;
-    CGRect rect = UIInterfaceOrientationIsPortrait(orientation) ? (CGRect){{0,0},{screenWidth,screenHeight}} : (CGRect){{0,0},{screenHeight,screenWidth}};
-    return rect;
+    return UIInterfaceOrientationIsPortrait(orientation) ? (CGRect){{0,0},{screenWidth,screenHeight}} : (CGRect){{0,0},{screenHeight,screenWidth}};
 }
 
 
