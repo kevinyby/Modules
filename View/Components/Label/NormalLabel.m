@@ -6,19 +6,26 @@
 
 @implementation NormalLabel
 
-- (id)init
+// http://stackoverflow.com/a/4359845/1749293
+// http://stackoverflow.com/a/14306893/1749293
+- (id)initWithFrame:(CGRect)frame
 {
-    self = [super init];
+    self = [super initWithFrame:frame];
     if (self) {
-        self.font = [UIFont fontWithName:@"Arial" size:[FrameTranslater convertFontSize: 25]];
-		self.textColor = [UIColor blackColor];
-		self.backgroundColor = [UIColor clearColor];
-		self.highlightedTextColor = [UIColor blackColor];
-//		self.textAlignment = NSTextAlignmentCenter;
-        
-        [self setSizeHeight: [FrameTranslater convertCanvasHeight: 30]]; // default
+        [self setDefaultVariable];
     }
     return self;
+}
+
+-(void) setDefaultVariable
+{
+    self.font = [UIFont fontWithName:@"Arial" size:[FrameTranslater convertFontSize: 25]];
+    self.textColor = [UIColor blackColor];
+    self.backgroundColor = [UIColor clearColor];
+    self.highlightedTextColor = [UIColor blackColor];
+    //		self.textAlignment = NSTextAlignmentCenter;
+    
+    [self setSizeHeight: [FrameTranslater convertCanvasHeight: 30]]; // default
 }
 
 

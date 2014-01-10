@@ -10,9 +10,9 @@
 @synthesize tableView;
 @synthesize headerView;
 
-- (id)init
+-(id)initWithFrame:(CGRect)frame
 {
-    self = [super init];
+    self = [super initWithFrame:frame];
     if (self) {
         [self initializeSubviews];
         [self initializeSubviewsHConstraints];

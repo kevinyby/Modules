@@ -3,72 +3,85 @@
 
 @class TableViewBase;
 
-@protocol TableViewTableProxy <NSObject>
+
+//_______________________________________________________________________________________________________________
+
+@protocol TableViewBaseTableProxy <NSObject>
 
 @optional
 
-- (void)didSelectIndexPath:(NSIndexPath*)indexPath on:(TableViewBase *)tableViewObj;
+// UITableViewDataSource
+- (UITableViewCell*)tableViewBase:(TableViewBase *)tableViewObj cellForIndexPath:(NSIndexPath *)indexPath oldCell:(UITableViewCell*)oldCell;
 
-- (void)willShowIndexPath:(NSIndexPath*)indexPath withCell:(UITableViewCell*)cell on:(TableViewBase *)tableViewObj;
+- (BOOL)tableViewBase:(TableViewBase *)tableViewObj canEditIndexPath:(NSIndexPath*)indexPath;
 
-- (CGFloat)heightAtIndexPath:(NSIndexPath*)indexPath on:(TableViewBase *)tableViewObj;
+- (void)tableViewBase:(TableViewBase *)tableViewObj commitEditStyle:(UITableViewCellEditingStyle)editStyle indexPath:(NSIndexPath *)indexPath;
 
-- (UITableViewCell*)cellForIndexPath:(NSIndexPath *)indexPath on:(TableViewBase *)tableViewObj;
+- (BOOL)tableViewBase:(TableViewBase *)tableViewObj willDeleteContentsAtIndexPath:(NSIndexPath*)indexPath;
 
-- (BOOL)shouldDeleteIndexPath:(NSIndexPath*)indexPath on:(TableViewBase*)tableViewObj;
+- (void)tableViewBase:(TableViewBase *)tableViewObj didDeleteContentsAtIndexPath:(NSIndexPath*)indexPath;
 
-- (void)didDeleteIndexPath:(NSIndexPath*)indexPath on:(TableViewBase*)tableViewObj;
 
-- (void) commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath on:(TableViewBase*)tableViewObj;
+// UITableViewDelegate
+- (void)tableViewBase:(TableViewBase *)tableViewObj didSelectIndexPath:(NSIndexPath*)indexPath;
+
+- (void)tableViewBase:(TableViewBase *)tableViewObj willShowCell:(UITableViewCell*)cell indexPath:(NSIndexPath*)indexPath;
+
+- (CGFloat)tableViewBase:(TableViewBase *)tableViewObj heightForSection:(NSInteger)section;
+
+- (CGFloat)tableViewBase:(TableViewBase *)tableViewObj heightForIndexPath:(NSIndexPath*)indexPath;
+
+@end
+
+
+//_______________________________________________________________________________________________________________
+
+@protocol TableViewBaseScrollProxy <NSObject>
+
+@optional
+
+// UIScrollViewDelegate
+- (void)tableViewBaseDidScroll:(TableViewBase *)tableViewObj ;
+
+- (void)tableViewBase:(TableViewBase *)tableViewObj didEndDragging:(BOOL)willDecelerate;
 
 @end
 
 
 
 
-@protocol TableViewScrollProxy <NSObject>
 
-@optional
-
-- (void)didScroll:(TableViewBase *)tableViewObj;
-
-- (void)didEndDragging:(BOOL)willDecelerate on:(TableViewBase *)tableViewObj;
-
-
-@end
-
-
-
-
-
-
+//_______________________________________________________________________________________________________________
 
 @interface TableViewBase : UITableView <UITableViewDataSource, UITableViewDelegate>
 
-@property(assign) id<TableViewTableProxy> proxy;
-
-@property(assign) id<TableViewScrollProxy> scrollProxy;     // For RefreshTableView now
-
 @property(assign) BOOL hideSections;
 
-// { @"section_1":@[[@"1",@"2",@"3"],[@"1",@"2",@"3"]], @"section_2":@[[@"1",@"2",@"3"],[@"1",@"2",@"3"]] };
-@property (strong) NSMutableDictionary* realContentsDictionary;    // the background/real data of contentsDictionary, be sure has the same sort/order/sequence contentsDictionary
+@property(assign) id<TableViewBaseTableProxy> proxy;
+@property(assign) id<TableViewBaseScrollProxy> scrollProxy;     // For RefreshTableView now
 
 // "_l" for "_local"
-// { @"section_1_l":@[[@"1_l",@"2_l",@"3_l"],[@"1_l",@"2_l",@"3_l"]], @"section_2_l":@[[@"1_l",@"2_l",@"3_l"],[@"1_l",@"2_l",@"3_l"]] };
-@property(strong, nonatomic) NSMutableDictionary* contentsDictionary; // the show/visible contents to end-user, be sure has the same sort/order/sequence realContentsDictionary
-
 
 // if keysMap == nil , asume that the keys is the same!!!!
 // @{@"section_1_l" : @"section_1", @"section_2_l":@"section_2" }
 @property(strong) NSMutableDictionary* keysMap;
 
+// { @"section_1":@[[@"1",@"2",@"3"],[@"1",@"2",@"3"]], @"section_2":@[[@"1",@"2",@"3"],[@"1",@"2",@"3"]] };
+// the background/real data of contentsDictionary, be sure has the same sort/order/sequence contentsDictionary
+@property (strong) NSMutableDictionary* realContentsDictionary;
+
+// { @"section_1_l":@[[@"1_l",@"2_l",@"3_l"],[@"1_l",@"2_l",@"3_l"]], @"section_2_l":@[[@"1_l",@"2_l",@"3_l"],[@"1_l",@"2_l",@"3_l"]] };
+// the show/visible contents to end-user, be sure has the same sort/order/sequence realContentsDictionary
+@property(strong, nonatomic) NSMutableDictionary* contentsDictionary;
+
+
 
 /** get the sequential keys of contentsDictionary, against to the table section */
 -(NSArray *)sections;
+
 /** get the realValue By indexPath */
 -(id) realContentForIndexPath: (NSIndexPath*)indexPath;
-/** the visible content by indexPath , equals to the cell.textLabel.text */
+/** the visible content by indexPath, equals to the cell.textLabel.text */
 -(NSString*) contentForIndexPath: (NSIndexPath*)indexPath;
 
 -(NSMutableArray*) contentsForSection: (NSUInteger)section;
@@ -76,3 +89,29 @@
 
 
 @end
+
+
+
+
+
+//_______________________________________________________________________________________________________________
+
+
+@interface TableViewBase (ActionBlock)
+
+// To Be Extended ...
+
+// UITableViewDataSource
+@property (copy) UITableViewCell* (^tableViewBaseCellForIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath,UITableViewCell* oldCell);
+@property (copy) BOOL (^tableViewBaseCanEditIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
+@property (copy) void (^tableViewBaseCommitEditStyleAction)(TableViewBase* tableViewObj, UITableViewCellEditingStyle editStyle, NSIndexPath* indexPath);
+
+// UITableViewDelegate
+@property (copy) void (^tableViewBaseWillShowCellAction)(TableViewBase* tableViewObj,UITableViewCell* cell, NSIndexPath* indexPath);
+@property (copy) void (^tableViewBaseDidSelectAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
+@property (copy) CGFloat(^tableViewBaseHeightForSectionAction)(TableViewBase* tableViewObj,NSInteger section);
+@property (copy) CGFloat(^tableViewBaseHeightForIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
+
+@end
+
+

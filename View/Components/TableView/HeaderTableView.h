@@ -4,7 +4,7 @@
 
 @class HeaderTableView;
 
-@protocol HeaderTableViewDelegate <TableViewTableProxy>
+@protocol HeaderTableViewDelegate <TableViewBaseTableProxy>
 
 @optional
 

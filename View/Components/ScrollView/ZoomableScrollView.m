@@ -4,18 +4,7 @@
 
 @synthesize contentView;
 
-
 #pragma mark - Override Methods
-
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        [self initializeVariables];
-    }
-    return self;
-}
-
 
 -(id)initWithFrame:(CGRect)frame
 {

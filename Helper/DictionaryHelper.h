@@ -18,7 +18,11 @@
 
 #pragma mark - About Content
 
-+(NSMutableDictionary*) filterModel: (NSDictionary*)dictionary filterContent:(id)filterObj ;
++(NSMutableDictionary*) subtract: (NSMutableDictionary*)dictionary withType:(Class)clazz;
+
++(NSMutableDictionary*) filter: (NSDictionary*)dictionary withType:(Class)clazz;
++(NSMutableDictionary*) filter: (NSDictionary*)dictionary withObject:(id)filterObj ;
+
 +(NSMutableDictionary*)filterNumberToString: (NSDictionary*)dictionary;
 
 @end

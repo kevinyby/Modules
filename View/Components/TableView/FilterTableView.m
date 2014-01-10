@@ -6,9 +6,9 @@
     NSMutableDictionary* contentsDictionaryBackUp;
 }
 
-- (id)init
+- (id)initWithFrame:(CGRect)frame
 {
-    self = [super init];
+    self = [super initWithFrame:frame];
     if (self) {
         self.filterMode = FilterModeContains;
         self.seletedVisibleIndexPath = nil;
@@ -73,9 +73,11 @@
 
 - (void)tableView:(UITableView *)tableViewObj didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.seletedVisibleIndexPath = indexPath;
+    
     if ([self isInFilteringMode])  indexPath = [self traslateFilterModeIndexPath: indexPath];
-    if (self.proxy && [self.proxy respondsToSelector:@selector(didSelectIndexPath:on:)]) {
-        [self.proxy didSelectIndexPath: indexPath on:self];
+    
+    if (self.proxy && [self.proxy respondsToSelector:@selector(tableViewBase:didSelectIndexPath:)]) {
+        [self.proxy tableViewBase:self didSelectIndexPath:indexPath];
     }
 }
 

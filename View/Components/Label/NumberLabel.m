@@ -6,15 +6,23 @@
 
 @implementation NumberLabel
 
-- (id)init{
-    if (self = [super init]) {
-        self.clipsToBounds = NO;
-        self.userInteractionEnabled = NO;
-        self.backgroundColor = [UIColor clearColor];
-        timer = [NSTimer timerWithTimeInterval: kTimerInterval target:self selector:@selector(increaseText) userInfo:nil repeats:YES];
-        isBeing = NO;
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self initializeValues];
     }
     return self;
+}
+
+-(void) initializeValues
+{
+    self.clipsToBounds = NO;
+    self.userInteractionEnabled = NO;
+    self.backgroundColor = [UIColor clearColor];
+    timer = [NSTimer timerWithTimeInterval: kTimerInterval target:self selector:@selector(increaseText) userInfo:nil repeats:YES];
+    isBeing = NO;
 }
 
 -(void) startTimer {

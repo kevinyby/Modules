@@ -1,16 +1,37 @@
 #import "TableViewBase.h"
 
-#import "_View.h"
+//#import "_View.h"
 #import "NSArray+Additions.h"
 
-#import "_Frame.h"
+//#import "_Frame.h"
 #import "FrameTranslater.h"
 
-#import "_Helper.h"
+//#import "_Helper.h"
 #import "DictionaryHelper.h"
 
-static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
+
+@interface TableViewBase()  // Class Extension
+{
+    // _____________________ ActionBlock Category
+    
+    // UITableViewDataSource
+    UITableViewCell* (^_tableViewBaseCellForIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath,UITableViewCell* oldCell);
+    BOOL (^_tableViewBaseCanEditIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
+    void (^_tableViewBaseCommitEditStyleAction)(TableViewBase* tableViewObj, UITableViewCellEditingStyle editStyle, NSIndexPath* indexPath);
+    
+    // UITableViewDelegate
+    void (^_tableViewBaseWillShowCellAction)(TableViewBase* tableViewObj,UITableViewCell* cell, NSIndexPath* indexPath);
+    void (^_tableViewBaseDidSelectAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
+    CGFloat(^_tableViewBaseHeightForSectionAction)(TableViewBase* tableViewObj,NSInteger section);
+    CGFloat(^_tableViewBaseHeightForIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
+}
+
+@end
+
+
+
+static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 @implementation TableViewBase
 {
@@ -20,15 +41,6 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 @synthesize proxy;
 
 @synthesize scrollProxy;
-
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        [self setDefaultVariables];
-    }
-    return self;
-}
 
 -(id)initWithFrame:(CGRect)frame
 {
@@ -44,15 +56,20 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     self.hideSections = YES;
     self.dataSource = self;
     self.delegate = self;
+    
+    // uitableview displaying empty cells at the end
     //http://stackoverflow.com/questions/14520185/ios-uitableview-displaying-empty-cells-at-the-end
     self.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    // UITableViewCell in ios7 now has gaps on left and right
+    // http://stackoverflow.com/questions/18982347/uitableviewcell-in-ios7-now-has-gaps-on-left-and-right/19059028#19059028
     if ([self respondsToSelector:@selector(setSeparatorInset:)]) [self setSeparatorInset:UIEdgeInsetsZero];     // ios 7
 }
 
 -(void)setContentsDictionary:(NSMutableDictionary *)contentsDictionary
 {
     _contentsDictionary = contentsDictionary;
-    _sections = [DictionaryHelper getSortedKeys: _contentsDictionary];
+    _sections = [DictionaryHelper getSortedKeys: contentsDictionary];
 }
 
 -(NSArray *)sections
@@ -87,7 +104,7 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 #pragma mark - UITableViewDataSource
 
 - (NSString *)tableView:(UITableView *)tableViewObj titleForHeaderInSection:(NSInteger)section {
-    return [self.sections safeObjectAtIndex: section];
+    return [self.sections objectAtIndex: section];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableViewObj {
@@ -95,46 +112,64 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 }
 
 - (NSInteger)tableView:(UITableView *)tableViewObj numberOfRowsInSection:(NSInteger)section {
-    NSArray* sectionContents = [self.contentsDictionary objectForKey: [self.sections safeObjectAtIndex: section]];
-    return sectionContents.count;
+    return [self contentsForSection: section].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableViewObj cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     UITableViewCell *cell = [tableViewObj dequeueReusableCellWithIdentifier:RaiseTableViewCellId];
-    if (cell == nil) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RaiseTableViewCellId];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RaiseTableViewCellId];
+    }
 
-    NSString* cellText = [self contentForIndexPath: indexPath];     // == cell.textLabel.text , the key point!
+    NSString* cellText = [self contentForIndexPath: indexPath]; // == cell.textLabel.text, important!!!
     
     cell.textLabel.font = [UIFont systemFontOfSize: [FrameTranslater convertFontSize: 20]];
-    cell.textLabel.text = cellText;
+    cell.textLabel.text = cellText;     // set font first then set text
     
-    if (proxy && [proxy respondsToSelector:@selector(cellForIndexPath:on:)]) {
-        cell = [proxy cellForIndexPath: indexPath on:self];
+    // proxy
+    if (self.tableViewBaseCellForIndexPathAction) {
+        cell = self.tableViewBaseCellForIndexPathAction(self, indexPath, cell);
+    }
+    else
+    if (proxy && [proxy respondsToSelector:@selector(tableViewBase:cellForIndexPath:oldCell:)]) {
+        cell = [proxy tableViewBase:self cellForIndexPath:indexPath oldCell:cell];
     }
     
     return cell;
 }
 
 
-// Deletion A .
+// Edit Pair A .
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (proxy && [proxy respondsToSelector:@selector(shouldDeleteIndexPath:on:)]) {
-        return [proxy shouldDeleteIndexPath: indexPath on:self];
+    // proxy
+    if (self.tableViewBaseCanEditIndexPathAction) {
+        return self.tableViewBaseCanEditIndexPathAction(self, indexPath);
+    }
+    else
+    if (proxy && [proxy respondsToSelector:@selector(tableViewBase:canEditIndexPath:)]) {
+        return [proxy tableViewBase:self canEditIndexPath: indexPath];
     }
     return NO;
 }
-
-// Deletion B . This method if for the delete function and its animation
+// Edit Pair B .
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
-    if (proxy && [proxy respondsToSelector:@selector(commitEditingStyle:forRowAtIndexPath:on:)]) {
-        [proxy commitEditingStyle: editingStyle forRowAtIndexPath:indexPath on:self];
+    // proxy
+    if (self.tableViewBaseCommitEditStyleAction) {
+        self.tableViewBaseCommitEditStyleAction(self, editingStyle, indexPath);
+    }
+    else
+    if (proxy && [proxy respondsToSelector:@selector(tableViewBase:commitEditStyle:indexPath:)]) {
+        [proxy tableViewBase:self commitEditStyle:editingStyle indexPath:indexPath];
     }
     
+    // delete and its animation
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        if (proxy && [proxy respondsToSelector:@selector(tableViewBase:willDeleteContentsAtIndexPath:)]) {
+            if(! [proxy tableViewBase:self willDeleteContentsAtIndexPath: indexPath]) return;
+        }
         
         // A . delete the contents dictionary row data
         NSString* sectionTitle = [self.sections safeObjectAtIndex: indexPath.section];
@@ -150,9 +185,9 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
         // C . apply the animation
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
-        
-        if (proxy && [proxy respondsToSelector:@selector(didDeleteIndexPath:on:)]) {
-            [proxy didDeleteIndexPath: indexPath on:self];
+        // proxy delete
+        if (proxy && [proxy respondsToSelector:@selector(tableViewBase:didDeleteContentsAtIndexPath:)]) {
+            [proxy tableViewBase:self didDeleteContentsAtIndexPath:indexPath];
         }
         
     }
@@ -163,34 +198,58 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return self.hideSections ? 0 :  25;
-}
-
 - (void)tableView:(UITableView *)tableViewObj willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    // tableViewObj == self
-    if (proxy && [proxy respondsToSelector:@selector(willShowIndexPath:withCell:on:)]) {
-        [proxy willShowIndexPath: indexPath withCell:cell on:self];
+    // proxy
+    if (self.tableViewBaseWillShowCellAction) {
+        self.tableViewBaseWillShowCellAction(self, cell, indexPath);
+    }
+    else
+    if (proxy && [proxy respondsToSelector:@selector(tableViewBase:willShowCell:indexPath:)]) {
+        [proxy tableViewBase:self willShowCell:cell indexPath:indexPath];
     }
 }
 
 - (void)tableView:(UITableView *)tableViewObj didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (proxy && [proxy respondsToSelector:@selector(didSelectIndexPath:on:)]) {
-        [proxy didSelectIndexPath: indexPath on:self];
+    // proxy
+    if (self.tableViewBaseDidSelectAction) {
+        self.tableViewBaseDidSelectAction(self,indexPath);
+    }
+    else
+    if (proxy && [proxy respondsToSelector:@selector(tableViewBase:didSelectIndexPath:)]) {
+        [proxy tableViewBase: self didSelectIndexPath:indexPath];
     }
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (proxy && [proxy respondsToSelector:@selector(heightAtIndexPath:on:)]) {
-        return [proxy heightAtIndexPath: indexPath on:self];
-    }
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (self.hideSections) return 0;
     
-    CGRect canvas = CGRectMake(0, 0, 0, 50);
-    CGRect frame = [FrameTranslater getFrame: canvas];
-    CGFloat defaultHeight = frame.size.height;
-    return defaultHeight;
+    CGFloat height = [FrameTranslater convertCanvasHeight: 25];
+    
+    // proxy
+    if (self.tableViewBaseHeightForSectionAction) {
+        height = self.tableViewBaseHeightForSectionAction(self, section);
+    }
+    else
+    if (proxy && [proxy respondsToSelector:@selector(tableViewBase:heightForSection:)]) {
+        height = [proxy tableViewBase:self heightForSection:section];
+    }
+    return height;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    CGFloat height = [FrameTranslater convertCanvasHeight: 50];
+    
+    // proxy
+    if (self.tableViewBaseHeightForIndexPathAction) {
+        height = self.tableViewBaseHeightForIndexPathAction(self, indexPath);
+    }
+    else
+    if (proxy && [proxy respondsToSelector:@selector(tableViewBase:heightForIndexPath:)]) {
+        height = [proxy tableViewBase: self heightForIndexPath:indexPath];
+    }
+    return height;
+}
+
 
 
 
@@ -200,19 +259,124 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (scrollProxy && [scrollProxy respondsToSelector:@selector(didScroll:)]) {
-        [scrollProxy didScroll: self];
+    if (scrollProxy && [scrollProxy respondsToSelector:@selector(tableViewBaseDidScroll:)]) {
+        [scrollProxy tableViewBaseDidScroll: self];
     }
 }
 
-// called on finger up if the user dragged. decelerate is true if it will continue moving afterwards
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    if (scrollProxy && [scrollProxy respondsToSelector:@selector(didEndDragging:on:)]) {
-        [scrollProxy didEndDragging: decelerate on:self];
+    if (scrollProxy && [scrollProxy respondsToSelector:@selector(tableViewBase:didEndDragging:)]) {
+        [scrollProxy tableViewBase: self didEndDragging:decelerate];
     }
 }
 
+@end
 
+
+
+
+
+
+
+
+
+
+//_______________________________________________________________________________________________________________
+
+
+@implementation TableViewBase (ActionBlock)
+
+//@dynamic tableViewBaseDidSelectAction;        // just tell the complier , u will implementation somewhere , do not show the warning .
+
+
+// UITableViewDataSource
+
+//_______________________ tableViewBaseCellForIndexPathAction
+
+-(UITableViewCell *(^)(TableViewBase *, NSIndexPath *, UITableViewCell *))tableViewBaseCellForIndexPathAction
+{
+    return _tableViewBaseCellForIndexPathAction;
+}
+
+-(void)setTableViewBaseCellForIndexPathAction:(UITableViewCell *(^)(TableViewBase *, NSIndexPath *, UITableViewCell *))tableViewBaseCellForIndexPathAction
+{
+    _tableViewBaseCellForIndexPathAction = tableViewBaseCellForIndexPathAction;
+}
+
+
+//_______________________ tableViewBaseCanEditIndexPathAction
+
+-(BOOL (^)(TableViewBase *, NSIndexPath *))tableViewBaseCanEditIndexPathAction
+{
+    return _tableViewBaseCanEditIndexPathAction;
+}
+
+-(void)setTableViewBaseCanEditIndexPathAction:(BOOL (^)(TableViewBase *, NSIndexPath *))tableViewBaseCanEditIndexPathAction
+{
+    _tableViewBaseCanEditIndexPathAction = tableViewBaseCanEditIndexPathAction;
+}
+
+//_______________________ tableViewBaseCommitEditStyleAction
+
+-(void (^)(TableViewBase *, UITableViewCellEditingStyle, NSIndexPath *))tableViewBaseCommitEditStyleAction
+{
+    return _tableViewBaseCommitEditStyleAction;
+}
+
+-(void)setTableViewBaseCommitEditStyleAction:(void (^)(TableViewBase *, UITableViewCellEditingStyle, NSIndexPath *))tableViewBaseCommitEditStyleAction
+{
+    _tableViewBaseCommitEditStyleAction = tableViewBaseCommitEditStyleAction;
+}
+
+
+// UITableViewDelegate
+
+//_______________________ tableViewBaseWillShowCellAction
+
+-(void (^)(TableViewBase *, UITableViewCell *, NSIndexPath *))tableViewBaseWillShowCellAction
+{
+    return _tableViewBaseWillShowCellAction;
+}
+-(void)setTableViewBaseWillShowCellAction:(void (^)(TableViewBase *, UITableViewCell *, NSIndexPath *))tableViewBaseWillShowCellAction
+{
+    _tableViewBaseWillShowCellAction = tableViewBaseWillShowCellAction;
+}
+
+//_______________________ tableViewBaseDidSelectAction
+
+-(void (^)(TableViewBase *, NSIndexPath *))tableViewBaseDidSelectAction
+{
+    return _tableViewBaseDidSelectAction;
+}
+-(void)setTableViewBaseDidSelectAction:(void (^)(TableViewBase *, NSIndexPath *))tableViewBaseDidSelectAction
+{
+    _tableViewBaseDidSelectAction = tableViewBaseDidSelectAction;
+}
+
+//_______________________ tableViewBaseHeightForSectionAction
+
+-(CGFloat (^)(TableViewBase *, NSInteger))tableViewBaseHeightForSectionAction
+{
+    return _tableViewBaseHeightForSectionAction;
+}
+
+-(void)setTableViewBaseHeightForSectionAction:(CGFloat (^)(TableViewBase *, NSInteger))tableViewBaseHeightForSectionAction
+{
+    _tableViewBaseHeightForSectionAction = tableViewBaseHeightForSectionAction;
+}
+
+//_______________________ tableViewBaseHeightForIndexPathAction
+
+-(CGFloat (^)(TableViewBase *, NSIndexPath *))tableViewBaseHeightForIndexPathAction
+{
+    return _tableViewBaseHeightForIndexPathAction;
+}
+
+-(void)setTableViewBaseHeightForIndexPathAction:(CGFloat (^)(TableViewBase *, NSIndexPath *))tableViewBaseHeightForIndexPathAction
+{
+    _tableViewBaseHeightForIndexPathAction = tableViewBaseHeightForIndexPathAction;
+}
 
 @end
+

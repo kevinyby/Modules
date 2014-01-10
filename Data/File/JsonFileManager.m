@@ -14,6 +14,10 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
+//#if TARGET_OS_IPHONE        // TargetConditionals.h
+//#endif
+
+
 @implementation JsonFileManager
 
 /** @return Could be NSDictionary or NSArray */

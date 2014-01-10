@@ -88,17 +88,45 @@
 
 #pragma mark - About Content
 
+// return the subtract contents
++(NSMutableDictionary*) subtract: (NSMutableDictionary*)dictionary withType:(Class)clazz
+{
+    NSMutableDictionary* result = [NSMutableDictionary dictionary];
+    NSArray* keys = [dictionary allKeys];
+    for (NSString* key in keys) {
+        id value = [dictionary objectForKey: key];
+        
+        if ([value isKindOfClass:clazz]) {
+            [result setObject: value forKey:key];
+            [dictionary removeObjectForKey: key];
+        }
+    }
+    return result;
+}
 
-+(NSMutableDictionary*) filterModel: (NSDictionary*)dictionary filterContent:(id)filterObj {
++(NSMutableDictionary*) filter: (NSDictionary*)dictionary withType:(Class)clazz {
+    NSMutableDictionary* result = [NSMutableDictionary dictionary];
+    for (id key in dictionary) {
+        id value = [dictionary objectForKey: key];
+        
+        if ([value isKindOfClass:clazz]) continue;
+        
+        [result setObject: value forKey:key];
+    }
+    return result;
+}
+
+
++(NSMutableDictionary*) filter: (NSDictionary*)dictionary withObject:(id)filterObj {
     NSMutableDictionary* result = [NSMutableDictionary dictionary];
     for (id key in dictionary) {
         id value = [dictionary objectForKey: key];
         
         if (value == filterObj) continue;
         
-        if ([filterObj isKindOfClass:[NSString class]]) {
-            if ([filterObj isEqualToString: value]) continue;
-        }
+        // http://stackoverflow.com/questions/2293859/checking-for-equality-in-objective-c
+        
+        if ([value isEqual: filterObj]) continue;
         
         [result setObject: value forKey:key];
     }

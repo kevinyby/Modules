@@ -22,16 +22,6 @@
     return self;
 }
 
-- (id)init
-{
-    self = [super init];
-    if (self) {
-        [self initializeValues];
-    }
-    return self;
-}
-
-
 -(void) initializeValues
 {
     [self setSize:[FrameTranslater convertCanvasSize:(CGSize){50,50}]];    // default
