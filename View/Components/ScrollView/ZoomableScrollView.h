@@ -2,7 +2,9 @@
 
 @interface ZoomableScrollView : UIScrollView <UIScrollViewDelegate>
 
-@property (strong) UIView* contentView;
+@property (strong) UIView* contentView;     // add the zoomalbe subview
+
+-(void) setViewFrame: (CGRect)frame;
 
 -(NSArray*) contentViewSubviews;
 -(void) addSubviewToContentView: (UIView*)view;

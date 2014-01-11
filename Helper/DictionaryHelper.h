@@ -23,6 +23,6 @@
 +(NSMutableDictionary*) filter: (NSDictionary*)dictionary withType:(Class)clazz;
 +(NSMutableDictionary*) filter: (NSDictionary*)dictionary withObject:(id)filterObj ;
 
-+(NSMutableDictionary*)filterNumberToString: (NSDictionary*)dictionary;
++(NSMutableDictionary*) convertNumberToString: (NSDictionary*)dictionary;
 
 @end

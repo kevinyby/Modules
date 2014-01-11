@@ -115,7 +115,7 @@
 //_ScrollView.h
 #import "_ScrollView.h"
 #import "ZoomableScrollView.h"
-#import "ZoomablePanScrollView.h"
+#import "ZoomablePanView.h"
 
 //_ViewController.h
 #import "_ViewController.h"

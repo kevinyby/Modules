@@ -135,7 +135,7 @@
 
 
 
-+(NSMutableDictionary*)filterNumberToString: (NSDictionary*)dictionary
++(NSMutableDictionary*) convertNumberToString: (NSDictionary*)dictionary
 {
     NSMutableDictionary* result = [NSMutableDictionary dictionary];
     for (id key in dictionary) {
