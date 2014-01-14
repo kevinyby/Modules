@@ -32,7 +32,6 @@
 -(void) setText:(NSString *)text {
     NSString* oldText = self.text;
     [super setText: text];
-    [self adjustWidthToFontText];
     if (self.didSetTextBlock) self.didSetTextBlock(self, text, oldText);
 }
 

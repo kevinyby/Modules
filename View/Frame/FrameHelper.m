@@ -73,24 +73,27 @@ static Boolean isNeedReserve ;
 
 +(void) setComponentFrame: (NSArray*)values component:(UIView*)view
 {
-    if (values.count != 4) return;
-    
     float ingore_value = -1.1f;
     
-    float x = [values[0] floatValue];
-    float y = [values[1] floatValue];
-    float width = [values[2] floatValue];
-    float height = [values[3] floatValue];
+    NSNumber* valueX = ((int)values.count - 1) < (int)0 ? nil : [values objectAtIndex: 0];
+    NSNumber* valueY = ((int)values.count - 1) < (int)1 ? nil : [values objectAtIndex: 1];
+    NSNumber* valueWidth = ((int)values.count - 1) < (int)2 ? nil : [values objectAtIndex: 2];
+    NSNumber* valueHeight = ((int)values.count - 1) < (int)3 ? nil : [values objectAtIndex: 3];
     
-    bool isIgnoreX      = x         == ingore_value;
-    bool isIgnoreY      = y         == ingore_value;
-    bool isIgnoreWidth  = width     == ingore_value;
-    bool isIgnoreHeight = height    == ingore_value;
+    float x = [valueX floatValue];
+    float y = [valueY floatValue];
+    float width = [valueWidth floatValue];
+    float height = [valueHeight floatValue];
+    
+    bool isIgnoreX      = valueX == nil         || x == ingore_value;
+    bool isIgnoreY      = valueY == nil         || y == ingore_value;
+    bool isIgnoreWidth  = valueWidth  == nil    || width == ingore_value;
+    bool isIgnoreHeight = valueHeight == nil    || height == ingore_value;
+    
     
     if ( !isIgnoreX && !isIgnoreY && !isIgnoreWidth && !isIgnoreHeight){
         CGRect canvas = [ArrayHelper convertToRect: values];
         [FrameHelper setFrame: canvas view:view];
-        
     } else {
         if (!isIgnoreX) [view setOriginX:[FrameTranslater convertCanvasX:x]];
         if (!isIgnoreY) [view setOriginY:[FrameTranslater convertCanvasY:y]];
