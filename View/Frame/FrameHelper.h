@@ -25,6 +25,7 @@
 
 +(void) setComponentFrame: (NSArray*)frame component:(UIView*)view;
 +(void) setComponentCenter: (NSArray*)values component:(UIView*)view;
++(void) paseIgnores:(NSArray*)values :(float*)x :(float*)y :(float*)width :(float*)height :(bool*)isIgnoreX :(bool*)isIgnoreY :(bool*)isIgnoreWidth :(bool*)isIgnoreHeight;
 
 +(UIEdgeInsets) convertCanvasEdgeInsets: (UIEdgeInsets)insets;
 

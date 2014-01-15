@@ -14,7 +14,7 @@
 #import <Cocoa/Cocoa.h>
 #endif
 
-//#if TARGET_OS_IPHONE        // TargetConditionals.h
+//#if TARGET_OS_IPHONE        // TargetConditionals.h , but it won't work
 //#endif
 
 
@@ -32,6 +32,9 @@
 +(id) getJsonFromPath: (NSString*)jsonFilePath
 {
     NSData* jsonData = [NSData dataWithContentsOfFile: jsonFilePath];
+    
+    if (! jsonData) return nil;
+    
     NSError* error = nil;
     id content = [NSJSONSerialization JSONObjectWithData: jsonData options: NSJSONReadingAllowFragments error:&error];
     

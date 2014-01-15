@@ -73,23 +73,9 @@ static Boolean isNeedReserve ;
 
 +(void) setComponentFrame: (NSArray*)values component:(UIView*)view
 {
-    float ingore_value = -1.1f;
-    
-    NSNumber* valueX = ((int)values.count - 1) < (int)0 ? nil : [values objectAtIndex: 0];
-    NSNumber* valueY = ((int)values.count - 1) < (int)1 ? nil : [values objectAtIndex: 1];
-    NSNumber* valueWidth = ((int)values.count - 1) < (int)2 ? nil : [values objectAtIndex: 2];
-    NSNumber* valueHeight = ((int)values.count - 1) < (int)3 ? nil : [values objectAtIndex: 3];
-    
-    float x = [valueX floatValue];
-    float y = [valueY floatValue];
-    float width = [valueWidth floatValue];
-    float height = [valueHeight floatValue];
-    
-    bool isIgnoreX      = valueX == nil         || x == ingore_value;
-    bool isIgnoreY      = valueY == nil         || y == ingore_value;
-    bool isIgnoreWidth  = valueWidth  == nil    || width == ingore_value;
-    bool isIgnoreHeight = valueHeight == nil    || height == ingore_value;
-    
+    float x = 0.0, y = 0.0, width = 0.0, height = 0.0;
+    bool isIgnoreX = NO, isIgnoreY = NO, isIgnoreWidth = NO, isIgnoreHeight = NO;
+    [self paseIgnores: values :&x :&y :&width :&height :&isIgnoreX :&isIgnoreY :&isIgnoreWidth :&isIgnoreHeight];
     
     if ( !isIgnoreX && !isIgnoreY && !isIgnoreWidth && !isIgnoreHeight){
         CGRect canvas = [ArrayHelper convertToRect: values];
@@ -101,6 +87,27 @@ static Boolean isNeedReserve ;
         if (!isIgnoreHeight) [view setSizeHeight: [FrameTranslater convertCanvasHeight: height]];
     }
 }
+
++(void) paseIgnores:(NSArray*)values :(float*)x :(float*)y :(float*)width :(float*)height :(bool*)isIgnoreX :(bool*)isIgnoreY :(bool*)isIgnoreWidth :(bool*)isIgnoreHeight
+{
+    float ingore_value = -1.1f;
+    
+    NSNumber* valueX = ((int)values.count - 1) < (int)0 ? nil : [values objectAtIndex: 0];
+    NSNumber* valueY = ((int)values.count - 1) < (int)1 ? nil : [values objectAtIndex: 1];
+    NSNumber* valueWidth = ((int)values.count - 1) < (int)2 ? nil : [values objectAtIndex: 2];
+    NSNumber* valueHeight = ((int)values.count - 1) < (int)3 ? nil : [values objectAtIndex: 3];
+    
+    *x = [valueX floatValue];
+    *y = [valueY floatValue];
+    *width = [valueWidth floatValue];
+    *height = [valueHeight floatValue];
+    
+    *isIgnoreX      = valueX == nil         || *x == ingore_value;
+    *isIgnoreY      = valueY == nil         || *y == ingore_value;
+    *isIgnoreWidth  = valueWidth  == nil    || *width == ingore_value;
+    *isIgnoreHeight = valueHeight == nil    || *height == ingore_value;
+}
+
 
 +(void) setComponentCenter: (NSArray*)values component:(UIView*)view
 {
