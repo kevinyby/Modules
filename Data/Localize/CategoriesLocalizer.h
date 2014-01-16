@@ -5,8 +5,8 @@
 #define LOCALIZE_KEY(_key) [CategoriesLocalizer getLocalize: _key]
 #define LOCALIZE_MESSAGE(_key) [CategoriesLocalizer getMessageLocalize: _key]
 
-#define ITEM_ATTR_CONNECTOR @"."
-#define CONNECT_KEYS(_item, _attr) [CategoriesLocalizer connectKeys:_item attribute:_attr]
+#define LOCALIZE_KEY_CONNECTOR @"."
+#define LOCALIZE_CONNECT_KEYS(_item, _attr) [CategoriesLocalizer connectKeys:_item attribute:_attr]
 
 
 // Convention:

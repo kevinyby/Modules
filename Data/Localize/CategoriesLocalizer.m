@@ -32,12 +32,12 @@ static NSDictionary* categories;
 {
     NSString* result = nil;
     
-    if ([key rangeOfString: ITEM_ATTR_CONNECTOR].location == NSNotFound) {
+    if ([key rangeOfString: LOCALIZE_KEY_CONNECTOR].location == NSNotFound) {
         result = [CategoriesLocalizer getGlobalLocalize: key];
         
     } else {
         
-        NSArray* array = [key componentsSeparatedByString:ITEM_ATTR_CONNECTOR];
+        NSArray* array = [key componentsSeparatedByString:LOCALIZE_KEY_CONNECTOR];
         NSString* item = [array firstObject];
         NSString* attr = [array lastObject];
         
@@ -58,7 +58,7 @@ static NSDictionary* categories;
 
 +(NSString*) connectKeys: (NSString*) item attribute:(NSString*)attribute
 {
-    return [item stringByAppendingFormat:@"%@%@", ITEM_ATTR_CONNECTOR, attribute];
+    return [item stringByAppendingFormat:@"%@%@", LOCALIZE_KEY_CONNECTOR, attribute];
 }
 
 +(NSString*) getGlobalLocalize: (NSString*)key
