@@ -1,5 +1,5 @@
 
-#import "UIWiew+CanvasFrame.h"
+#import "UIView+CanvasFrame.h"
 #import <objc/runtime.h>
 
 static const char* designFrameKey = "designFrameKey";

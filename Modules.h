@@ -82,7 +82,7 @@
 #import "FrameManager.h"
 #import "FrameHelper.h"
 #import "FrameTranslater.h"
-#import "UIWiew+CanvasFrame.h"
+#import "UIView+CanvasFrame.h"
 
 //_Components.h
 #import "_Components.h"

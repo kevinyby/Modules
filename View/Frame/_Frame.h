@@ -5,6 +5,6 @@
 
 #import "FrameTranslater.h"
 
-#import "UIWiew+CanvasFrame.h"
+#import "UIView+CanvasFrame.h"
 
 

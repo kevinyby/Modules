@@ -4,7 +4,7 @@
 
 #import "FrameManager.h"
 
-#import "UIWiew+CanvasFrame.h"
+#import "UIView+CanvasFrame.h"
 
 #import "UIView+PropertiesSetter.h"
 
