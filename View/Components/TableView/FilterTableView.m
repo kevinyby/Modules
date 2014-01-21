@@ -76,9 +76,8 @@
     
     if ([self isInFilteringMode])  indexPath = [self traslateFilterModeIndexPath: indexPath];
     
-    if (self.proxy && [self.proxy respondsToSelector:@selector(tableViewBase:didSelectIndexPath:)]) {
-        [self.proxy tableViewBase:self didSelectIndexPath:indexPath];
-    }
+    // super
+    [super tableView: tableViewObj didSelectRowAtIndexPath:indexPath];
 }
 
 #pragma mark - Public Methods

@@ -22,7 +22,7 @@
         return;
     }
     
-    int maxRow = sectionsContents.count - 1;
+    int maxRow = sectionsContents.count ? sectionsContents.count - 1 : 0;
     
     [sectionsContents insertObject: content atIndex: maxRow ];
     [realSectionsContents insertObject: realContent atIndex:maxRow];
