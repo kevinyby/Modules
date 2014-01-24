@@ -37,7 +37,7 @@
     
     NSError* error = nil;
     id content = [NSJSONSerialization JSONObjectWithData: jsonData options: NSJSONReadingAllowFragments error:&error];
-    
+    if (error) NSLog(@"Json File Format Error, Check it out !!!");
 #ifdef __PLATFORM_IPHONE_OS
     if (error) {
         NSString* message = [NSString stringWithFormat:@"Check your %@ json file or json format please", [jsonFilePath lastPathComponent]];

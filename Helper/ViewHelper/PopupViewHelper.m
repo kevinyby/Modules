@@ -81,14 +81,14 @@
  */
 @implementation PopupViewHelper
 
-
-+(UIAlertView*) popAlert: (NSString*)title message:(NSString*)message actionBlock:(PopupViewActionBlock)actionBlock buttons:(NSString*)button, ... NS_REQUIRES_NIL_TERMINATION
++(UIAlertView*) popAlert: (NSString*)title message:(NSString*)message style:(UIAlertViewStyle)style actionBlock:(PopupViewActionBlock)actionBlock buttons:(NSString*)button, ... NS_REQUIRES_NIL_TERMINATION
 {
     PopAlertView* popupView = [[PopAlertView alloc] init];
     popupView.actionBlock = actionBlock;
     popupView.delegate = popupView;
     popupView.message = message;
     popupView.title = title;
+    popupView.alertViewStyle = style;
     
     
     if (button) [popupView addButtonWithTitle: button];
