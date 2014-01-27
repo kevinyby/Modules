@@ -47,8 +47,8 @@ static NSDictionary* categories;
         if (category) result = [LocalizeManager getLocalized: key category:category];
         
         // if not find  , go to the GLOBAL_LOCALIZE to continue find it
-        if (!result) result = [CategoriesLocalizer getGlobalLocalize: attr];
         if (!result) result = [CategoriesLocalizer getGlobalLocalize: key];
+        if (!result) result = [CategoriesLocalizer getGlobalLocalize: attr];
     }
     
     if (!result) result = key;

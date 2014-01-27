@@ -11,6 +11,7 @@
 @interface PopAlertView : UIAlertView <UIAlertViewDelegate>
 
 @property (copy) PopupViewActionBlock actionBlock;
+@property (copy) PopupViewActionBlock dismissedBlock;
 
 @end
 
@@ -21,6 +22,12 @@
 {
     PopAlertView* popupView = (PopAlertView*)alertView;
     if (popupView.actionBlock) popupView.actionBlock(popupView, buttonIndex);
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    PopAlertView* popupView = (PopAlertView*)alertView;
+    if (popupView.dismissedBlock) popupView.dismissedBlock(popupView, buttonIndex);
 }
 
 @end
@@ -81,10 +88,11 @@
  */
 @implementation PopupViewHelper
 
-+(UIAlertView*) popAlert: (NSString*)title message:(NSString*)message style:(UIAlertViewStyle)style actionBlock:(PopupViewActionBlock)actionBlock buttons:(NSString*)button, ... NS_REQUIRES_NIL_TERMINATION
++(UIAlertView*) popAlert: (NSString*)title message:(NSString*)message style:(UIAlertViewStyle)style actionBlock:(PopupViewActionBlock)actionBlock dismissBlock:(PopupViewActionBlock)dismissBlock buttons:(NSString*)button, ... NS_REQUIRES_NIL_TERMINATION
 {
     PopAlertView* popupView = [[PopAlertView alloc] init];
     popupView.actionBlock = actionBlock;
+    popupView.dismissedBlock = dismissBlock;
     popupView.delegate = popupView;
     popupView.message = message;
     popupView.title = title;
@@ -164,6 +172,10 @@ static NSMutableArray* currentPopingViews = nil;
     
     UIView* topView = [ViewHelper getTopView];
     [topView addSubview: overlayView];
+    CATransition *animation = [CATransition animation];
+    animation.duration = 0.3f;
+    animation.type = kCATransitionFade;
+    [[topView layer] addAnimation:animation forKey: nil];
     
     if (!currentPopingViews) currentPopingViews = [NSMutableArray array];
     [currentPopingViews addObject: overlayView];
@@ -172,7 +184,7 @@ static NSMutableArray* currentPopingViews = nil;
     } else {
         [currentPopingViews addObject: [NSNull null]];
     }
-    
+    view.center = [view.superview getMiddlePoint];
 }
 
 +(void) dissmissCurrentPopView
@@ -208,7 +220,6 @@ static NSMutableArray* currentPopingViews = nil;
     
     OverlayView* overlayView = [[OverlayView alloc] init];
     overlayView.backgroundColor = [UIColor clearColor];
-//    [ColorHelper setBorder: overlayView];
     overlayView.didDidTapActionBlock = ^void(OverlayView* view) {
         [self dissmissCurrentDropDownView];
     };

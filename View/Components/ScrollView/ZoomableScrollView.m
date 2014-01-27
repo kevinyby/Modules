@@ -74,7 +74,7 @@
 #pragma mark - UIScrollViewDelegate Methods
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return contentView;
+    return self.disableZoom ? nil : contentView;
 }
 
 

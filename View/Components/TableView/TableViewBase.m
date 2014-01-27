@@ -58,6 +58,7 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     self.delegate = self;
     
     // uitableview displaying empty cells at the end
+    // if you want the empty cells line back , just set the footerView back to nil !!
     //http://stackoverflow.com/questions/14520185/ios-uitableview-displaying-empty-cells-at-the-end
     self.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     

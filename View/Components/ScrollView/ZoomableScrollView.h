@@ -3,6 +3,7 @@
 @interface ZoomableScrollView : UIScrollView <UIScrollViewDelegate>
 
 @property (strong) UIView* contentView;     // add the zoomalbe subview
+@property (assign) BOOL disableZoom;
 
 -(void) setViewFrame: (CGRect)frame;
 
