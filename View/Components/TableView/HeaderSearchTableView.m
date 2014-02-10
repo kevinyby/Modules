@@ -1,5 +1,8 @@
 #import "HeaderSearchTableView.h"
 #import "AlignTableView.h"
+#import "ColorHelper.h"
+
+#import "SearchBarView.h"
 
 //#import "_View.h"
 //#import "_Frame.h"
@@ -8,6 +11,7 @@
 @interface HeaderSearchTableView () <UISearchBarDelegate>
 
 @property (strong) UISearchBar *searchBar;
+//@property (strong) SearchBarView *searchBar;
 
 @end
 
@@ -40,18 +44,21 @@
     [super initializeSubviews];
     
     searchBar = [[UISearchBar alloc] init];
+//    searchBar = [[SearchBarView alloc] init];
+    [searchBar setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
     [searchBar sizeToFit];
     searchBar.delegate = self;
     searchBar.placeholder = @"Search";
     searchBar.showsCancelButton = YES;
     [self addSubview: searchBar];
+    
+//    [ColorHelper setBorderRecursive: searchBar];
 }
 
 -(void)initializeSubviewsHConstraints
 {
     [super initializeSubviewsHConstraints];
-    
-    [searchBar setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     [self addConstraints:[NSLayoutConstraint
                           constraintsWithVisualFormat:@"|-0-[searchBar]-0-|"
@@ -68,16 +75,21 @@
     float headerHeight = [FrameTranslater convertCanvasHeight: 25.0f];
     float inset = [FrameTranslater convertCanvasHeight: 0.0f];
     
+//    float searchBarHeight = [FrameTranslater convertCanvasHeight: 50.0f];
     [self addConstraints:[NSLayoutConstraint
                           constraintsWithVisualFormat:@"V:|-0-[searchBar][headerView(headerHeight)]-(inset)-[tableView]-0-|"
+//                          constraintsWithVisualFormat:@"V:|-0-[searchBar(searchBarHeight)][headerView(headerHeight)]-(inset)-[tableView]-0-|"
                           options:NSLayoutFormatDirectionLeadingToTrailing
-                          metrics:@{@"headerHeight":@(headerHeight),@"inset":@(inset)}
+                          metrics:@{ @"headerHeight":@(headerHeight)
+                                     , @"inset":@(inset)
+//                                     , @"searchBarHeight":@(searchBarHeight)
+                                     }
                           views:NSDictionaryOfVariableBindings(searchBar,headerView,tableView)]];
     
 }
 
 
-#pragma mark - UISearchBarDelegate
+#pragma mark - UISearchBarDelegate Methods
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     super.tableView.filterText = searchText;

@@ -27,7 +27,8 @@
 
 
 #pragma mark - Public Methods
--(void) reloadData ;
+-(void) reloadTableData ;           // reload table view data
+-(void) removeSubviewConstraints;   // remove the constraints
 
 
 #pragma mark - Subclass Override Methods

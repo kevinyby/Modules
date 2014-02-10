@@ -47,8 +47,14 @@
 
 #pragma mark - Public Methods
 
--(void) reloadData {
+-(void) reloadTableData {
     [tableView reloadData];
+}
+
+-(void) removeSubviewConstraints
+{
+    for (UIView* subview in self.subviews)[subview setTranslatesAutoresizingMaskIntoConstraints: YES];
+    [self removeConstraints: self.constraints];
 }
 
 #pragma mark - Subclass Override Methods
@@ -57,17 +63,17 @@
 {
     headerView = [[UIView alloc] init];
     tableView = [[AlignTableView alloc] init];
+    
+    [headerView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    headerView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.2];
+    
     [self addSubview: tableView];
     [self addSubview: headerView];
-    
-    headerView.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.2];
 }
 
 -(void) initializeSubviewsHConstraints
 {
-    [headerView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    
     [self addConstraints:[NSLayoutConstraint
                           constraintsWithVisualFormat:@"|-0-[headerView]-0-|"
                           options:NSLayoutFormatAlignAllBaseline

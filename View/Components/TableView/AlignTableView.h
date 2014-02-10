@@ -24,6 +24,7 @@
 @property (strong) NSArray* valuesXcoordinates;     // array fo number @[@(50),@(250)] or @[@[@(50),@(250)], @[@(50),@(250)]]
 
 
+#pragma mark - AlignTableView Class Object Methods
 
 + (void)setAlignHeaders: (UITableView*)tableView headerView:(UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates;
 
