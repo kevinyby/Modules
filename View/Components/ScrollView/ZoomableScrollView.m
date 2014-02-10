@@ -58,7 +58,8 @@
 //    [contentView addSubview: view];
 //}
 
-// Will cause subvei auto layout constraints no effect !!!
+// for easy debug , comment it will be better !!!
+// and will cause subvei auto layout constraints no effect !!!
 //-(NSArray *)subviews
 //{
 //    return contentView.subviews;

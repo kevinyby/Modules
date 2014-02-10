@@ -1,5 +1,3 @@
-#import <Foundation/Foundation.h>
-
 typedef void(^PopupViewActionBlock)(UIView* popView, NSInteger index);
 
 @interface PopupViewHelper : NSObject
