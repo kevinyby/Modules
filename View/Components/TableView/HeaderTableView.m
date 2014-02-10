@@ -1,11 +1,12 @@
 #import "HeaderTableView.h"
+#import "AlignTableView.h"
 
 // _View.h
 #import "FrameTranslater.h"
 
 @implementation HeaderTableView
 
-@synthesize delegate;
+//@synthesize delegate;
 
 @synthesize tableView;
 @synthesize headerView;
@@ -39,10 +40,10 @@
 //    [tableView reloadData];       // need it or not ?
 }
 
--(void)setDelegate:(id<HeaderTableViewDelegate>)delegateObj {
-    delegate = delegateObj;
-    tableView.proxy = delegateObj;
-}
+//-(void)setDelegate:(id<HeaderTableViewDelegate>)delegateObj {
+//    delegate = delegateObj;
+//    tableView.proxy = delegateObj;
+//}
 
 #pragma mark - Public Methods
 
