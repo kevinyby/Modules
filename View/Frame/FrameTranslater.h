@@ -13,8 +13,6 @@
 
 
 +(CGRect) getFrame: (CGRect)canvasFrame ;
-+(CGSize) getSize: (CGSize)canvasSize ;
-+(CGPoint) getPoint: (CGPoint)canvasPoint ;
 
 
 +(void) transformLabel: (UILabel*)label;

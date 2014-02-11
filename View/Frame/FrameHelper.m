@@ -124,7 +124,7 @@ static Boolean isNeedReserve ;
     
     if ( !isIgnoreX && !isIgnoreY){
         CGPoint point = [ArrayHelper convertToPoint: values];
-        CGPoint center = [FrameTranslater getPoint: point];
+        CGPoint center = [FrameTranslater convertCanvasPoint: point];
         view.center = center;
         
     } else {

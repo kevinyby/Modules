@@ -84,13 +84,6 @@ static CGFloat statusBarVerticalHeight;
     return [self getFrame: isPortraitDesigned canvasFrame:canvasFrame];
 }
 
-+(CGPoint) getPoint: (CGPoint)canvasPoint {
-    return [self getPoint: isPortraitDesigned canvasPoint:canvasPoint];
-}
-
-+(CGSize) getSize: (CGSize)canvasSize {
-    return [self getSize: isPortraitDesigned canvasSize:canvasSize];
-}
 
 #pragma mark - About Font (In UILable)
 // transform label , then getFrame
@@ -175,30 +168,6 @@ static CGFloat statusBarVerticalHeight;
     frame.size.height *= ratioY;
     
     return frame;
-}
-
-+(CGPoint) getPoint: (BOOL)isPortrait canvasPoint:(CGPoint)canvasPoint {
-    float ratioX = self.ratioX;
-    float ratioY = self.ratioY;
-    
-    CGPoint point = canvasPoint;
-    
-    point.x *= ratioX;
-    point.y *= ratioY;
-    
-    return point;
-}
-
-+(CGSize) getSize: (BOOL)isPortrait canvasSize:(CGSize)canvasSize {
-    float ratioX = self.ratioX;
-    float ratioY = self.ratioY;
-    
-    CGSize size = canvasSize;
-    
-    size.width *= ratioX;
-    size.height *= ratioY;
-    
-    return size;
 }
 
 +(NSArray*) getRatios:(BOOL)isPortrait {
