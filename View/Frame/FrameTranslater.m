@@ -19,10 +19,6 @@ static bool isPortraitDesigned;
 static CGSize  portraitCanvasSize;
 static CGSize  landscapeCanvasSize;
 
-
-
-#define isStatusBarHidden [UIApplication sharedApplication].statusBarHidden
-
 static bool isIOS7;
 static CGFloat statusBarVerticalHeight;
 
@@ -49,9 +45,10 @@ static CGFloat statusBarVerticalHeight;
     
     // For status bar
     isIOS7 = [[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0;
-    BOOL isPortrait = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
     CGSize statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
-    statusBarVerticalHeight = isPortrait ? statusBarSize.height : statusBarSize.width;
+//    BOOL isPortrait = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
+//    statusBarVerticalHeight = isPortrait ? statusBarSize.height : statusBarSize.width;
+    statusBarVerticalHeight = statusBarSize.height > statusBarSize.width ? statusBarSize.width : statusBarSize.height;
     
     [super initialize];
 }
@@ -79,23 +76,57 @@ static CGFloat statusBarVerticalHeight;
     landscapeCanvasSize = size;
 }
 
-
-+(CGRect) getFrame: (CGRect)canvasFrame {
-    return [self getFrame: isPortraitDesigned canvasFrame:canvasFrame];
-}
-
-
 #pragma mark - About Font (In UILable)
 // transform label , then getFrame
-+(void) transformLabel: (UILabel*)label
++(void) transformView: (UIView*)view
 {
     float ratioX = self.ratioX;
     float ratioY = self.ratioY;
     if (ratioX == 1.0 && ratioY == 1.0) {
-        label.transform = CGAffineTransformIdentity;
+        view.transform = CGAffineTransformIdentity;
     } else {
-        label.transform = CGAffineTransformMakeScale(ratioX, ratioY);
+        view.transform = CGAffineTransformMakeScale(ratioX, ratioY);
     }
+}
+
+// convert size for label(then getFrame), textfield ...
++(CGFloat) convertFontSize: (CGFloat)fontSize {
+    float ratioX = self.ratioX;
+    float ratioY = self.ratioY;
+    return fontSize * ((ratioX + ratioY) / 2);
+}
+
+
+#pragma mark -
+
++(CGRect) convertFrame: (CGRect)canvasFrame {
+    return [self getFrame: isPortraitDesigned canvasFrame:canvasFrame];
+}
+
++(CGSize) convertCanvasSize: (CGSize)size
+{
+    return [self convertFrame: CGRectMake(0, 0, size.width, size.height)].size;
+}
+
++(CGPoint) convertCanvasPoint: (CGPoint)point
+{
+    return [self convertFrame: CGRectMake(point.x, point.y, 0, 0)].origin;
+}
+
++(CGFloat) convertCanvasHeight: (CGFloat)y {
+    return [self convertFrame: CGRectMake(0, 0, 0, y)].size.height;
+}
+
++(CGFloat) convertCanvasWidth: (CGFloat)x {
+    return [self convertFrame: CGRectMake(0, 0, x, 0)].size.width;
+}
+
++(CGFloat) convertCanvasY: (CGFloat)y {
+    return [self convertFrame: CGRectMake(0, y, 0, 0)].origin.y;
+}
+
++(CGFloat) convertCanvasX: (CGFloat)x {
+    return [self convertFrame: CGRectMake(x, 0, 0, 0)].origin.x;
 }
 
 
@@ -115,46 +146,8 @@ static CGFloat statusBarVerticalHeight;
     return [self getRatios: isPortraitDesigned];
 }
 
-// convert size for label(then getFrame), textfield ... 
-+(CGFloat) convertFontSize: (CGFloat)fontSize {
-    float ratioX = self.ratioX;
-    float ratioY = self.ratioY;
-    return fontSize * ((ratioX + ratioY) / 2);
-}
-
-+(CGSize) convertCanvasSize: (CGSize)size
-{
-    return [self getFrame: CGRectMake(0, 0, size.width, size.height)].size;
-}
-
-+(CGPoint) convertCanvasPoint: (CGPoint)point
-{
-    return [self getFrame: CGRectMake(point.x, point.y, 0, 0)].origin;
-}
-
-+(CGFloat) convertCanvasHeight: (CGFloat)y {
-    return [self getFrame: CGRectMake(0, 0, 0, y)].size.height;
-}
-
-+(CGFloat) convertCanvasWidth: (CGFloat)x {
-    return [self getFrame: CGRectMake(0, 0, x, 0)].size.width;
-}
-
-+(CGFloat) convertCanvasY: (CGFloat)y {
-    return [self getFrame: CGRectMake(0, y, 0, 0)].origin.y;
-}
-
-+(CGFloat) convertCanvasX: (CGFloat)x {
-    return [self getFrame: CGRectMake(x, 0, 0, 0)].origin.x;
-}
-
 
 #pragma mark - Private Methods
-
-+ (CGSize) getCanvas: (BOOL)isPortrait
-{
-    return (isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
-}
 
 +(CGRect) getFrame: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame {
     float ratioX = self.ratioX;
@@ -171,7 +164,7 @@ static CGFloat statusBarVerticalHeight;
 }
 
 +(NSArray*) getRatios:(BOOL)isPortrait {
-    CGSize canvas = [self getCanvas: isPortrait];
+    CGSize canvas = (isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
     CGSize screen = [self getDeviceSize: isPortrait];
     
     float ratioX = (float)screen.width / (float)canvas.width;
@@ -184,7 +177,7 @@ static CGFloat statusBarVerticalHeight;
     // like UIWindow's bounds,  always will be (768 x 1024)(ipad) not influnce by orientation.
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     // Ignore the case of statusbar on ios 7 and hidden.
-    CGFloat statusBarVH = isIOS7 || (isStatusBarHidden) ? 0 : statusBarVerticalHeight;
+    CGFloat statusBarVH = isIOS7 || [UIApplication sharedApplication].statusBarHidden ? 0 : statusBarVerticalHeight;
     
     return isPortrait ? CGSizeMake(screenSize.width, screenSize.height-statusBarVH):
                         CGSizeMake(screenSize.height, screenSize.width-statusBarVH);

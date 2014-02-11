@@ -3,6 +3,8 @@
 @interface FrameTranslater : NSObject
 
 
+#pragma mark -
+
 +(BOOL) isPortraitDesigned ;
 +(void) setIsPortraitDesigned: (BOOL)isPortrait ;
 
@@ -12,19 +14,21 @@
 +(void) setLandscapeCanvasSize: (CGSize)size ;
 
 
-+(CGRect) getFrame: (CGRect)canvasFrame ;
 
-
-+(void) transformLabel: (UILabel*)label;
-
-
+#pragma mark -
 +(NSArray*) screenCanvasRatio ;
 
 
+#pragma mark -
++(void) transformView: (UIView*)view;
 +(CGFloat) convertFontSize: (CGFloat)fontSize ;
 
-+(CGSize) convertCanvasSize: (CGSize)size;
+
+#pragma mark -
+
++(CGRect) convertFrame: (CGRect)canvasFrame ;
 +(CGPoint) convertCanvasPoint: (CGPoint)point;
++(CGSize) convertCanvasSize: (CGSize)size;
 
 +(CGFloat) convertCanvasHeight: (CGFloat)y ;
 +(CGFloat) convertCanvasWidth: (CGFloat)x ;
