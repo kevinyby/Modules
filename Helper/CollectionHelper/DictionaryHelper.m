@@ -37,15 +37,6 @@
     }
 }
 
-
-+(NSString*) convertToJSONString: (NSDictionary*)dictionary
-{
-    NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
-    NSString *jsonStrings = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    return jsonStrings;
-}
-
 #pragma mark = About Key
 
 +(NSArray*) getSortedKeys: (NSDictionary*)dictionary
@@ -133,7 +124,17 @@
     return result;
 }
 
-
++(NSMutableDictionary*) filter: (NSDictionary*)dictionary filter:(BOOL(^)(id value))filter {
+    NSMutableDictionary* result = [NSMutableDictionary dictionary];
+    for (id key in dictionary) {
+        id value = [dictionary objectForKey: key];
+        
+        if (filter(value)) continue;
+        
+        [result setObject: value forKey:key];
+    }
+    return result;
+}
 
 +(NSMutableDictionary*) convertNumberToString: (NSDictionary*)dictionary
 {
@@ -147,6 +148,28 @@
     }
     return result;
 }
+
+
+
+#pragma mark - Temporary
+
+// For Two Dimension Dictioanry
+// i.e :
+// { "HumanResource":{"EmployeeCHOrder":["YGYDB201312181638"],"Employee":[]},  "Finance":{"FinanceCHOrder":[]}, } -> {"EmployeeCHOrder":["YGYDB201312181638"], "Employee":[], "FinanceCHOrder":[]}
++(NSMutableDictionary*) convertToOneDimensionDictionary: (NSDictionary*)dictionary
+{
+    NSMutableDictionary* result = [NSMutableDictionary dictionary];
+    for (id key in dictionary) {
+        NSDictionary* value = [dictionary objectForKey: key];
+        for (NSString* subKey in value) {
+            id subValue = [value objectForKey: subKey];
+            [result setObject: subValue forKey:subKey];
+        }
+    }
+    return result;
+}
+
+
 
 
 @end

@@ -6,8 +6,6 @@
 
 @implementation HeaderTableView
 
-//@synthesize delegate;
-
 @synthesize tableView;
 @synthesize headerView;
 
@@ -39,11 +37,6 @@
     tableView.valuesXcoordinates = valuesXcoordinates;
 //    [tableView reloadData];       // need it or not ?
 }
-
-//-(void)setDelegate:(id<HeaderTableViewDelegate>)delegateObj {
-//    delegate = delegateObj;
-//    tableView.proxy = delegateObj;
-//}
 
 #pragma mark - Public Methods
 

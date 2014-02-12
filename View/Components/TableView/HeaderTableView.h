@@ -1,21 +1,7 @@
-//#import <UIKit/UIKit.h>
 
-//#import "AlignTableView.h"
 @class AlignTableView;
 
-//@class HeaderTableView;
-//
-//@protocol HeaderTableViewDelegate <TableViewBaseTableProxy>
-//
-//@optional
-//
-//@end
-
-
 @interface HeaderTableView : UIView
-
-
-//@property (nonatomic, assign) id<HeaderTableViewDelegate> delegate;
 
 @property (strong) UIView* headerView;
 @property (strong) AlignTableView* tableView;

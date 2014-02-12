@@ -7,8 +7,6 @@
 +(NSMutableDictionary*) deepCopy: (NSDictionary*)source ;
 +(void) deepCopy: (NSDictionary*)source to:(NSMutableDictionary*)destination  ;
 
-+(NSString*) convertToJSONString: (NSDictionary*)dictionary;
-
 #pragma mark = About Key
 
 +(NSArray*) getSortedKeys: (NSDictionary*)dictionary;
@@ -22,7 +20,12 @@
 
 +(NSMutableDictionary*) filter: (NSDictionary*)dictionary withType:(Class)clazz;
 +(NSMutableDictionary*) filter: (NSDictionary*)dictionary withObject:(id)filterObj ;
++(NSMutableDictionary*) filter: (NSDictionary*)dictionary filter:(BOOL(^)(id value))filter ;
 
 +(NSMutableDictionary*) convertNumberToString: (NSDictionary*)dictionary;
+
+
+#pragma mark - Temporary
++(NSMutableDictionary*) convertToOneDimensionDictionary: (NSDictionary*)dictionary;
 
 @end
