@@ -24,6 +24,16 @@
     return self.center.y;
 }
 
+-(void) addCenterX:(CGFloat)x
+{
+    self.center = CGPointMake(self.center.x + x, self.center.y);
+}
+
+-(void) addCenterY:(CGFloat)y
+{
+    self.center = CGPointMake(self.center.x, self.center.y + y);
+}
+
 
 -(CGPoint) getMiddlePoint
 {

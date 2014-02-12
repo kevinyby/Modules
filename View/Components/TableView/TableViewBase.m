@@ -101,7 +101,23 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     return [self.contentsDictionary objectForKey: [self.sections objectAtIndex: section]];
 }
 
-
+#pragma mark - Util Methods
+-(void) deleteIndexPath: (NSIndexPath*)indexPath
+{
+    // A . delete the contents dictionary row data
+    NSString* sectionTitle = [self.sections safeObjectAtIndex: indexPath.section];
+    NSMutableArray* sectionContents = [self.contentsDictionary objectForKey: sectionTitle];
+    [sectionContents removeObjectAtIndex: indexPath.row];
+    
+    // B . delete the real contents dictionary row data
+    NSString* key = self.keysMap ? [self.keysMap objectForKey: sectionTitle] : sectionTitle;
+    NSMutableArray* realSectionContents = [self.realContentsDictionary objectForKey: key];
+    [realSectionContents removeObjectAtIndex: indexPath.row];
+    
+    
+    // C . apply the animation
+    [self deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -122,11 +138,6 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RaiseTableViewCellId];
     }
-
-    NSString* cellText = [self contentForIndexPath: indexPath]; // == cell.textLabel.text, important!!!
-    
-    cell.textLabel.font = [UIFont systemFontOfSize: [FrameTranslater convertFontSize: 20]];
-    cell.textLabel.text = cellText;     // set font first then set text
     
     // proxy
     if (self.tableViewBaseCellForIndexPathAction) {
@@ -136,6 +147,10 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     if (proxy && [proxy respondsToSelector:@selector(tableViewBase:cellForIndexPath:oldCell:)]) {
         cell = [proxy tableViewBase:self cellForIndexPath:indexPath oldCell:cell];
     }
+    
+    NSString* cellText = [self contentForIndexPath: indexPath]; // == cell.textLabel.text, important!!!
+    cell.textLabel.font = [UIFont systemFontOfSize: [FrameTranslater convertFontSize: 20]];
+    cell.textLabel.text = cellText;     // set font first then set text
     
     return cell;
 }
@@ -173,19 +188,7 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
             if(! [proxy tableViewBase:self willDeleteContentsAtIndexPath: indexPath]) return;
         }
         
-        // A . delete the contents dictionary row data
-        NSString* sectionTitle = [self.sections safeObjectAtIndex: indexPath.section];
-        NSMutableArray* sectionContents = [self.contentsDictionary objectForKey: sectionTitle];
-        [sectionContents removeObjectAtIndex: indexPath.row];
-        
-        // B . delete the real contents dictionary row data
-        NSString* key = self.keysMap ? [self.keysMap objectForKey: sectionTitle] : sectionTitle;
-        NSMutableArray* realSectionContents = [self.realContentsDictionary objectForKey: key];
-        [realSectionContents removeObjectAtIndex: indexPath.row];
-        
-        
-        // C . apply the animation
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self deleteIndexPath: indexPath];
         
         // proxy delete
         if (proxy && [proxy respondsToSelector:@selector(tableViewBase:didDeleteContentsAtIndexPath:)]) {

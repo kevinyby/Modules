@@ -91,6 +91,10 @@
 -(NSMutableArray*) realContentsForSection: (NSUInteger)section;
 
 
+
+#pragma mark - Util Methods
+-(void) deleteIndexPath: (NSIndexPath*)indexPath;
+
 @end
 
 

@@ -6,6 +6,9 @@
 - (CGFloat)getCenterX;
 - (CGFloat)getCenterY;
 
+-(void) addCenterX:(CGFloat)x;
+-(void) addCenterY:(CGFloat)y;
+
 -(CGPoint) getMiddlePoint;
 
 #pragma mark - Size
