@@ -31,6 +31,9 @@
 
 - (CGFloat)tableViewBase:(TableViewBase *)tableViewObj heightForIndexPath:(NSIndexPath*)indexPath;
 
+// Edit Pair Extendions :
+- (NSString*)tableViewBase:(TableViewBase *)tableViewObj titleForDeleteButtonAtIndexPath:(NSIndexPath*)indexPath;
+
 @end
 
 
@@ -111,6 +114,7 @@
 @property (copy) void (^tableViewBaseDidSelectAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
 @property (copy) CGFloat(^tableViewBaseHeightForSectionAction)(TableViewBase* tableViewObj,NSInteger section);
 @property (copy) CGFloat(^tableViewBaseHeightForIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
+@property (copy) NSString*(^tableViewBaseTitleForDeleteButtonAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
 
 @end
 

@@ -14,5 +14,6 @@ typedef enum {
 
 -(BOOL) isInFilteringMode;
 -(NSIndexPath*) getRealIndexPath:(UIView*)subview ;
+-(NSIndexPath*) traslateFilterModeIndexPath: (NSIndexPath*)indexPath;
 
 @end

@@ -25,6 +25,7 @@
     void (^_tableViewBaseDidSelectAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
     CGFloat(^_tableViewBaseHeightForSectionAction)(TableViewBase* tableViewObj,NSInteger section);
     CGFloat(^_tableViewBaseHeightForIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
+    NSString*(^_tableViewBaseTitleForDeleteButtonAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
 }
 
 @end
@@ -253,6 +254,23 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 
 
+// Edit Pair Extendions :
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString* deleteTitle = @"Delete";
+    
+    // proxy
+    if (self.tableViewBaseTitleForDeleteButtonAction) {
+        deleteTitle = self.tableViewBaseTitleForDeleteButtonAction(self, indexPath);
+    }
+    else
+    if (proxy && [proxy respondsToSelector:@selector(tableViewBase:titleForDeleteButtonAtIndexPath:)]) {
+        deleteTitle = [proxy tableViewBase: self titleForDeleteButtonAtIndexPath:indexPath];
+    }
+    
+    return deleteTitle;
+}
 
 
 
@@ -377,6 +395,19 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 -(void)setTableViewBaseHeightForIndexPathAction:(CGFloat (^)(TableViewBase *, NSIndexPath *))tableViewBaseHeightForIndexPathAction
 {
     _tableViewBaseHeightForIndexPathAction = tableViewBaseHeightForIndexPathAction;
+}
+
+
+//_______________________ tableViewBaseTitleForDeleteButtonAction
+
+-(NSString *(^)(TableViewBase *, NSIndexPath *))tableViewBaseTitleForDeleteButtonAction
+{
+    return _tableViewBaseTitleForDeleteButtonAction;
+}
+
+-(void)setTableViewBaseTitleForDeleteButtonAction:(NSString *(^)(TableViewBase *, NSIndexPath *))tableViewBaseTitleForDeleteButtonAction
+{
+    _tableViewBaseTitleForDeleteButtonAction = tableViewBaseTitleForDeleteButtonAction;
 }
 
 @end
