@@ -8,6 +8,7 @@
 
 @synthesize tableView;
 @synthesize headerView;
+@synthesize delegate;
 
 -(id)initWithFrame:(CGRect)frame
 {
@@ -44,12 +45,6 @@
     [tableView reloadData];
 }
 
--(void) removeSubviewConstraints
-{
-    for (UIView* subview in self.subviews)[subview setTranslatesAutoresizingMaskIntoConstraints: YES];
-    [self removeConstraints: self.constraints];
-}
-
 #pragma mark - Subclass Override Methods
 
 -(void) initializeSubviews
@@ -83,14 +78,34 @@
 -(void) initializeSubviewsVConstraints
 {
     float headerHeight = [FrameTranslater convertCanvasHeight: 25.0f];
-    float inset = [FrameTranslater convertCanvasHeight: 0.0f];
+    if (delegate && [delegate respondsToSelector:@selector(headerTableViewHeaderHeight:)]) {
+        headerHeight = [delegate headerTableViewHeaderHeight:self];
+    }
+    float gap = [FrameTranslater convertCanvasHeight: 0.0f];
+    if (delegate && [delegate respondsToSelector:@selector(headerTableViewGap:)]) {
+        gap = [delegate headerTableViewGap: self];
+    }
     
     [self addConstraints:[NSLayoutConstraint
-                          constraintsWithVisualFormat:@"V:|-0-[headerView(headerHeight)]-(inset)-[tableView]-0-|"
+                          constraintsWithVisualFormat:@"V:|-0-[headerView(headerHeight)]-(gap)-[tableView]-0-|"
                           options:NSLayoutFormatDirectionLeadingToTrailing
-                          metrics:@{@"headerHeight":@(headerHeight),@"inset":@(inset)}
+                          metrics:@{@"headerHeight":@(headerHeight),@"gap":@(gap)}
                           views:NSDictionaryOfVariableBindings(headerView,tableView)]];
     
+}
+
+-(void)setDelegate:(id<HeaderTableViewDeletage>)delegateObj
+{
+    
+    delegate = delegateObj;
+    
+    [self removeConstraints: self.constraints];
+    
+    // reset it
+    [self initializeSubviewsHConstraints];
+    [self initializeSubviewsVConstraints];
+    
+    [self setNeedsLayout];
 }
 
 @end

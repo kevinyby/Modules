@@ -6,4 +6,6 @@
 
 +(void) insertToLastRowWithAnimation: (TableViewBase*)tableView section:(int)section content:(NSString*)content realContent:(id)realContent;
 
++(void) insertToFirstRowWithAnimation: (TableViewBase*)tableView section:(int)section content:(NSString*)content realContent:(id)realContent;
+
 @end

@@ -28,4 +28,10 @@
 #pragma mark - Temporary
 +(NSMutableDictionary*) convertToOneDimensionDictionary: (NSDictionary*)dictionary;
 
+
+
+#pragma mark - Get the depth
++(NSInteger) getTheDepth: (NSDictionary*)dictionary;
+
+
 @end

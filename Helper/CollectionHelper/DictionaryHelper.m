@@ -171,5 +171,26 @@
 
 
 
+#pragma mark - Get the depth
+// dictionary with dictionary in it.
++(NSInteger) getTheDepth: (NSDictionary*)dictionary
+{
+    NSInteger depth = 1 ;
+    [self iterateDictionary: dictionary depth:&depth];
+    return depth;
+}
+// so to be optimize
++(void) iterateDictionary: (NSDictionary*)dictionary depth:(NSInteger*)depth
+{
+    *depth = *depth + 1;
+    for (NSString* key in dictionary) {
+        id content = dictionary[key];
+        if ([content isKindOfClass:[NSDictionary class]]) {
+            [self iterateDictionary: content depth:depth];
+            break;      // just get one to test , so , you must has the same structure in it.
+        }
+    }
+}
+
 
 @end
