@@ -15,7 +15,7 @@
 }
 
 
-+ (void) setCornerRadius: (UIView*)view config:(NSDictionary*)config
++(void) setCornerRadius: (UIView*)view config:(NSDictionary*)config
 {
     NSNumber* radiusNumber = config[@"CornerRadius"];
     float cornerRadius = radiusNumber ? [radiusNumber floatValue] : 10.0f;
@@ -23,20 +23,8 @@
     view.clipsToBounds = YES;
 }
 
-/**
- * This method just make you know that , if you want radius(cause you have to set clipsToBounds/setMasksToBounds YES) and shadow exist at the same time
- * For the setMasksToBounds and clipsToBounds sake , they cannot exist at the same time 
- * So , you should create a shadow view to show the shadow for your view(cornerRadius and clipsToBounds/masksToBounds)
- *
- * the view should have frame first.
- */
-+ (void) appendShadowView: (UIView*)view config:(NSDictionary*)config
++(void) setShadow: (UIView*)view config:(NSDictionary*)config
 {
-    UIView *superView = view.superview;
-    
-    CGRect oldBackgroundFrame = view.frame;
-    [view removeFromSuperview];
-    
     // get parameters
     NSNumber* shadowOpacityValue = [config objectForKey: @"ShadowOpacity"];
     float shadowOpacity = shadowOpacityValue ? [shadowOpacityValue floatValue] : 1.0f;
@@ -45,12 +33,31 @@
     NSValue* shadowOffsetValue = [config objectForKey: @"ShadowOffset"];
     CGSize shadowOffset = [shadowOffsetValue CGSizeValue];
     
-    CGRect frameForShadowView = CGRectMake(0, 0, oldBackgroundFrame.size.width, oldBackgroundFrame.size.height);
-    UIView *shadowView = [[UIView alloc] initWithFrame:frameForShadowView];
-    [shadowView.layer setShadowOpacity: shadowOpacity];
-    [shadowView.layer setShadowRadius: shadowRadius];
-    [shadowView.layer setShadowOffset: shadowOffset];
+    [view.layer setShadowOpacity: shadowOpacity];
+    [view.layer setShadowRadius: shadowRadius];
+    [view.layer setShadowOffset: shadowOffset];
+}
+
+/**
+ * 
+ * Call the view already has a super view
+ *
+ * This method just make you know that , if you want radius(cause you have to set clipsToBounds/setMasksToBounds YES) and shadow exist at the same time
+ * For the setMasksToBounds and clipsToBounds sake , they cannot exist at the same time 
+ * So , you should create a shadow view to show the shadow for your view(cornerRadius and clipsToBounds/masksToBounds)
+ *
+ * the view should have frame first.
+ */
++ (void) setShadowWithCorner: (UIView*)view config:(NSDictionary*)config
+{
+    [ViewHelper setCornerRadius:view config:config];
     
+    UIView *shadowView = [[UIView alloc] initWithFrame:view.frame];
+    [ViewHelper setShadow: shadowView config:config];
+    
+    UIView *superView = view.superview;
+    [view removeFromSuperview];
+    view.frame = view.bounds;
     [shadowView addSubview:view];
     [superView addSubview:shadowView];
 }

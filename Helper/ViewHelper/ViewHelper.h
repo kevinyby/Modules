@@ -4,8 +4,9 @@
 
 +(void) logViewRecursive: (UIView*)view;
 
-+ (void) setCornerRadius: (UIView*)view config:(NSDictionary*)config;
-+(void) appendShadowView: (UIView*)view config:(NSDictionary*)config ;
++(void) setShadow: (UIView*)view config:(NSDictionary*)config;
++(void) setCornerRadius: (UIView*)view config:(NSDictionary*)config;
++(void) setShadowWithCorner: (UIView*)view config:(NSDictionary*)config ;
 
 +(void) sortedSubviewsByXCoordinate: (UIView*)view;
 
