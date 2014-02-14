@@ -1,9 +1,15 @@
 #import "ActionExecutorBase.h"
 
-
+// label
 #define JSON_FONT_NAME              @"FONT_NAME"
 #define JSON_FONT_SIZE              @"FONT_SIZE"
-#define JSON_TEXT_COLOR             @"TEXT_COLOR"
+
+#define JSON_FONT_BOLD              @"JS_FONT_BOLD"
+#define JSON_FONT_ITALIC            @"JS_FONT_ITALIC"
+
+#define JSON_FONT_N_COLOR           @"JS_FONT_N_COLOR"        // Normal Color
+#define JSON_FONT_H_COLOR           @"JS_FONT_H_COLOR"        // Highlit Color
+#define JSON_FONT_S_COLOR           @"JS_FONT_S_COLOR"        // Shadow Color
 
 
 // -- StrokeLabel

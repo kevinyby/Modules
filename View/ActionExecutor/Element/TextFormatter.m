@@ -1,6 +1,6 @@
 #import "TextFormatter.h"
 
-
+#import "FontHelper.h"
 #import "ColorHelper.h"
 
 // _View.h -> _Components.h -> _Label.h
@@ -24,12 +24,16 @@
         label.font = font;
         
         
-        // text color
-        NSDictionary* colors = [config objectForKey: JSON_TEXT_COLOR];
-        float R, G, B , alpha;
-        [ColorHelper parseColor: colors red:&R green:&G blue:&B alpha:&alpha];
-        label.textColor = [UIColor colorWithRed: R green:G blue:B alpha:alpha];
+        // color
+        label.textColor = [ColorHelper parseColor: config[JSON_FONT_N_COLOR]];
+        label.shadowColor = [ColorHelper parseColor: config[JSON_FONT_S_COLOR]];
+        label.highlightedTextColor = [ColorHelper parseColor: config [JSON_FONT_H_COLOR]];
         
+        // bold & italic
+        BOOL fontBold = [[config objectForKey: JSON_FONT_BOLD] boolValue];
+        BOOL fontItalic = [[config objectForKey: JSON_FONT_ITALIC] boolValue];
+        if (fontBold) [FontHelper setBoldToFont: label];
+        if (fontItalic) [FontHelper setItalicToFont: label];
         
         // StrokeLabel & GradientLabel
         [label isKindOfClass: [StrokeLabel class]] ?

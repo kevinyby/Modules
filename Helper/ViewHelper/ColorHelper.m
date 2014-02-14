@@ -56,6 +56,9 @@
 
 +(UIColor*) parseColor: (id)config {
     if (! config) return nil;
+    
+    if ([config isKindOfClass:[NSNumber class]]) return [ColorHelper color:[config intValue]];
+    
     if (! ([config isKindOfClass: [NSArray class]] || [config isKindOfClass: [NSDictionary class]])) return nil;
     
     float red = 0.0, green = 0.0, blue = 0.0 ,alpha = 1.0;
