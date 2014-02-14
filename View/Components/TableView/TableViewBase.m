@@ -139,6 +139,10 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RaiseTableViewCellId];
     }
     
+    NSString* cellText = [self contentForIndexPath: indexPath]; // == cell.textLabel.text, important!!!
+    cell.textLabel.font = [UIFont systemFontOfSize: [FrameTranslater convertFontSize: 20]];
+    cell.textLabel.text = cellText;     // set font first then set text
+    
     // proxy
     if (self.tableViewBaseCellForIndexPathAction) {
         cell = self.tableViewBaseCellForIndexPathAction(self, indexPath, cell);
@@ -147,10 +151,6 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     if (proxy && [proxy respondsToSelector:@selector(tableViewBase:cellForIndexPath:oldCell:)]) {
         cell = [proxy tableViewBase:self cellForIndexPath:indexPath oldCell:cell];
     }
-    
-    NSString* cellText = [self contentForIndexPath: indexPath]; // == cell.textLabel.text, important!!!
-    cell.textLabel.font = [UIFont systemFontOfSize: [FrameTranslater convertFontSize: 20]];
-    cell.textLabel.text = cellText;     // set font first then set text
     
     return cell;
 }

@@ -67,15 +67,15 @@
            label = [[UILabel alloc] initWithText:labelText];
             label.tag = HEADER_CONTENT_LABEL_TAG(i);
             [headerView addSubview:label];
-            
-            // set frame by FrameHelper
-            CGRect labelCanvas = [self getCanvas:label xcoordinates:headersXcoordinates index:i];
-            [FrameHelper translateLabel: label canvas:labelCanvas];
         }
         
         // adjust width by text content
         label.text = labelText;
         [label adjustWidthToFontText];
+        
+        // set frame by FrameHelper
+        CGRect labelCanvas = [self getCanvas:label xcoordinates:headersXcoordinates index:i];
+        [FrameHelper translateLabel: label canvas:labelCanvas];
     }
 }
 
