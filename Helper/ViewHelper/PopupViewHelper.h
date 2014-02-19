@@ -17,6 +17,7 @@ typedef void(^PopupViewActionBlock)(UIView* popView, NSInteger index);
 
 // ------------------
 +(void) popoverView:(UIView*)view inView:(UIView*)inView;
++(void) popView: (UIView*)view willDissmiss:(void(^)(UIView* view))block inRootView:(BOOL)inRootView;
 +(void) popoverView:(UIView*)view inView:(UIView*)inView inRect:(CGRect)inRect arrowDirections:(UIPopoverArrowDirection)arrowDirections;
 +(void) dissmissCurrentPopover;
 

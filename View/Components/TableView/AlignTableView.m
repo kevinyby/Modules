@@ -14,9 +14,12 @@
 @implementation AlignTableView
 
 @synthesize headers;
+
 @synthesize headersXcoordinates;
 @synthesize valuesXcoordinates;
 
+@synthesize headersYcoordinates;
+@synthesize valuesYcoordinates;
 
 #pragma mark - UITableViewDataSource
 //
@@ -29,19 +32,22 @@
     
     // we create the header view
     NSArray* sectionsHeaders = [ArrayHelper isTwoDimension: headers] ? [headers objectAtIndex: section] : headers;
-    NSArray* sectionsHeaderCoordinates = [ArrayHelper isTwoDimension: headersXcoordinates] ? [headersXcoordinates objectAtIndex: section] : headersXcoordinates;
+    NSArray* sectionsHeaderXCoordinates = [ArrayHelper isTwoDimension: headersXcoordinates] ? [headersXcoordinates objectAtIndex: section] : headersXcoordinates;
+    NSArray* sectionsHeaderYCoordinates = [ArrayHelper isTwoDimension: headersYcoordinates] ? [headersYcoordinates objectAtIndex: section] : headersYcoordinates;
     
     UIView* headerView = [[UIView alloc] init];
     headerView.backgroundColor = [UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:0.5];
-    [AlignTableView setAlignHeaders:tableView headerView:headerView headers:sectionsHeaders headersXcoordinates:sectionsHeaderCoordinates];
+    [AlignTableView setAlignHeaders:tableView headerView:headerView headers:sectionsHeaders headersXcoordinates:sectionsHeaderXCoordinates headersYcoordinates:sectionsHeaderYCoordinates];
     return headerView;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray* coordinates = valuesXcoordinates ? valuesXcoordinates : headersXcoordinates;
-    NSArray* valueXCoordinates = [ArrayHelper isTwoDimension: coordinates] ? [coordinates objectAtIndex: indexPath.section] : coordinates;
-    [AlignTableView separateCellTextToAlignHeaders: self cell:cell valuesXcoordinates:valueXCoordinates];
+    valuesXcoordinates = valuesXcoordinates ? valuesXcoordinates : headersXcoordinates;
+    NSArray* valueXCoordinates = [ArrayHelper isTwoDimension: valuesXcoordinates] ? [valuesXcoordinates objectAtIndex: indexPath.section] : valuesXcoordinates;
+    NSArray* valueYCoordinates = [ArrayHelper isTwoDimension: valuesYcoordinates] ? [valuesYcoordinates objectAtIndex: indexPath.section] : valuesYcoordinates;
+    
+    [AlignTableView separateCellTextToAlignHeaders: self cell:cell valuesXcoordinates:valueXCoordinates valuesYcoordinates:valueYCoordinates];
     
     [super tableView:tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
 }
@@ -54,33 +60,35 @@
 
 #pragma mark - AlignTableView Class Object Methods
 
-+ (void)setAlignHeaders: (UITableView*)tableView headerView:(UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates
++ (void)setAlignHeaders: (UITableView*)tableView headerView:(UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates headersYcoordinates:(NSArray*)headersYcoordinates
 {
-    // set up contents & labels with x coordinate
     int count = headers.count;
+    // set up contents & labels with x coordinate
     for (int i = 0; i < count; i++) {
         NSString* labelText = [headers objectAtIndex:i];
         
         // init label
         UILabel* label = (UILabel*)[headerView viewWithTag:HEADER_CONTENT_LABEL_TAG(i)];
         if (!label) {
-           label = [[UILabel alloc] initWithText:labelText];
+            label = [[UILabel alloc] initWithText:labelText];
+            [self setLabelDefaultProperties: label];
             label.tag = HEADER_CONTENT_LABEL_TAG(i);
             [headerView addSubview:label];
         }
         
+        
+        // set frame
+        CGRect labelCanvas = [self getLabelCanvas:i xCoordinates:headersXcoordinates yCoordinates:headersYcoordinates];
+        [FrameHelper setFrame: labelCanvas view:label];
+        
         // adjust width by text content
         label.text = labelText;
         [label adjustWidthToFontText];
-        
-        // set frame by FrameHelper
-        CGRect labelCanvas = [self getCanvas:label xcoordinates:headersXcoordinates index:i];
-        [FrameHelper translateLabel: label canvas:labelCanvas];
     }
 }
 
 
-+ (void)separateCellTextToAlignHeaders: (UITableView*)tableView cell:(UITableViewCell*)cell valuesXcoordinates:(NSArray*)valuesXcoordinates
++ (void)separateCellTextToAlignHeaders: (UITableView*)tableView cell:(UITableViewCell*)cell valuesXcoordinates:(NSArray*)valuesXcoordinates valuesYcoordinates:(NSArray*)valuesYcoordinates
 {
     cell.textLabel.hidden = YES;        // hide the original text
     NSString* cellText = cell.textLabel.text;
@@ -93,18 +101,14 @@
         UILabel* label = (UILabel*)[cell viewWithTag:CELL_CONTENT_LABEL_TAG(i)] ;
         if (!label) {
             label = [[UILabel alloc] initWithText:nil];
-            label.textAlignment = NSTextAlignmentLeft;
-            // set font size
-            float size = [FrameTranslater convertFontSize: 20];
-            label.font = [UIFont systemFontOfSize: size];
-            // adjust width by text content
+            [self setLabelDefaultProperties: label];
             label.tag = CELL_CONTENT_LABEL_TAG(i);
             [cell.contentView addSubview:label];
             
-            // set position
-            CGRect labelCanvas = [self getCanvas:label xcoordinates:valuesXcoordinates index:i];
+            // set frame
+            CGRect labelCanvas = [self getLabelCanvas:i xCoordinates:valuesXcoordinates yCoordinates:valuesYcoordinates];
             [FrameHelper setFrame: labelCanvas view:label];
-            [label setCenterY: [cell getSizeHeight]/2];
+            [label setCenterY: [label.superview getSizeHeight]/2];
         }
     }
     
@@ -130,10 +134,27 @@
 
 #pragma mark - Private Methods
 
-+ (CGRect)getCanvas: (UILabel*)label xcoordinates:(NSArray*)xCoordinates index:(int)i {
-    NSNumber* coordinate = xCoordinates.count > i ? [xCoordinates objectAtIndex: i] : nil;
-    float coordinateX = coordinate ? [coordinate floatValue] : 200 * i;             // default interval 200
-    CGRect labelCanvas = CGRectMake(coordinateX, 0, label.frame.size.width, 25);
++ (void)setLabelDefaultProperties: (UILabel*)label
+{
+    label.textAlignment = NSTextAlignmentLeft;
+    // set font size
+    float size = [FrameTranslater convertFontSize: 20];
+    label.font = [UIFont systemFontOfSize: size];
+}
+
++ (CGRect)getLabelCanvas: (int)index xCoordinates:(NSArray*)xCoordinates yCoordinates:(NSArray*)yCoordinates {
+    NSNumber* xNum = xCoordinates.count > index ? [xCoordinates objectAtIndex: index] : nil;
+    float coordinateX = xNum ? [xNum floatValue] : 200 * index;             // default interval 200
+    
+    int temp = index;
+    NSNumber* yNum = nil;
+    while (temp >= 0 && !yNum) {
+        yNum = yCoordinates.count > temp ? [yCoordinates objectAtIndex: temp] : nil;
+        temp--;
+    }
+    float coordinateY = yNum ? [yNum floatValue] : 0;                       // default get the last one
+    
+    CGRect labelCanvas = CGRectMake(coordinateX, coordinateY, 25, 25);
     return labelCanvas;
 }
 

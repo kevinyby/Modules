@@ -24,23 +24,32 @@
 -(void)setHeaders:(NSArray *)headers
 {
     tableView.headers = headers;
-    [AlignTableView setAlignHeaders: tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates];
+    [AlignTableView setAlignHeaders: tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.headersXcoordinates headersYcoordinates:tableView.headersYcoordinates];
 }
 
 -(void) setHeadersXcoordinates:(NSArray *)headersXcoordinates
 {
     tableView.headersXcoordinates = headersXcoordinates;
-    [AlignTableView setAlignHeaders:tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.headersXcoordinates];
+    [AlignTableView setAlignHeaders: tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.headersXcoordinates headersYcoordinates:tableView.headersYcoordinates];
+}
+
+-(void) setHeadersYcoordinates:(NSArray *)headersYcoordinates
+{
+    tableView.headersYcoordinates = headersYcoordinates;
+    [AlignTableView setAlignHeaders: tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates headersYcoordinates:tableView.headersYcoordinates];
 }
 
 -(void)setValuesXcoordinates:(NSArray *)valuesXcoordinates
 {
     tableView.valuesXcoordinates = valuesXcoordinates;
-//    [tableView reloadData];       // need it or not ?
+}
+
+-(void) setValuesYcoordinates:(NSArray *)valuesYcoordinates
+{
+    tableView.valuesYcoordinates = valuesYcoordinates;
 }
 
 #pragma mark - Public Methods
-
 -(void) reloadTableData {
     [tableView reloadData];
 }

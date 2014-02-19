@@ -20,14 +20,18 @@
 @interface AlignTableView : FilterTableView
 
 @property (strong) NSArray* headers ;               // array of string @[@"1H",@"2H"] or @[@[@"1H",@"2H"],@[@"1H",@"2H"]]
+
+// array of number @[@(50),@(250)] or @[@[@(50),@(250)], @[@(50),@(250)]]
 @property (strong) NSArray* headersXcoordinates;
-@property (strong) NSArray* valuesXcoordinates;     // array fo number @[@(50),@(250)] or @[@[@(50),@(250)], @[@(50),@(250)]]
+@property (strong) NSArray* valuesXcoordinates;
+
+@property (strong) NSArray* headersYcoordinates;
+@property (strong) NSArray* valuesYcoordinates;
 
 
 #pragma mark - AlignTableView Class Object Methods
 
-+ (void)setAlignHeaders: (UITableView*)tableView headerView:(UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates;
-
-+ (void)separateCellTextToAlignHeaders: (UITableView*)tableView cell:(UITableViewCell*)cell valuesXcoordinates:(NSArray*)valuesXcoordinates ;
++ (void)setAlignHeaders: (UITableView*)tableView headerView:(UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates headersYcoordinates:(NSArray*)headersYcoordinates;
++ (void)separateCellTextToAlignHeaders: (UITableView*)tableView cell:(UITableViewCell*)cell valuesXcoordinates:(NSArray*)valuesXcoordinates valuesYcoordinates:(NSArray*)valuesYcoordinates;
 
 @end

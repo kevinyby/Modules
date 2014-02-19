@@ -20,9 +20,11 @@
 
 
 @property (nonatomic, strong) NSArray* headers;            //here one dimension
+
 @property (nonatomic, strong) NSArray* headersXcoordinates;//here one dimension
 @property (nonatomic, strong) NSArray* valuesXcoordinates; //here one dimension
-
+@property (nonatomic, strong) NSArray* headersYcoordinates;//here one dimension
+@property (nonatomic, strong) NSArray* valuesYcoordinates; //here one dimension
 
 #pragma mark - Public Methods
 -(void) reloadTableData ;           // reload table view data

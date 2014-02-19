@@ -160,6 +160,11 @@
 static NSMutableArray* currentPopingViews = nil;
 +(void) popView: (UIView*)view willDissmiss:(void(^)(UIView* view))block
 {
+    [self popView: view willDissmiss:block inRootView:NO];
+}
+
++(void) popView: (UIView*)view willDissmiss:(void(^)(UIView* view))block inRootView:(BOOL)inRootView
+{
     OverlayView* overlayView = [[OverlayView alloc] init];
     overlayView.backgroundColor = [UIColor colorWithRed:.16 green:.17 blue:.21 alpha:.5];
     CGRect bounds = [ViewHelper getScreenBoundsByOrientation];
@@ -170,7 +175,7 @@ static NSMutableArray* currentPopingViews = nil;
     };
     [overlayView addSubview: view];
     
-    UIView* topView = [ViewHelper getTopView];
+    UIView* topView = inRootView ? [ViewHelper getRootView] : [ViewHelper getTopView];
     [topView addSubview: overlayView];
     CATransition *animation = [CATransition animation];
     animation.duration = 0.3f;
@@ -198,6 +203,8 @@ static NSMutableArray* currentPopingViews = nil;
             if (block != [NSNull null]) {
                 void(^willDissmissBlock)(UIView* view) = block;
                 willDissmissBlock([overlayView.subviews lastObject]);
+            } else if (block == [NSNull class]) {
+                return;
             }
         }
     }
