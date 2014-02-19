@@ -8,13 +8,6 @@
 //#import "_Frame.h"
 #import "FrameTranslater.h"
 
-@interface HeaderSearchTableView () <UISearchBarDelegate>
-
-@property (strong) UISearchBar *searchBar;
-//@property (strong) SearchBarView *searchBar;
-
-@end
-
 @implementation HeaderSearchTableView
 
 @synthesize searchBar;
