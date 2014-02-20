@@ -142,12 +142,13 @@
 
 +(UIView*) getTopView
 {
-    UIViewController* rootViewController = [self getRootViewController];
+    UIViewController* topController = [self getRootViewController];
+    while ([topController presentedViewController])	topController = [topController presentedViewController];
     UIView* topView = nil ;
-    if ([rootViewController isKindOfClass:[UINavigationController class]]) {
-        topView = ((UINavigationController*)rootViewController).topViewController.view;
+    if ([topController isKindOfClass:[UINavigationController class]]) {
+        topView = ((UINavigationController*)topController).topViewController.view;
     } else {
-        topView = rootViewController.view;
+        topView = topController.view;
     }
     return topView;
 }
