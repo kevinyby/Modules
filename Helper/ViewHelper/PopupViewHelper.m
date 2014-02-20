@@ -156,25 +156,36 @@
     return popupView;
 }
 
+// ------------------------------------------
 
 static NSMutableArray* currentPopingViews = nil;
 +(void) popView: (UIView*)view willDissmiss:(void(^)(UIView* view))block
 {
-    [self popView: view willDissmiss:block inRootView:NO];
+    [self popView: view inRootView:NO tapOverlayAction:nil willDissmiss:block];
 }
 
-+(void) popView: (UIView*)view willDissmiss:(void(^)(UIView* view))block inRootView:(BOOL)inRootView
++(void) popView: (UIView*)view inRootView:(BOOL)inRootView tapOverlayAction:(void(^)(UIControl* control))tapOverlayAction willDissmiss:(void(^)(UIView* view))block
 {
+    // add to overlay
     OverlayView* overlayView = [[OverlayView alloc] init];
     overlayView.backgroundColor = [UIColor colorWithRed:.16 green:.17 blue:.21 alpha:.5];
     CGRect bounds = [ViewHelper getScreenBoundsByOrientation];
     overlayView.frame = bounds;
     
     overlayView.didDidTapActionBlock = ^void(OverlayView* view) {
-        [self dissmissCurrentPopView];
+        if (tapOverlayAction) {
+            if ((id)tapOverlayAction == [NSNull null]) {
+                return;
+            } else {
+                tapOverlayAction(view);
+            }
+        } else {
+            [self dissmissCurrentPopView];
+        }
     };
     [overlayView addSubview: view];
     
+    // get top view
     UIView* topView = inRootView ? [ViewHelper getRootView] : [ViewHelper getTopView];
     [topView addSubview: overlayView];
     CATransition *animation = [CATransition animation];
@@ -182,6 +193,7 @@ static NSMutableArray* currentPopingViews = nil;
     animation.type = kCATransitionFade;
     [[topView layer] addAnimation:animation forKey: nil];
     
+    // add to array
     if (!currentPopingViews) currentPopingViews = [NSMutableArray array];
     [currentPopingViews addObject: overlayView];
     if (block) {
@@ -203,12 +215,15 @@ static NSMutableArray* currentPopingViews = nil;
             if (block != [NSNull null]) {
                 void(^willDissmissBlock)(UIView* view) = block;
                 willDissmissBlock([overlayView.subviews lastObject]);
-            } else if (block == [NSNull class]) {
-                return;
             }
         }
     }
     [UIView animateWithDuration:0.3 animations:^{overlayView.alpha = 0.0;} completion:^(BOOL finished){ [overlayView removeFromSuperview]; }];
+}
+
++(BOOL) isCurrentPopingView
+{
+    return currentPopingViews.count >= 2;
 }
 
 

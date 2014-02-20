@@ -7,8 +7,11 @@ typedef void(^PopupViewActionBlock)(UIView* popView, NSInteger index);
 
 +(UIActionSheet*) popSheet: (NSString*)title inView:(UIView*)inView actionBlock:(PopupViewActionBlock)actionBlock buttons:(NSString*)button, ... NS_REQUIRES_NIL_TERMINATION;
 
+// ---------------
 +(void) popView: (UIView*)view willDissmiss:(void(^)(UIView* view))block;
++(void) popView: (UIView*)view inRootView:(BOOL)inRootView tapOverlayAction:(void(^)(UIControl* control))tapOverlayAction willDissmiss:(void(^)(UIView* view))block;
 +(void) dissmissCurrentPopView;
++(BOOL) isCurrentPopingView;
 
 +(void) dropDownView: (UIView*)view belowView:(UIView*)belowView;
 +(void) dropDownView: (UIView*)view belowView:(UIView*)belowView overlayFrame:(CGRect)overlayFrame;
@@ -17,7 +20,6 @@ typedef void(^PopupViewActionBlock)(UIView* popView, NSInteger index);
 
 // ------------------
 +(void) popoverView:(UIView*)view inView:(UIView*)inView;
-+(void) popView: (UIView*)view willDissmiss:(void(^)(UIView* view))block inRootView:(BOOL)inRootView;
 +(void) popoverView:(UIView*)view inView:(UIView*)inView inRect:(CGRect)inRect arrowDirections:(UIPopoverArrowDirection)arrowDirections;
 +(void) dissmissCurrentPopover;
 
