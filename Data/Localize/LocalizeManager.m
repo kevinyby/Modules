@@ -9,7 +9,6 @@
 #endif
 
 #define SIMULATOR @"Simulator"
-
 #define ISSIMULATOR [[[UIDevice currentDevice] model] rangeOfString: SIMULATOR].location != NSNotFound
 
 // NSArray

@@ -20,6 +20,9 @@
     BOOL (^_tableViewBaseCanEditIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
     void (^_tableViewBaseCommitEditStyleAction)(TableViewBase* tableViewObj, UITableViewCellEditingStyle editStyle, NSIndexPath* indexPath);
     
+    BOOL (^_tableViewBaseShouldDeleteContentsAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
+    void (^_tableViewBaseDidDeleteContentsAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
+    
     // UITableViewDelegate
     void (^_tableViewBaseWillShowCellAction)(TableViewBase* tableViewObj,UITableViewCell* cell, NSIndexPath* indexPath);
     void (^_tableViewBaseDidSelectAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
@@ -184,13 +187,22 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     // delete and its animation
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
-        if (proxy && [proxy respondsToSelector:@selector(tableViewBase:willDeleteContentsAtIndexPath:)]) {
-            if(! [proxy tableViewBase:self willDeleteContentsAtIndexPath: indexPath]) return;
+        // proxy should delete
+        if (self.tableViewBaseShouldDeleteContentsAction) {
+            if (! self.tableViewBaseShouldDeleteContentsAction(self, indexPath)) return;
+        }
+        else
+        if (proxy && [proxy respondsToSelector:@selector(tableViewBase:shouldDeleteContentsAtIndexPath:)]) {
+            if(! [proxy tableViewBase:self shouldDeleteContentsAtIndexPath: indexPath]) return;
         }
         
         [self deleteIndexPath: indexPath];
         
         // proxy delete
+        if (self.tableViewBaseDidDeleteContentsAction) {
+            self.tableViewBaseDidDeleteContentsAction(self, indexPath);
+        }
+        else
         if (proxy && [proxy respondsToSelector:@selector(tableViewBase:didDeleteContentsAtIndexPath:)]) {
             [proxy tableViewBase:self didDeleteContentsAtIndexPath:indexPath];
         }
@@ -350,6 +362,32 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 {
     _tableViewBaseCommitEditStyleAction = tableViewBaseCommitEditStyleAction;
 }
+
+//______________________ tableViewBaseShouldDeleteContentsAction
+
+-(BOOL (^)(TableViewBase *, NSIndexPath *))tableViewBaseShouldDeleteContentsAction
+{
+    return _tableViewBaseShouldDeleteContentsAction;
+}
+
+-(void)setTableViewBaseShouldDeleteContentsAction:(BOOL (^)(TableViewBase *, NSIndexPath *))tableViewBaseShouldDeleteContentsAction
+{
+    _tableViewBaseShouldDeleteContentsAction = tableViewBaseShouldDeleteContentsAction;
+}
+
+//______________________ tableViewBaseDidDeleteContentsAction
+
+-(void (^)(TableViewBase *, NSIndexPath *))tableViewBaseDidDeleteContentsAction
+{
+    return _tableViewBaseDidDeleteContentsAction;
+}
+
+-(void)setTableViewBaseDidDeleteContentsAction:(void (^)(TableViewBase *, NSIndexPath *))tableViewBaseDidDeleteContentsAction
+{
+    _tableViewBaseDidDeleteContentsAction = tableViewBaseDidDeleteContentsAction;
+}
+
+
 
 
 // UITableViewDelegate

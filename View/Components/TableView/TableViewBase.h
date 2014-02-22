@@ -17,7 +17,7 @@
 
 - (void)tableViewBase:(TableViewBase *)tableViewObj commitEditStyle:(UITableViewCellEditingStyle)editStyle indexPath:(NSIndexPath *)indexPath;
 
-- (BOOL)tableViewBase:(TableViewBase *)tableViewObj willDeleteContentsAtIndexPath:(NSIndexPath*)indexPath;
+- (BOOL)tableViewBase:(TableViewBase *)tableViewObj shouldDeleteContentsAtIndexPath:(NSIndexPath*)indexPath;
 
 - (void)tableViewBase:(TableViewBase *)tableViewObj didDeleteContentsAtIndexPath:(NSIndexPath*)indexPath;
 
@@ -112,6 +112,10 @@
 @property (copy) UITableViewCell* (^tableViewBaseCellForIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath,UITableViewCell* oldCell);
 @property (copy) BOOL (^tableViewBaseCanEditIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
 @property (copy) void (^tableViewBaseCommitEditStyleAction)(TableViewBase* tableViewObj, UITableViewCellEditingStyle editStyle, NSIndexPath* indexPath);
+
+
+@property (copy) BOOL (^tableViewBaseShouldDeleteContentsAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
+@property (copy) void (^tableViewBaseDidDeleteContentsAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
 
 // UITableViewDelegate
 @property (copy) void (^tableViewBaseWillShowCellAction)(TableViewBase* tableViewObj,UITableViewCell* cell, NSIndexPath* indexPath);
