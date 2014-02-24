@@ -174,11 +174,7 @@ static NSMutableArray* currentPopingViews = nil;
     
     overlayView.didDidTapActionBlock = ^void(OverlayView* view) {
         if (tapOverlayAction) {
-            if ((id)tapOverlayAction == [NSNull null]) {
-                return;
-            } else {
-                tapOverlayAction(view);
-            }
+            tapOverlayAction(view);
         } else {
             [self dissmissCurrentPopView];
         }
