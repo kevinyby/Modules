@@ -46,8 +46,6 @@ static CGFloat statusBarVerticalHeight;
     // For status bar
     isIOS7 = [[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0;
     CGSize statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
-//    BOOL isPortrait = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
-//    statusBarVerticalHeight = isPortrait ? statusBarSize.height : statusBarSize.width;
     statusBarVerticalHeight = statusBarSize.height > statusBarSize.width ? statusBarSize.width : statusBarSize.height;
     
     [super initialize];
@@ -130,7 +128,7 @@ static CGFloat statusBarVerticalHeight;
 }
 
 
-#pragma mark -
+#pragma mark - Ratio
 
 +(float) ratioX
 {
@@ -171,7 +169,6 @@ static CGFloat statusBarVerticalHeight;
     float ratioY = (float)screen.height/ (float)canvas.height;
     return @[[NSNumber numberWithFloat: ratioX], [NSNumber numberWithFloat: ratioY]];
 }
-
 + (CGSize) getDeviceSize: (BOOL)isPortrait
 {
     // like UIWindow's bounds,  always will be (768 x 1024)(ipad) not influnce by orientation.
