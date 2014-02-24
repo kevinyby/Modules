@@ -8,7 +8,7 @@
 
 @synthesize tableView;
 @synthesize headerView;
-@synthesize delegate;
+@synthesize headerDelegate;
 
 -(id)initWithFrame:(CGRect)frame
 {
@@ -49,6 +49,18 @@
     tableView.valuesYcoordinates = valuesYcoordinates;
 }
 
+-(void)setHeaderDelegate:(id<HeaderTableViewDeletage>)headerDelegateObj
+{
+    headerDelegate = headerDelegateObj;
+    [self removeConstraints: self.constraints];
+    // reset it
+    [self initializeSubviewsHConstraints];
+    [self initializeSubviewsVConstraints];
+    // refresh
+    [self setNeedsLayout];
+}
+
+
 #pragma mark - Public Methods
 -(void) reloadTableData {
     [tableView reloadData];
@@ -87,12 +99,12 @@
 -(void) initializeSubviewsVConstraints
 {
     float headerHeight = [FrameTranslater convertCanvasHeight: 25.0f];
-    if (delegate && [delegate respondsToSelector:@selector(headerTableViewHeaderHeight:)]) {
-        headerHeight = [delegate headerTableViewHeaderHeight:self];
+    if (headerDelegate && [headerDelegate respondsToSelector:@selector(headerTableViewHeaderHeight:)]) {
+        headerHeight = [headerDelegate headerTableViewHeaderHeight:self];
     }
     float gap = [FrameTranslater convertCanvasHeight: 0.0f];
-    if (delegate && [delegate respondsToSelector:@selector(headerTableViewGap:)]) {
-        gap = [delegate headerTableViewGap: self];
+    if (headerDelegate && [headerDelegate respondsToSelector:@selector(headerTableViewGap:)]) {
+        gap = [headerDelegate headerTableViewGap: self];
     }
     
     [self addConstraints:[NSLayoutConstraint
@@ -101,20 +113,6 @@
                           metrics:@{@"headerHeight":@(headerHeight),@"gap":@(gap)}
                           views:NSDictionaryOfVariableBindings(headerView,tableView)]];
     
-}
-
--(void)setDelegate:(id<HeaderTableViewDeletage>)delegateObj
-{
-    
-    delegate = delegateObj;
-    
-    [self removeConstraints: self.constraints];
-    
-    // reset it
-    [self initializeSubviewsHConstraints];
-    [self initializeSubviewsVConstraints];
-    
-    [self setNeedsLayout];
 }
 
 @end

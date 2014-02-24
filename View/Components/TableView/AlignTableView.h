@@ -19,9 +19,10 @@
 // import !!! Just for section header
 @interface AlignTableView : FilterTableView
 
-@property (strong) NSArray* headers ;               // array of string @[@"1H",@"2H"] or @[@[@"1H",@"2H"],@[@"1H",@"2H"]]
+// array of string @[@"1H",@"2H"] or @[@[@"1H",@"2H"],@[@"1H",@"2H"]]
+@property (strong) NSArray* headers ;
 
-// array of number @[@(50),@(250)] or @[@[@(50),@(250)], @[@(50),@(250)]]
+// here , tow dimension array of number @[@(50),@(250)] or @[@[@(50),@(250)], @[@(50),@(250)]]
 @property (strong) NSArray* headersXcoordinates;
 @property (strong) NSArray* valuesXcoordinates;
 

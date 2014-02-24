@@ -16,7 +16,7 @@
 
 @property (strong) UIView* headerView;
 @property (strong) AlignTableView* tableView;
-@property (nonatomic, assign) id<HeaderTableViewDeletage> delegate;
+@property (nonatomic, assign) id<HeaderTableViewDeletage> headerDelegate;
 
 
 @property (nonatomic, strong) NSArray* headers;            //here one dimension
