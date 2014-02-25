@@ -4,6 +4,18 @@
 // _View.h
 #import "FrameTranslater.h"
 
+
+
+@interface HeaderTableView ()
+{
+    CGFloat(^_headerTableViewGapAction)(HeaderTableView* view);
+    CGFloat(^_headerTableViewHeaderHeightAction)(HeaderTableView* view);
+}
+
+@end
+
+
+
 @implementation HeaderTableView
 
 @synthesize tableView;
@@ -103,13 +115,23 @@
 
 -(void) initializeSubviewsVConstraints
 {
-    float headerHeight = [FrameTranslater convertCanvasHeight: 25.0f];
-    if (headerDelegate && [headerDelegate respondsToSelector:@selector(headerTableViewHeaderHeight:)]) {
-        headerHeight = [headerDelegate headerTableViewHeaderHeight:self];
-    }
     float gap = [FrameTranslater convertCanvasHeight: 0.0f];
+    float headerHeight = [FrameTranslater convertCanvasHeight: 25.0f];
+    
+    if (self.headerTableViewGapAction) {
+        gap = self.headerTableViewGapAction(self);
+    }
+    else
     if (headerDelegate && [headerDelegate respondsToSelector:@selector(headerTableViewGap:)]) {
         gap = [headerDelegate headerTableViewGap: self];
+    }
+    
+    if (self.headerTableViewHeaderHeightAction) {
+        headerHeight = self.headerTableViewHeaderHeightAction(self);
+    }
+    else
+    if (headerDelegate && [headerDelegate respondsToSelector:@selector(headerTableViewHeaderHeight:)]) {
+        headerHeight = [headerDelegate headerTableViewHeaderHeight:self];
     }
     
     [self addConstraints:[NSLayoutConstraint
@@ -121,3 +143,47 @@
 }
 
 @end
+
+
+
+
+
+
+
+
+
+//_______________________________________________________________________________________________________________
+
+@implementation HeaderTableView (ActionBlock)
+
+-(CGFloat (^)(HeaderTableView *))headerTableViewGapAction
+{
+    return _headerTableViewGapAction;
+}
+-(void)setHeaderTableViewGapAction:(CGFloat (^)(HeaderTableView *))headerTableViewGapAction
+{
+    _headerTableViewGapAction = headerTableViewGapAction;
+    
+    // reset it
+    [self restoreConstraints];
+}
+
+
+-(CGFloat (^)(HeaderTableView *))headerTableViewHeaderHeightAction
+{
+    return _headerTableViewHeaderHeightAction;
+}
+-(void)setHeaderTableViewHeaderHeightAction:(CGFloat (^)(HeaderTableView *))headerTableViewHeaderHeightAction
+{
+    _headerTableViewHeaderHeightAction = headerTableViewHeaderHeightAction;
+    
+    // reset it
+    [self restoreConstraints];
+}
+
+@end
+
+
+
+
+

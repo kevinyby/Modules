@@ -41,10 +41,13 @@
 
 
 
+
+
 //_______________________________________________________________________________________________________________
 
 @interface HeaderTableView (ActionBlock)
 
 @property (copy) CGFloat(^headerTableViewGapAction)(HeaderTableView* view);
+@property (copy) CGFloat(^headerTableViewHeaderHeightAction)(HeaderTableView* view);
 
 @end
