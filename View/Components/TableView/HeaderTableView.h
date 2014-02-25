@@ -36,3 +36,15 @@
 -(void) initializeSubviewsVConstraints;
 
 @end
+
+
+
+
+
+//_______________________________________________________________________________________________________________
+
+@interface HeaderTableView (ActionBlock)
+
+@property (copy) CGFloat(^headerTableViewGapAction)(HeaderTableView* view);
+
+@end

@@ -15,8 +15,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self initializeSubviews];
-        [self initializeSubviewsHConstraints];
-        [self initializeSubviewsVConstraints];
+        [self restoreConstraints];
     }
     return self;
 }
@@ -36,7 +35,7 @@
 -(void) setHeadersYcoordinates:(NSArray *)headersYcoordinates
 {
     tableView.headersYcoordinates = headersYcoordinates;
-    [AlignTableView setAlignHeaders: tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.valuesXcoordinates headersYcoordinates:tableView.headersYcoordinates];
+    [AlignTableView setAlignHeaders: tableView headerView:headerView headers:tableView.headers headersXcoordinates:tableView.headersXcoordinates headersYcoordinates:tableView.headersYcoordinates];
 }
 
 -(void)setValuesXcoordinates:(NSArray *)valuesXcoordinates
@@ -52,12 +51,18 @@
 -(void)setHeaderDelegate:(id<HeaderTableViewDeletage>)headerDelegateObj
 {
     headerDelegate = headerDelegateObj;
-    [self removeConstraints: self.constraints];
     // reset it
-    [self initializeSubviewsHConstraints];
-    [self initializeSubviewsVConstraints];
+    [self restoreConstraints];
     // refresh
     [self setNeedsLayout];
+}
+
+#pragma mark - Private Methods
+-(void) restoreConstraints
+{
+    [self removeConstraints: self.constraints];
+    [self initializeSubviewsHConstraints];
+    [self initializeSubviewsVConstraints];
 }
 
 

@@ -109,7 +109,6 @@
             CGRect labelCanvas = [self getLabelCanvas:i xCoordinates:valuesXcoordinates yCoordinates:valuesYcoordinates];
             [FrameHelper setFrame: labelCanvas view:label];
             if (! valuesYcoordinates) {
-//                [label setCenterY: [label.superview getSizeHeight]/2];        // Apple's Badddddddddddly ... code .
                 [label setCenterY: [tableView.delegate tableView: tableView heightForRowAtIndexPath:[tableView indexPathForCell: cell]] / 2];
             }
         }
