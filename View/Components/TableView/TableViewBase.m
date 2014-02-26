@@ -124,10 +124,6 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 
 #pragma mark - UITableViewDataSource
 
-- (NSString *)tableView:(UITableView *)tableViewObj titleForHeaderInSection:(NSInteger)section {
-    return [self.sections objectAtIndex: section];
-}
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableViewObj {
     return self.sections.count;
 }
@@ -156,6 +152,10 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     }
     
     return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableViewObj titleForHeaderInSection:(NSInteger)section {
+    return [self.sections objectAtIndex: section];
 }
 
 

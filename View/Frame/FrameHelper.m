@@ -30,7 +30,7 @@ static Boolean isNeedReserve ;
 +(void) setFrame: (CGRect)canvas view:(UIView*)view {
     if (isNeedReserve) view.designFrame = [NSValue valueWithCGRect: canvas];
     
-    view.actualFrame = [NSValue valueWithCGRect: [FrameTranslater convertFrame: canvas]];
+    view.actualFrame = [NSValue valueWithCGRect: [FrameTranslater convertCanvasRect: canvas]];
     view.frame = [view.actualFrame CGRectValue];
 }
 
@@ -46,14 +46,14 @@ static Boolean isNeedReserve ;
 +(void) translateLabel: (UILabel*)label canvas:(CGRect)canvas
 {
     [FrameTranslater transformView: label];
-    label.frame = [FrameTranslater convertFrame: canvas ];
+    label.frame = [FrameTranslater convertCanvasRect: canvas ];
 }
 
 
 
 // deprecated
 +(void) translateCanvas: (CGRect)canvas view:(UIView*)view {
-    view.actualFrame = [NSValue valueWithCGRect: [FrameTranslater convertFrame: canvas]];
+    view.actualFrame = [NSValue valueWithCGRect: [FrameTranslater convertCanvasRect: canvas]];
     if (isNeedReserve) view.designFrame = [NSValue valueWithCGRect: canvas];
 }
 

@@ -26,7 +26,7 @@
 
 #pragma mark -
 
-+(CGRect) convertFrame: (CGRect)canvasFrame ;
++(CGRect) convertCanvasRect: (CGRect)canvasFrame ;
 +(CGPoint) convertCanvasPoint: (CGPoint)point;
 +(CGSize) convertCanvasSize: (CGSize)size;
 

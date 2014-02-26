@@ -97,34 +97,34 @@ static CGFloat statusBarVerticalHeight;
 
 #pragma mark -
 
-+(CGRect) convertFrame: (CGRect)canvasFrame {
++(CGRect) convertCanvasRect: (CGRect)canvasFrame {
     return [self getFrame: isPortraitDesigned canvasFrame:canvasFrame];
 }
 
 +(CGSize) convertCanvasSize: (CGSize)size
 {
-    return [self convertFrame: CGRectMake(0, 0, size.width, size.height)].size;
+    return [self convertCanvasRect: CGRectMake(0, 0, size.width, size.height)].size;
 }
 
 +(CGPoint) convertCanvasPoint: (CGPoint)point
 {
-    return [self convertFrame: CGRectMake(point.x, point.y, 0, 0)].origin;
+    return [self convertCanvasRect: CGRectMake(point.x, point.y, 0, 0)].origin;
 }
 
 +(CGFloat) convertCanvasHeight: (CGFloat)y {
-    return [self convertFrame: CGRectMake(0, 0, 0, y)].size.height;
+    return [self convertCanvasRect: CGRectMake(0, 0, 0, y)].size.height;
 }
 
 +(CGFloat) convertCanvasWidth: (CGFloat)x {
-    return [self convertFrame: CGRectMake(0, 0, x, 0)].size.width;
+    return [self convertCanvasRect: CGRectMake(0, 0, x, 0)].size.width;
 }
 
 +(CGFloat) convertCanvasY: (CGFloat)y {
-    return [self convertFrame: CGRectMake(0, y, 0, 0)].origin.y;
+    return [self convertCanvasRect: CGRectMake(0, y, 0, 0)].origin.y;
 }
 
 +(CGFloat) convertCanvasX: (CGFloat)x {
-    return [self convertFrame: CGRectMake(x, 0, 0, 0)].origin.x;
+    return [self convertCanvasRect: CGRectMake(x, 0, 0, 0)].origin.x;
 }
 
 
