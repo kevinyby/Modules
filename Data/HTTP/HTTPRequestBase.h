@@ -13,25 +13,26 @@
 
 @protocol HTTPRequestDelegate;
 
-@interface HTTPRequestBase : NSObject <NSURLConnectionDataDelegate> {
-    @private
-    NSMutableData* receiveData;
-    NSURLConnection* urlconnection;
-}
+@interface HTTPRequestBase : NSObject <NSURLConnectionDataDelegate>
 
 @property (weak) id<HTTPRequestDelegate> delegate;
 
 @property (strong) NSString* identification ;
 @property (readonly) NSURLRequest* request;
 
+
+// initial methods
 -(id) initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters ;
+
 -(id)initWithURLString: (NSString*)urlString parameters:(NSDictionary*)parameters timeoutInterval:(NSTimeInterval)timeoutInterval ;
 
 
 
 -(void) startRequest ;
+
 -(void) startRequest: (void (^)(NSURLResponse* response, NSData* data, NSError* connectionError))completeHandler ;      // no need delegate
 
+-(void) cancelRequest ;
 
 
 #pragma mark - SubClass Overwrite Methods
