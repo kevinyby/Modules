@@ -29,10 +29,11 @@
 
 
 -(void) startRequest ;
-
+-(void) cancelRequest ;
 -(void) startRequest: (void (^)(NSURLResponse* response, NSData* data, NSError* connectionError))completeHandler ;      // no need delegate
 
--(void) cancelRequest ;
+-(void) startAsynchronousRequest: (void (^)(NSURLResponse* response, NSData* data, NSError* connectionError))completeHandler ;
+
 
 
 #pragma mark - SubClass Overwrite Methods
