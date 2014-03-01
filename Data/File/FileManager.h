@@ -25,11 +25,12 @@
 +(BOOL) isFileExist: (NSString*)fullPath ;
 
 
-// file name can be "/abc/hot.png", the will save to "Documents/abc/hot.png"
+// file name like "/abc/hot.png", will be saved to "Documents/abc/hot.png"
 +(NSData*) getDataFromDocument: (NSString*)filename ;
 +(void) writeDataToDocument: (NSString*)filename data:(NSData*)data ;
 
 +(NSMutableArray*) getFilesPathsIn: (NSString*)directoryPath ;
++(NSArray*) getFileNamesIn:(NSString*)directoryPath;
 
 
 #pragma mark - Util Methods

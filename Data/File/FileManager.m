@@ -34,7 +34,7 @@
 }
 
 +(NSString*) libraryCachesPath: (NSString*)subPath {
-    return [[self libraryPath] stringByAppendingPathComponent:subPath];
+    return [[[self libraryPath] stringByAppendingPathComponent:@"Caches"] stringByAppendingPathComponent:subPath];
 }
 
 #pragma mark - Delete, Copy, Save, Move , Create , Check Exist ...
@@ -90,6 +90,10 @@
             [NSFileManagerInstance createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:&error];
         }
     }
+    
+    if(error){
+        NSLog(@"Failed when create %@ ", fullPath);
+    }
 }
 
 +(BOOL) isFileExist: (NSString*)fullPath {
@@ -108,9 +112,23 @@
     return [NSData dataWithContentsOfFile: fullPath];
 }
 
-+(NSMutableArray*) getFilesPathsIn: (NSString*)directoryPath {
++(NSArray*) getFileNamesIn:(NSString*)directoryPath{
     NSError* error = nil;
-    NSArray *files = [NSFileManagerInstance contentsOfDirectoryAtPath:directoryPath error:&error];
+    NSArray* files = [NSFileManagerInstance contentsOfDirectoryAtPath:directoryPath error:&error];
+    if (error != nil){
+        NSLog(@"getFIleNamesIn: error");
+        return nil;
+    }
+    
+    return files;
+}
+
++(NSData*) getFileWithPath:(NSString*)path{
+    return [NSData dataWithContentsOfFile:path];
+}
+
++(NSMutableArray*) getFilesPathsIn: (NSString*)directoryPath {
+    NSArray *files = [self getFileNamesIn:directoryPath];
     NSMutableArray* filePaths = [NSMutableArray array];
     for (NSString* file in files) {
         NSString* path = [directoryPath stringByAppendingPathComponent: file];
