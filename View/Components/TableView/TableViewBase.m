@@ -35,7 +35,7 @@
 
 
 
-static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
+static NSString* const tableViewBaseCellId = @"tableViewBaseCellId";
 
 @implementation TableViewBase
 {
@@ -69,6 +69,11 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     // UITableViewCell in ios7 now has gaps on left and right
     // http://stackoverflow.com/questions/18982347/uitableviewcell-in-ios7-now-has-gaps-on-left-and-right/19059028#19059028
     if ([self respondsToSelector:@selector(setSeparatorInset:)]) [self setSeparatorInset:UIEdgeInsetsZero];     // ios 7
+}
+
+-(NSString *)cellReuseIdentifier
+{
+    return tableViewBaseCellId;
 }
 
 -(void)setContentsDictionary:(NSMutableDictionary *)contentsDictionary
@@ -133,14 +138,11 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableViewObj cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableViewObj dequeueReusableCellWithIdentifier:RaiseTableViewCellId];
+    UITableViewCell *cell = [tableViewObj dequeueReusableCellWithIdentifier:tableViewBaseCellId];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:RaiseTableViewCellId];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:tableViewBaseCellId];
+        cell.textLabel.font = [UIFont systemFontOfSize: [FrameTranslater convertFontSize: 20]];
     }
-    
-    NSString* cellText = [self contentForIndexPath: indexPath]; // == cell.textLabel.text, important!!!
-    cell.textLabel.font = [UIFont systemFontOfSize: [FrameTranslater convertFontSize: 20]];
-    cell.textLabel.text = cellText;     // set font first then set text
     
     // proxy
     if (self.tableViewBaseCellForIndexPathAction) {
@@ -150,6 +152,9 @@ static NSString* const RaiseTableViewCellId = @"RaiseTableViewCellId";
     if (proxy && [proxy respondsToSelector:@selector(tableViewBase:cellForIndexPath:oldCell:)]) {
         cell = [proxy tableViewBase:self cellForIndexPath:indexPath oldCell:cell];
     }
+    
+    NSString* cellText = [self contentForIndexPath: indexPath]; // == cell.textLabel.text, important!!!
+    cell.textLabel.text = cellText;     // set font first then set text
     
     return cell;
 }

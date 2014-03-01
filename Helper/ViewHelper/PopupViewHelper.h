@@ -9,7 +9,7 @@ typedef void(^PopupViewActionBlock)(UIView* popView, NSInteger index);
 
 // ---------------
 +(void) popView: (UIView*)view willDissmiss:(void(^)(UIView* view))block;
-+(void) popView: (UIView*)view inRootView:(BOOL)inRootView tapOverlayAction:(void(^)(UIControl* control))tapOverlayAction willDissmiss:(void(^)(UIView* view))block;
++(void) popView: (UIView*)view inView:(UIView*)inView tapOverlayAction:(void(^)(UIControl* control))tapOverlayAction willDissmiss:(void(^)(UIView* view))block;
 +(void) dissmissCurrentPopView;
 +(BOOL) isCurrentPopingView;
 

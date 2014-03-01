@@ -282,7 +282,6 @@
             
         default:
             
-//            NSAssert(0, @"Unrecognized color selected as random color");
             break;
     }
     return color;

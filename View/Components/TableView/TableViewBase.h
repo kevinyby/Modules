@@ -59,6 +59,7 @@
 @interface TableViewBase : UITableView <UITableViewDataSource, UITableViewDelegate>
 
 @property(assign) BOOL hideSections;
+@property(strong, readonly) NSString* cellReuseIdentifier;
 
 @property(assign) id<TableViewBaseTableProxy> proxy;
 @property(assign) id<TableViewBaseScrollProxy> scrollProxy;     // For RefreshTableView now

@@ -161,10 +161,10 @@
 static NSMutableArray* currentPopingViews = nil;
 +(void) popView: (UIView*)view willDissmiss:(void(^)(UIView* view))block
 {
-    [self popView: view inRootView:NO tapOverlayAction:nil willDissmiss:block];
+    [self popView: view inView:nil tapOverlayAction:nil willDissmiss:block];
 }
 
-+(void) popView: (UIView*)view inRootView:(BOOL)inRootView tapOverlayAction:(void(^)(UIControl* control))tapOverlayAction willDissmiss:(void(^)(UIView* view))block
++(void) popView: (UIView*)view inView:(UIView*)inView tapOverlayAction:(void(^)(UIControl* control))tapOverlayAction willDissmiss:(void(^)(UIView* view))block
 {
     // add to overlay
     OverlayView* overlayView = [[OverlayView alloc] init];
@@ -182,7 +182,9 @@ static NSMutableArray* currentPopingViews = nil;
     [overlayView addSubview: view];
     
     // get top view
-    UIView* topView = inRootView ? [ViewHelper getRootView] : [ViewHelper getTopView];
+    UIView* topView = inView;
+    if (! topView) topView = [ViewHelper getTopView];
+    
     [topView addSubview: overlayView];
     CATransition *animation = [CATransition animation];
     animation.duration = 0.3f;

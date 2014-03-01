@@ -160,7 +160,7 @@
 
 +(UIViewController*) getRootViewController
 {
-    return [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    return [[[UIApplication sharedApplication] keyWindow] rootViewController];  // when UIActionSheet show or not complete dismiss animation , the rootViewController = nil !!! Apple is Kidding the World~!
 }
 
 +(CGRect) getScreenBoundsByOrientation
