@@ -153,8 +153,11 @@ static NSString* const tableViewBaseCellId = @"tableViewBaseCellId";
         cell = [proxy tableViewBase:self cellForIndexPath:indexPath oldCell:cell];
     }
     
-    NSString* cellText = [self contentForIndexPath: indexPath]; // == cell.textLabel.text, important!!!
+    NSString* cellText = [self contentForIndexPath: indexPath];  // == cell.textLabel.text, for AlignTableView and FilterTableView are important!!!
     cell.textLabel.text = cellText;     // set font first then set text
+   
+//    cell.layer.borderColor = [[UIColor grayColor] CGColor];
+//    cell.layer.borderWidth = 2.0f;
     
     return cell;
 }

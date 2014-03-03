@@ -100,7 +100,8 @@
 {
     if (![self isInFilteringMode]) return indexPath;
     
-    NSString* cellText = [self cellForRowAtIndexPath: indexPath].textLabel.text;
+    UITableViewCell* cell = [self cellForRowAtIndexPath: indexPath];
+    NSString* cellText = cell.textLabel.text;
     for (int section = 0 ; section < self.numberOfSections; section++ ){
         NSString* sectionKey = [self.sections objectAtIndex: section];
         NSArray* sectionContents = [contentsDictionaryBackUp objectForKey: sectionKey];
