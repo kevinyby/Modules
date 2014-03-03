@@ -21,7 +21,7 @@
 +(void) saveDataToFile: (NSString*)fullPath data:(NSData*)data ;
 +(NSError*) moveFile: (NSString*)fileSrcFullPath to:(NSString*)fileDesFullPath ;
 
-+(void) createFolderIfNotExist: (NSString*)fullPath ;
++(BOOL) createFolderIfNotExist: (NSString*)fullPath;
 +(BOOL) isFileExist: (NSString*)fullPath ;
 
 

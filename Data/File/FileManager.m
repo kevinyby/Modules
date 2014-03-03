@@ -6,6 +6,7 @@
 #define NSFileManagerInstance [NSFileManager defaultManager]
 
 #define Library @"Library"
+#define LibraryCaches @"Caches"
 
 #define Documents @"Documents"
 
@@ -34,7 +35,7 @@
 }
 
 +(NSString*) libraryCachesPath: (NSString*)subPath {
-    return [[[self libraryPath] stringByAppendingPathComponent:@"Caches"] stringByAppendingPathComponent:subPath];
+    return [[[self libraryPath] stringByAppendingPathComponent: LibraryCaches] stringByAppendingPathComponent:subPath];
 }
 
 #pragma mark - Delete, Copy, Save, Move , Create , Check Exist ...
@@ -79,21 +80,23 @@
     return error;
 }
 
-+(void) createFolderIfNotExist: (NSString*)fullPath {
++(BOOL) createFolderIfNotExist: (NSString*)fullPath {
     NSError* error = nil;
+    BOOL isSuccessfully = NO;
     
     if(![self isFileExist: fullPath]) {
         // file not exists
         NSString* directoryPath = [fullPath stringByDeletingLastPathComponent];
         if(![NSFileManagerInstance fileExistsAtPath:directoryPath]) {
             // dir not exists, create it
-            [NSFileManagerInstance createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:&error];
+            isSuccessfully = [NSFileManagerInstance createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:&error];
         }
     }
     
     if(error){
-        NSLog(@"Failed when create %@ ", fullPath);
+        NSLog(@"Error ! Failed when create %@ ", fullPath);
     }
+    return isSuccessfully;
 }
 
 +(BOOL) isFileExist: (NSString*)fullPath {
@@ -116,7 +119,7 @@
     NSError* error = nil;
     NSArray* files = [NSFileManagerInstance contentsOfDirectoryAtPath:directoryPath error:&error];
     if (error != nil){
-        NSLog(@"getFIleNamesIn: error");
+        NSLog(@"Error ! getFIleNamesIn: %@", directoryPath);
         return nil;
     }
     
