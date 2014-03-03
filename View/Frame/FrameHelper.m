@@ -30,8 +30,9 @@ static Boolean isNeedReserve ;
 +(void) setFrame: (CGRect)canvas view:(UIView*)view {
     if (isNeedReserve) view.designFrame = [NSValue valueWithCGRect: canvas];
     
-    view.actualFrame = [NSValue valueWithCGRect: [FrameTranslater convertCanvasRect: canvas]];
-    view.frame = [view.actualFrame CGRectValue];
+    CGRect frame = [FrameTranslater convertCanvasRect: canvas];
+    view.actualFrame = [NSValue valueWithCGRect: frame];
+    view.frame = frame;
 }
 
 /**

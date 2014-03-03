@@ -1,9 +1,9 @@
-#import "CanvasserBase.h"
+#import "TrackExecutor.h"
 #import "EaseFunction.h"
 
 #define defaultStepTime 0.05
 
-@implementation CanvasserBase
+@implementation TrackExecutor
 
 -(void) applyKeyPath: (CAKeyframeAnimation*)animation {
     animation.keyPath = @"position";

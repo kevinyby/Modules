@@ -1,6 +1,6 @@
 #import "QueueExecutorBase.h"
 
-@interface CanvasserBase : QueueExecutorBase {
+@interface TrackExecutor : QueueExecutorBase {
     @private
     @protected
 }

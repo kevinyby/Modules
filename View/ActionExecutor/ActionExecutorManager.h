@@ -4,18 +4,14 @@
 
 @class ActionExecutorBase;
 
-@interface ActionExecutorManager : NSObject {    
-    @private
-    NSMutableDictionary* executors;
-    @protected
-}
+@interface ActionExecutorManager : NSObject
 
 #pragma mark - Public Properties
 
 #pragma mark - Public Methods 
--(void) registerActionExecutor: (NSString*)action executor:(ActionExecutorBase*)executor delegate:(id)executorDelegate;
+-(void) registerActionExecutor: (NSString*)action executor:(ActionExecutorBase*)executor ;
 
--(void) cancelActionExecutor: (NSString*)action ;
+-(void) removeActionExecutor: (NSString*)action ;
 -(ActionExecutorBase*) getActionExecutor: (NSString*)action ;
 
 -(void) runActionExecutors: (NSDictionary*)config onObjects:(NSArray*)objects values:(NSArray*)values baseTimes:(NSArray*)baseTimes ;

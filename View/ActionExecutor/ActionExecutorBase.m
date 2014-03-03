@@ -2,8 +2,6 @@
 
 @implementation ActionExecutorBase
 
-@synthesize executorDelegate;
-
 -(id) init {
     self = [super init];
     if (self) {

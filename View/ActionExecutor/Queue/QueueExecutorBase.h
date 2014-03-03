@@ -1,8 +1,21 @@
 #import "ActionExecutorBase.h"
 
+@class QueueExecutorBase;
+
+@protocol QueueExecutorDelegate <NSObject>
+
+-(void)queue:(QueueExecutorBase*)executor beginTimes:(NSArray*)beginTimes durations:(NSArray*)durations;
+
+-(void)queueDidStart:(QueueExecutorBase*)executor animation:(CAAnimation *)anim;
+
+-(void)queueDidStop:(QueueExecutorBase*)executor animation:(CAAnimation *)anim finished:(BOOL)flag;
+
+@end
+
 @interface QueueExecutorBase : ActionExecutorBase
 
 #pragma mark - Public Methods
+@property (strong) id<QueueExecutorDelegate> delegate;
 
 #pragma mark - Protect Methods
 

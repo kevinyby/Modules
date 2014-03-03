@@ -2,6 +2,9 @@
 #import "ActionExecutorBase.h"
 
 @implementation ActionExecutorManager
+{
+    NSMutableDictionary* executors;
+}
 
 - (id)init {
     self = [super init];
@@ -11,16 +14,13 @@
     return self;
 }
 
--(void) registerActionExecutor: (NSString*)action executor:(ActionExecutorBase*)executor delegate:(id)executorDelegate {
-    if (executorDelegate) {
-    	executor.executorDelegate = executorDelegate;
-    }
+-(void) registerActionExecutor: (NSString*)action executor:(ActionExecutorBase*)executor {
     if (executor) {
         [executors setObject: executor forKey:action];
     }
 }
 
--(void) cancelActionExecutor: (NSString*)action {
+-(void) removeActionExecutor: (NSString*)action {
     [executors removeObjectForKey: action];
 }
 

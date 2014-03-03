@@ -2,6 +2,24 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+
+// ipad     1024×768        :   1024/768 = 1.333
+// iphone   1136×640        :   1136/640 = 1.775
+// so we design close to iphone :
+// 768 * 1.775 = 1363.2 ---> so canvas is  1363.2x768 , get it to int . then we get 1000 * 1.775 = 1775
+// so finally , we get the designed result 1775x1000
+// in config and your frame, size, origin, width, height, do notice to use the desiged canvas to measure.
+
+//#define LONG 1775
+//#define SHORT 1000
+
+// explain this one designt , 1920/1280=1.5 . but (1.333+1.775)/2=1.555 . ok , there is a little bit contrast
+// so , this just bring the average of iphone and ipad's screen resolution
+//#define LONG 1920
+//#define SHORT 1280
+
+
+
 #ifndef LONG
     #define LONG 1024
 #endif

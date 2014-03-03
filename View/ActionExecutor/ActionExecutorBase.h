@@ -11,7 +11,6 @@
 }
 
 #pragma mark - Public Properties
-@property (strong) id executorDelegate;
 
 #pragma mark - Public Methods
 -(void) execute:(NSDictionary*)config objects:(NSArray*)objects values:(NSArray*)values times:(NSArray*)times ;
