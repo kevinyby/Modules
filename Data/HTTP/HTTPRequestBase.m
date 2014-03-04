@@ -6,7 +6,7 @@
 {
     NSURLConnection* urlconnection;
     
-    void(^completeHandlerBlock)(NSURLResponse* response, NSData* data, NSError* connectionError);
+    void(^completeHandlerBlock)(HTTPRequestBase* httpRequest, NSURLResponse* response, NSData* data, NSError* connectionError);
     
     NSMutableData* connectionReceivedData;
     NSURLResponse* connectionResponse;
@@ -47,7 +47,7 @@
     return self;
 }
 
--(void) startRequest: (void (^)(NSURLResponse* response, NSData* data, NSError* connectionError))completeHandler {
+-(void) startRequest: (void (^)(HTTPRequestBase* httpRequest, NSURLResponse* response, NSData* data, NSError* connectionError))completeHandler {
     completeHandlerBlock = completeHandler;
     [self startRequest];
 }
@@ -94,6 +94,12 @@
     connectionError = error;
     
     // delegate
+    if (completeHandlerBlock) {
+        completeHandlerBlock(self , nil, nil, connectionError);
+    }
+    
+    else
+    
     if (delegate && [delegate respondsToSelector: @selector(didFailRequestWithError:error:)] ) {
         [delegate didFailRequestWithError: self error:error];
     }
@@ -136,7 +142,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     if (completeHandlerBlock) {
-        completeHandlerBlock(connectionResponse, connectionReceivedData, connectionError);
+        completeHandlerBlock(self, connectionResponse, connectionReceivedData, connectionError);
     }
     
     else

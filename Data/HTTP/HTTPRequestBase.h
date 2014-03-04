@@ -30,7 +30,7 @@
 
 -(void) startRequest ;
 -(void) cancelRequest ;
--(void) startRequest: (void (^)(NSURLResponse* response, NSData* data, NSError* connectionError))completeHandler ;      // no need delegate
+-(void) startRequest: (void (^)(HTTPRequestBase* httpRequest, NSURLResponse* response, NSData* data, NSError* connectionError))completeHandler ;
 
 -(void) startAsynchronousRequest: (void (^)(NSURLResponse* response, NSData* data, NSError* connectionError))completeHandler ;
 
