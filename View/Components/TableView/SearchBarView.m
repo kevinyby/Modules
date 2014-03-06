@@ -1,13 +1,51 @@
 #import "SearchBarView.h"
 #import "FrameTranslater.h"
+#import "ColorHelper.h"
 
-//#import "ColorHelper.h"
-//#import "UIColor+FlatColors.h"
+// Pair A
+#define PLUGIN_EMPTY_STRING @" "
+
+@interface SearchBarTextField : UITextField
+
+@end
+
+@implementation SearchBarTextField
+
+-(id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        // Pair A
+        super.text = PLUGIN_EMPTY_STRING;
+    }
+    return self;
+}
+
+// Pair A
+-(void)setText:(NSString *)text
+{
+    if (! text) text = @"";
+    NSString* newText = [PLUGIN_EMPTY_STRING stringByAppendingString: text];
+    [super setText: newText];
+}
+
+// Pair A
+-(NSString *)text
+{
+    return [super.text substringFromIndex: 1];
+}
+
+@end
+
+
+
 
 @implementation SearchBarView
 
 @synthesize textField;
 @synthesize cancelButton;
+
+@synthesize delegate;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -22,27 +60,35 @@
 
 -(void) initializeSubviews
 {
-    self.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
+    self.backgroundColor = [ColorHelper parseColor:@[@(189),@(189),@(195)]];
     
-    textField = [[UITextField alloc] init];
+    // textfield
+    textField = [[SearchBarTextField alloc] init];
     
     textField.backgroundColor = [UIColor whiteColor];
     textField.borderStyle = UITextBorderStyleRoundedRect;
     textField.adjustsFontSizeToFitWidth = YES;
     textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     textField.textAlignment = NSTextAlignmentLeft;
-    textField.font = [UIFont fontWithName:@"Arial" size:[FrameTranslater convertFontSize:20]];
+    textField.font = [UIFont fontWithName:@"Arial" size:[FrameTranslater convertFontSize:25]];
+    textField.delegate = self;
+    textField.returnKeyType = UIReturnKeySearch;
     
+    // Add a "textFieldDidChange" notification method to the text field control.
+    [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+    
+    // cancel button
     cancelButton = [[UIButton alloc] init];
     
     [cancelButton setTitle: @"Cancel" forState:UIControlStateNormal];
-    [cancelButton setTitleColor:  [UIColor colorWithRed:0 green:0.35 blue:1 alpha:1] forState:UIControlStateNormal];
+    [cancelButton setTitleColor:  cancelButton.tintColor forState:UIControlStateNormal];
     [cancelButton setTitleColor: [UIColor whiteColor] forState:UIControlStateHighlighted];
-    [cancelButton addTarget: self action:@selector(buttonTapAction:) forControlEvents:UIControlEventTouchUpInside];
+    cancelButton.titleLabel.font = [cancelButton.titleLabel.font fontWithSize: [FrameTranslater convertFontSize: 25]];
+    [cancelButton addTarget: self action:@selector(cancelButtonTapAction:) forControlEvents:UIControlEventTouchUpInside];
 
+    // constraints
     [textField setTranslatesAutoresizingMaskIntoConstraints:NO];
     [cancelButton setTranslatesAutoresizingMaskIntoConstraints:NO];
-    
     
     [self addSubview: textField];
     [self addSubview: cancelButton];
@@ -78,11 +124,50 @@
 }
 
 
+
+
 #pragma mark - Event
 
--(void) buttonTapAction: (id)sender
+-(void) cancelButtonTapAction: (id)sender
 {
-    [textField resignFirstResponder];
+    if (delegate && [delegate respondsToSelector:@selector(searchBarViewCancelButtonClicked:)]) {
+        [delegate searchBarViewCancelButtonClicked: self];
+    }
 }
+
+// for this PLUGIN_EMPTY_STRING is needed .
+-(void) textFieldDidChange:(UITextField*)sender
+{
+    // Pair A
+    if (delegate && [delegate respondsToSelector:@selector(searchBarView:textDidChange:)]) {
+        [delegate searchBarView: self textDidChange:sender.text];
+    }
+}
+
+
+
+#pragma mark - UITextFieldDelegate
+
+//- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+//- (void)textFieldDidBeginEditing:(UITextField *)textField
+//- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+//- (void)textFieldDidEndEditing:(UITextField *)textField
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    // Pair A
+    if (range.location == 0) {
+        return NO;                  // for the PLUGIN_EMPTY_STRING
+    }
+    return YES;
+}
+//- (BOOL)textFieldShouldClear:(UITextField *)textField
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (delegate && [delegate respondsToSelector:@selector(searchBarViewSearchButtonClicked:)]) {
+        [delegate searchBarViewSearchButtonClicked: self];
+    }
+    return YES;
+}
+
 
 @end

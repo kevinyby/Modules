@@ -1,9 +1,7 @@
 #import "HeaderSearchTableView.h"
 #import "AlignTableView.h"
-//#import "ColorHelper.h"
+#import "SearchBarView.h"
 
-//#import "_View.h"
-//#import "_Frame.h"
 #import "FrameTranslater.h"
 
 @implementation HeaderSearchTableView
@@ -34,13 +32,11 @@
 {
     [super initializeSubviews];
     
-    searchBar = [[UISearchBar alloc] init];
+    searchBar = [[SearchBarView alloc] init];
+    searchBar.delegate = self;
+    searchBar.textField.placeholder = @"Search";
     [searchBar setTranslatesAutoresizingMaskIntoConstraints:NO];
     
-    [searchBar sizeToFit];
-    searchBar.delegate = self;
-    searchBar.placeholder = @"Search";
-    searchBar.showsCancelButton = YES;
     [self addSubview: searchBar];
 }
 
@@ -63,13 +59,14 @@
         UIView* headerView = super.headerView;
         UITableView* tableView = super.tableView;
         
+        float searchBarHeight =[FrameTranslater convertCanvasHeight: 60.0f];
         float headerHeight = [FrameTranslater convertCanvasHeight: 25.0f];
         float inset = [FrameTranslater convertCanvasHeight: 0.0f];
         
         [self addConstraints:[NSLayoutConstraint
-                              constraintsWithVisualFormat:@"V:|-0-[searchBar][headerView(headerHeight)]-(inset)-[tableView]-0-|"
+                              constraintsWithVisualFormat:@"V:|-0-[searchBar(searchBarHeight)][headerView(headerHeight)]-(inset)-[tableView]-0-|"
                               options:NSLayoutFormatDirectionLeadingToTrailing
-                              metrics:@{@"headerHeight":@(headerHeight), @"inset":@(inset)}
+                              metrics:@{@"searchBarHeight":@(searchBarHeight), @"headerHeight":@(headerHeight), @"inset":@(inset)}
                               views:NSDictionaryOfVariableBindings(searchBar,headerView,tableView)]];
     } else {
         [super initializeSubviewsVConstraints];
@@ -78,13 +75,21 @@
 }
 
 
-#pragma mark - UISearchBarDelegate Methods
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+#pragma mark - SearchBarViewDelegate Methods
+- (void)searchBarView:(SearchBarView *)searchBar textDidChange:(NSString *)searchText
 {
     super.tableView.filterText = searchText;
 }
-- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
-    [self.searchBar resignFirstResponder];
+- (void)searchBarViewCancelButtonClicked:(SearchBarView *) searchBar
+{
+    [self.searchBar.textField resignFirstResponder];
+    
+    self.searchBar.textField.text = nil;    // clear
+    super.tableView.filterText = nil;       // filter
+}
+- (void)searchBarViewSearchButtonClicked:(SearchBarView *)searchBar
+{
+    [self.searchBar.textField resignFirstResponder];
 }
 
 @end

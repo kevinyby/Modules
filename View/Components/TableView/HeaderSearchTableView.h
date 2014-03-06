@@ -1,8 +1,9 @@
 #import "HeaderTableView.h"
+#import "SearchBarView.h"
 
-@interface HeaderSearchTableView : HeaderTableView <UISearchBarDelegate>
+@interface HeaderSearchTableView : HeaderTableView <SearchBarViewDelegate>
 
-@property (strong) UISearchBar *searchBar;
+@property (strong) SearchBarView* searchBar;
 
 @property (assign,nonatomic) BOOL hideSearchBar;    // default NO , use it to hide search bar temporary.
 
