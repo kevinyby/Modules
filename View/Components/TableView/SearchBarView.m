@@ -1,6 +1,7 @@
 #import "SearchBarView.h"
 #import "FrameTranslater.h"
 #import "ColorHelper.h"
+#import "ViewHelper.h"
 
 // Pair A
 #define PLUGIN_EMPTY_STRING @" "
@@ -73,6 +74,38 @@
     textField.font = [UIFont fontWithName:@"Arial" size:[FrameTranslater convertFontSize:25]];
     textField.delegate = self;
     textField.returnKeyType = UIReturnKeySearch;
+    
+//    UILabel *magnifyingGlass = [[UILabel alloc] init];
+//    NSString* string = [[NSString alloc] initWithUTF8String:"\xF0\x9F\x94\x8D"];
+//    [magnifyingGlass setText: string];
+//    [magnifyingGlass sizeToFit];
+//    [textField setLeftView:magnifyingGlass];
+//    [textField setLeftViewMode:UITextFieldViewModeAlways];
+    
+    
+    UISearchBar* searchBar = [[UISearchBar alloc] init];
+//    UIImage* image = [searchBar imageForSearchBarIcon:UISearchBarIconSearch state:UIControlStateSelected];    // get nothing
+
+    __block UITextField *searchField = nil;
+    [ViewHelper iterateSubView: searchBar class:[UITextField class] handler:^BOOL(id subView) {
+        searchField = (UITextField *)subView;
+        return NO;
+    }];
+    
+    // The icon is accessible through the 'leftView' property of the UITextField.
+    // We set it to the 'rightView' instead.
+    if (searchField)
+    {
+        UIView *searchIcon = searchField.leftView;
+        if ([searchIcon isKindOfClass:[UIImageView class]]) {
+            NSLog(@"ay-------e");
+        }
+        textField.leftView = searchIcon;
+        textField.leftViewMode = UITextFieldViewModeAlways;
+    }
+    
+    
+    
     
     // Add a "textFieldDidChange" notification method to the text field control.
     [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
