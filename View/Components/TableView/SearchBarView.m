@@ -2,43 +2,7 @@
 #import "FrameTranslater.h"
 #import "ColorHelper.h"
 #import "ViewHelper.h"
-
-// Pair A
-#define PLUGIN_EMPTY_STRING @" "
-
-@interface SearchBarTextField : UITextField
-
-@end
-
-@implementation SearchBarTextField
-
--(id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Pair A
-        super.text = PLUGIN_EMPTY_STRING;
-    }
-    return self;
-}
-
-// Pair A
--(void)setText:(NSString *)text
-{
-    if (! text) text = @"";
-    NSString* newText = [PLUGIN_EMPTY_STRING stringByAppendingString: text];
-    [super setText: newText];
-}
-
-// Pair A
--(NSString *)text
-{
-    return [super.text substringFromIndex: 1];
-}
-
-@end
-
-
+#import "UIView+PropertiesSetter.h"
 
 
 @implementation SearchBarView
@@ -64,7 +28,7 @@
     self.backgroundColor = [ColorHelper parseColor:@[@(189),@(189),@(195)]];
     
     // textfield
-    textField = [[SearchBarTextField alloc] init];
+    textField = [[UITextField alloc] init];
     
     textField.backgroundColor = [UIColor whiteColor];
     textField.borderStyle = UITextBorderStyleRoundedRect;
@@ -74,41 +38,40 @@
     textField.font = [UIFont fontWithName:@"Arial" size:[FrameTranslater convertFontSize:25]];
     textField.delegate = self;
     textField.returnKeyType = UIReturnKeySearch;
+    textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    // Add a "textFieldDidChange" notification method to the text field control.
+    [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
+    
+    // insert the search icon/ magnify glass icon
 //    UILabel *magnifyingGlass = [[UILabel alloc] init];
-//    NSString* string = [[NSString alloc] initWithUTF8String:"\xF0\x9F\x94\x8D"];
-//    [magnifyingGlass setText: string];
+//    // Google "Emoji" for more informations : http://stackoverflow.com/a/11815568
+//    NSString* string = [[NSString alloc] initWithUTF8String:"\xF0\x9F\x8D\xB0"]; // \xF0\x9F\x94\x8D
+//    magnifyingGlass.text = string;
 //    [magnifyingGlass sizeToFit];
-//    [textField setLeftView:magnifyingGlass];
-//    [textField setLeftViewMode:UITextFieldViewModeAlways];
+//    textField.leftView = magnifyingGlass;
+//    textField.leftViewMode = UITextFieldViewModeAlways;
     
-    
+    // insert the search icon/ magnify glass icon
     UISearchBar* searchBar = [[UISearchBar alloc] init];
-//    UIImage* image = [searchBar imageForSearchBarIcon:UISearchBarIconSearch state:UIControlStateSelected];    // get nothing
-
     __block UITextField *searchField = nil;
     [ViewHelper iterateSubView: searchBar class:[UITextField class] handler:^BOOL(id subView) {
         searchField = (UITextField *)subView;
+        if (searchField) return YES;
         return NO;
     }];
-    
-    // The icon is accessible through the 'leftView' property of the UITextField.
-    // We set it to the 'rightView' instead.
-    if (searchField)
-    {
-        UIView *searchIcon = searchField.leftView;
-        if ([searchIcon isKindOfClass:[UIImageView class]]) {
-            NSLog(@"ay-------e");
-        }
-        textField.leftView = searchIcon;
+    if (searchField) {
+        UIImageView *magnifyingGlass = (UIImageView*)searchField.leftView;
+        
+        UIView* leftView = [[UIView alloc] initWithFrame: magnifyingGlass.frame];
+        magnifyingGlass.frame = magnifyingGlass.bounds;
+        [magnifyingGlass addOriginX: [FrameTranslater convertCanvasWidth: 5]];
+        [leftView addSubview: magnifyingGlass];
+        
+        textField.leftView = leftView; // textField.leftView = magnifyingGlass , will be a little ...
         textField.leftViewMode = UITextFieldViewModeAlways;
     }
     
-    
-    
-    
-    // Add a "textFieldDidChange" notification method to the text field control.
-    [textField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     
     // cancel button
     cancelButton = [[UIButton alloc] init];
@@ -168,12 +131,11 @@
     }
 }
 
-// for this PLUGIN_EMPTY_STRING is needed .
 -(void) textFieldDidChange:(UITextField*)sender
 {
-    // Pair A
+    NSString* text = sender.text;
     if (delegate && [delegate respondsToSelector:@selector(searchBarView:textDidChange:)]) {
-        [delegate searchBarView: self textDidChange:sender.text];
+        [delegate searchBarView: self textDidChange:text];
     }
 }
 
@@ -185,14 +147,7 @@
 //- (void)textFieldDidBeginEditing:(UITextField *)textField
 //- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 //- (void)textFieldDidEndEditing:(UITextField *)textField
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-    // Pair A
-    if (range.location == 0) {
-        return NO;                  // for the PLUGIN_EMPTY_STRING
-    }
-    return YES;
-}
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 //- (BOOL)textFieldShouldClear:(UITextField *)textField
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {

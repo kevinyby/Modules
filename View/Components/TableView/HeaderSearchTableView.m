@@ -83,9 +83,6 @@
 - (void)searchBarViewCancelButtonClicked:(SearchBarView *) searchBar
 {
     [self.searchBar.textField resignFirstResponder];
-    
-    self.searchBar.textField.text = nil;    // clear
-    super.tableView.filterText = nil;       // filter
 }
 - (void)searchBarViewSearchButtonClicked:(SearchBarView *)searchBar
 {
