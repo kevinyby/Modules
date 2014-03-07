@@ -155,7 +155,7 @@
 
 // For Two Dimension Dictioanry
 // i.e :
-// { "HumanResource":{"EmployeeCHOrder":["YGYDB201312181638"],"Employee":[]},  "Finance":{"FinanceCHOrder":[]}, } -> {"EmployeeCHOrder":["YGYDB201312181638"], "Employee":[], "FinanceCHOrder":[]}
+// { "HumanResource":{"EmployeeCHOrder":["YGYDB201312181638"],"Employee":[]},  "Finance":{"FinanceSalaryCHOrder":[]}, } -> {"EmployeeCHOrder":["YGYDB201312181638"], "Employee":[], "FinanceSalaryCHOrder":[]}
 +(NSMutableDictionary*) convertToOneDimensionDictionary: (NSDictionary*)dictionary
 {
     NSMutableDictionary* result = [NSMutableDictionary dictionary];
