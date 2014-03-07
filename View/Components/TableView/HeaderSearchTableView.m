@@ -59,7 +59,7 @@
         UIView* headerView = super.headerView;
         UITableView* tableView = super.tableView;
         
-        float searchBarHeight =[FrameTranslater convertCanvasHeight: 60.0f];
+        float searchBarHeight =[FrameTranslater convertCanvasHeight: 50.0f];
         float headerHeight = [FrameTranslater convertCanvasHeight: 25.0f];
         float inset = [FrameTranslater convertCanvasHeight: 0.0f];
         
