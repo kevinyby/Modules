@@ -7,6 +7,7 @@
 @implementation ColorHelper
 
 #pragma mark - Touch Methods
+
 +(void) applyGradient: (UIImageView*)view config:(NSDictionary*)config flag:(BOOL*)flag {
     CAGradientLayer* gradient = [self assembleGradientLayer: config];
     if (*flag) {
@@ -23,6 +24,7 @@
     }
 }
 #pragma mark - Public Methods
+
 +(CAGradientLayer*) assembleGradientLayer: (NSDictionary*)config {
     if (config) {
         CAGradientLayer* gradient = [CAGradientLayer layer];
@@ -55,11 +57,10 @@
 }
 
 +(UIColor*) parseColor: (id)config {
-    if (! config) return nil;
-    
+    if (!config) return nil;
+    if ([config isKindOfClass:[UIColor class]]) return config;
     if ([config isKindOfClass:[NSNumber class]]) return [ColorHelper color:[config intValue]];
-    
-    if (! ([config isKindOfClass: [NSArray class]] || [config isKindOfClass: [NSDictionary class]])) return nil;
+    if (!([config isKindOfClass: [NSArray class]] || [config isKindOfClass: [NSDictionary class]])) return nil;
     
     float red = 0.0, green = 0.0, blue = 0.0 ,alpha = 1.0;
     [self parseColor: config red:&red green:&green blue:&blue alpha:&alpha];
@@ -110,62 +111,106 @@
 #pragma mark - 
 #pragma mark - Convenient Methods
 
-+(void) setBorderRecursive: (UIView*)view
+// border
+
+
+// set
++(void) setBorderRecursive: (id)obj
 {
-    for (UIView* subview in view.subviews) {
-        [ColorHelper setBorderRecursive: subview];
+    if ([obj isKindOfClass: [UIView class]]) {
+        UIView* view = (UIView*)obj;
+        for (UIView* subview in view.subviews) {
+            [self setBorderRecursive: subview];
+        }
+    } else if ([obj isKindOfClass: [CALayer class]]) {
+        CALayer* layer = (CALayer*)obj;
+        for (CALayer* sublayer in layer.sublayers) {
+            [self setBorderRecursive: sublayer];
+        }
     }
-    [ColorHelper setBorder: view];
+    [ColorHelper setBorder: obj];
 }
 
-+(void) clearBorderRecursive: (UIView*)view
++(void) setBorder: (id)obj
 {
-    for (UIView* subview in view.subviews) {
-        [ColorHelper clearBorderRecursive: subview];
+    [self setBorder:obj color:[UIColor greenColor]];
+}
+
++(void) setBorder: (id)obj color:(id)color
+{
+    CALayer* layer = nil;
+    if ([obj isKindOfClass: [UIView class]]) {
+        layer = ((UIView*)obj).layer;
+    } else if ([obj isKindOfClass: [CALayer class]]) {
+        layer = obj;
     }
-    [ColorHelper clearBorder: view];
+    layer.borderWidth = 1.0f;
+    layer.borderColor = [[self parseColor:color] CGColor];
 }
 
 
-+(void) clearBorder: (UIView*)view
+// clear
++(void) clearBorder: (id)obj
 {
-    view.layer.borderWidth = 0.0f;
-    view.layer.borderColor = [[UIColor clearColor] CGColor];
+    CALayer* layer = nil;
+    if ([obj isKindOfClass: [UIView class]]) {
+        layer = ((UIView*)obj).layer;
+    } else if ([obj isKindOfClass: [CALayer class]]) {
+        layer = obj;
+    }
+    layer.borderWidth = 0.0f;
+    layer.borderColor = [[UIColor clearColor] CGColor];
 }
-
-
-
-
-
-
-+(void) setBorder: (UIView*)view
++(void) clearBorderRecursive: (id)obj
 {
-    view.layer.borderWidth = 1.0f;
-    view.layer.borderColor = [[UIColor greenColor] CGColor];
-}
-+(void) setBorder: (UIView*)view color:(UIColor*)color
-{
-    view.layer.borderWidth = 1.0f;
-    view.layer.borderColor = [color CGColor];
-}
-+(void) setBorder: (UIView*)view colorIndex:(int)index
-{
-    view.layer.borderWidth = 1.0f;
-    view.layer.borderColor = [[ColorHelper color:index] CGColor];
+    if ([obj isKindOfClass: [UIView class]]) {
+        UIView* view = (UIView*)obj;
+        for (UIView* subview in view.subviews) {
+            [self clearBorderRecursive: subview];
+        }
+    } else if ([obj isKindOfClass: [CALayer class]]) {
+        CALayer* layer = (CALayer*)obj;
+        for (CALayer* sublayer in layer.sublayers) {
+            [self clearBorderRecursive: sublayer];
+        }
+    }
+    [self clearBorder: obj];
 }
 
-+(void) setBackGround: (UIView*)view
+
+
+
+
+
+
+// background
+
++(void) setBackGround: (id)obj
 {
-    view.backgroundColor = [UIColor greenColor];
+    [self setBackGround: obj color:[UIColor greenColor]];
 }
-+(void) setBackGround: (UIView*)view color:(UIColor*)color
++(void) setBackGround: (id)obj color:(id)color
 {
-    view.backgroundColor = color;
+    if ([obj isKindOfClass: [UIView class]]) {
+        UIView* view = (UIView*)obj;
+        view.backgroundColor = [self parseColor: color];
+    } else if ([obj isKindOfClass: [CALayer class]]) {
+        CALayer* layer = (CALayer*)obj;
+        layer.backgroundColor = [[self parseColor: color] CGColor];
+    }
 }
-+(void) setBackGround: (UIView*)view colorIndex:(int)index
-{
-    view.backgroundColor = [ColorHelper color:index];
-}
+
+
+
+
+
+
+
+
+
+
+
+#pragma mark - Util Private 
 
 +(UIColor*) color: (int)chosenColor
 {

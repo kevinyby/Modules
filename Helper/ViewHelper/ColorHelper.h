@@ -12,19 +12,17 @@
 
 #pragma mark -
 #pragma mark -  Convenient Methods
-+(void) setBorderRecursive: (UIView*)view;
-+(void) clearBorderRecursive: (UIView*)view;
-+(void) clearBorder: (UIView*)view;
 
-+(void) setBorder: (UIView*)view;
-+(void) setBorder: (UIView*)view color:(UIColor*)color;
-+(void) setBorder: (UIView*)view colorIndex:(int)index;
+// UIView or CALayer
++(void) setBorder: (id)obj;
++(void) setBorderRecursive: (id)obj;
++(void) setBorder: (id)obj color:(id)color;
 
-+(void) setBackGround: (UIView*)view;
-+(void) setBackGround: (UIView*)view color:(UIColor*)color;
-+(void) setBackGround: (UIView*)view colorIndex:(int)index;
++(void) clearBorder: (id)obj;
++(void) clearBorderRecursive: (id)obj;
 
 
-+(UIColor*) color: (int)chosenColor;
++(void) setBackGround: (id)obj;
++(void) setBackGround: (id)obj color:(id)color;
 
 @end
