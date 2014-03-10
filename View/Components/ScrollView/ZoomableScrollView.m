@@ -32,6 +32,7 @@
     self.backgroundColor = [UIColor clearColor];
     
     contentView = [[UIView alloc] init];
+    contentView.frame = self.bounds;
     contentView.backgroundColor = [UIColor clearColor];
     contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleHeight;
     [super addSubview: contentView];
