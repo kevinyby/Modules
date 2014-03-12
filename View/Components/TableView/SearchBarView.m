@@ -52,27 +52,6 @@
 //    textField.leftView = magnifyingGlass;
 //    textField.leftViewMode = UITextFieldViewModeAlways;
     
-    // insert the search icon/ magnify glass icon
-    UISearchBar* searchBar = [[UISearchBar alloc] init];
-    __block UITextField *searchField = nil;
-    [ViewHelper iterateSubView: searchBar class:[UITextField class] handler:^BOOL(id subView) {
-        searchField = (UITextField *)subView;
-        if (searchField) return YES;
-        return NO;
-    }];
-    if (searchField) {
-        UIImageView *magnifyingGlass = (UIImageView*)searchField.leftView;
-        
-        UIView* leftView = [[UIView alloc] initWithFrame: magnifyingGlass.frame];
-        magnifyingGlass.frame = magnifyingGlass.bounds;
-        [magnifyingGlass addOriginX: [FrameTranslater convertCanvasWidth: 5]];
-        [leftView addSubview: magnifyingGlass];
-        
-        textField.leftView = leftView; // textField.leftView = magnifyingGlass , will be a little ...
-        textField.leftViewMode = UITextFieldViewModeAlways;
-    }
-    
-    
     // cancel button
     cancelButton = [[UIButton alloc] init];
     
