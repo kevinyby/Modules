@@ -2,6 +2,9 @@
 //  _ViewHelper.h
 
 #import "ViewHelper.h"
+#import "LayerHelper.h"
+
+
 #import "ColorHelper.h"
 #import "ImageHelper.h"
 
