@@ -41,6 +41,7 @@
 
 +(NSArray*) getSortedKeys: (NSDictionary*)dictionary
 {
+    if (! dictionary) return nil;
     NSArray* allKeys = [dictionary allKeys];
     NSMutableArray* temp = [NSMutableArray arrayWithArray: allKeys];
     NSArray* sortedKeys = [temp sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
