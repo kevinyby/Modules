@@ -16,6 +16,8 @@
     // _____________________ ActionBlock Category
     
     // UITableViewDataSource
+    NSInteger(^_tableViewBaseNumberOfSectionsAction)(TableViewBase* tableViewObj);
+    NSInteger(^_tableViewBaseNumberOfRowsInSectionAction)(TableViewBase* tableViewObj, NSInteger section);
     UITableViewCell* (^_tableViewBaseCellForIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath,UITableViewCell* oldCell);
     BOOL (^_tableViewBaseCanEditIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
     void (^_tableViewBaseCommitEditStyleAction)(TableViewBase* tableViewObj, UITableViewCellEditingStyle editStyle, NSIndexPath* indexPath);
@@ -130,11 +132,29 @@ static NSString* const tableViewBaseCellId = @"tableViewBaseCellId";
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableViewObj {
-    return self.sections.count;
+    NSInteger count = self.sections.count;
+    // proxy
+    if (self.tableViewBaseNumberOfSectionsAction) {
+        count = self.tableViewBaseNumberOfSectionsAction(self);
+    }
+    else
+    if (proxy && [proxy respondsToSelector:@selector(tableViewBaseNumberOfSections:)]) {
+        count = [proxy tableViewBaseNumberOfSections: self];
+    }
+    return count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableViewObj numberOfRowsInSection:(NSInteger)section {
-    return [self contentsForSection: section].count;
+    NSInteger count = [self contentsForSection: section].count;
+    // proxy
+    if (self.tableViewBaseNumberOfRowsInSectionAction) {
+        count = self.tableViewBaseNumberOfRowsInSectionAction(self, section);
+    }
+    else
+    if (proxy && [proxy respondsToSelector:@selector(tableViewBaseNumberOfRows:inSection:)]){
+        count = [proxy tableViewBaseNumberOfRows:self inSection:section];
+    }
+    return count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableViewObj cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -333,6 +353,32 @@ static NSString* const tableViewBaseCellId = @"tableViewBaseCellId";
 
 
 // UITableViewDataSource
+
+
+//_______________________ tableViewBaseNumberOfSectionsAction
+
+-(NSInteger (^)(TableViewBase *))tableViewBaseNumberOfSectionsAction
+{
+    return _tableViewBaseNumberOfSectionsAction;
+}
+
+-(void)setTableViewBaseNumberOfSectionsAction:(NSInteger (^)(TableViewBase *))tableViewBaseNumberOfSectionsAction
+{
+    _tableViewBaseNumberOfSectionsAction = tableViewBaseNumberOfSectionsAction;
+}
+
+
+//_______________________ tableViewBaseNumberOfRowsInSectionAction
+
+-(NSInteger (^)(TableViewBase *, NSInteger))tableViewBaseNumberOfRowsInSectionAction
+{
+    return _tableViewBaseNumberOfRowsInSectionAction;
+}
+
+-(void)setTableViewBaseNumberOfRowsInSectionAction:(NSInteger (^)(TableViewBase *, NSInteger))tableViewBaseNumberOfRowsInSectionAction
+{
+    _tableViewBaseNumberOfRowsInSectionAction = tableViewBaseNumberOfRowsInSectionAction ;
+}
 
 //_______________________ tableViewBaseCellForIndexPathAction
 

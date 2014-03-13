@@ -11,6 +11,9 @@
 @optional
 
 // UITableViewDataSource
+- (NSInteger) tableViewBaseNumberOfSections:(TableViewBase *)tableViewObj;
+- (NSInteger) tableViewBaseNumberOfRows: (TableViewBase *)tableViewObj inSection:(NSInteger)section;
+
 - (UITableViewCell*)tableViewBase:(TableViewBase *)tableViewObj cellForIndexPath:(NSIndexPath *)indexPath oldCell:(UITableViewCell*)oldCell;
 
 - (BOOL)tableViewBase:(TableViewBase *)tableViewObj canEditIndexPath:(NSIndexPath*)indexPath;
@@ -110,6 +113,8 @@
 // To Be Extended ...
 
 // UITableViewDataSource
+@property (copy) NSInteger(^tableViewBaseNumberOfSectionsAction)(TableViewBase* tableViewObj);
+@property (copy) NSInteger(^tableViewBaseNumberOfRowsInSectionAction)(TableViewBase* tableViewObj, NSInteger section);
 @property (copy) UITableViewCell* (^tableViewBaseCellForIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath,UITableViewCell* oldCell);
 @property (copy) BOOL (^tableViewBaseCanEditIndexPathAction)(TableViewBase* tableViewObj, NSIndexPath* indexPath);
 @property (copy) void (^tableViewBaseCommitEditStyleAction)(TableViewBase* tableViewObj, UITableViewCellEditingStyle editStyle, NSIndexPath* indexPath);
