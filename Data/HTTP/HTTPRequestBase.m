@@ -121,7 +121,7 @@
         NSString* mimetype = httpURLReqponse.MIMEType;
         [userInfo setObject: suggestedFilename forKey:@"suggestedFilename"];
         [userInfo setObject: mimetype forKey:@"mimetype"];
-        [userInfo setObject: [NSNumber numberWithInt: statusCode] forKey:@"statusCode"];
+        [userInfo setObject: [NSNumber numberWithInteger: statusCode] forKey:@"statusCode"];
         [self connection: connection didFailWithError: [NSError errorWithDomain: httpURLReqponse.URL.host code:statusCode userInfo:userInfo]];
     }
     

@@ -125,7 +125,7 @@ static NSString* const tableViewBaseCellId = @"tableViewBaseCellId";
     [realSectionContents removeObjectAtIndex: indexPath.row];
     
     
-    // C . apply the animation
+    // C . apply the animation, be sure your data source updated before call this method
     [self deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
@@ -226,7 +226,7 @@ static NSString* const tableViewBaseCellId = @"tableViewBaseCellId";
         
         [self deleteIndexPath: indexPath];
         
-        // proxy delete
+        // proxy did delete
         if (self.tableViewBaseDidDeleteContentsAction) {
             self.tableViewBaseDidDeleteContentsAction(self, indexPath);
         }
