@@ -86,10 +86,11 @@
 /** get the sequential keys of contentsDictionary, against to the table section */
 -(NSArray *)sections;
 
+/** the visible content by indexPath */
+-(id) contentForIndexPath: (NSIndexPath*)indexPath;
+
 /** get the realValue By indexPath */
 -(id) realContentForIndexPath: (NSIndexPath*)indexPath;
-/** the visible content by indexPath, equals to the cell.textLabel.text */
--(NSString*) contentForIndexPath: (NSIndexPath*)indexPath;
 
 -(NSMutableArray*) contentsForSection: (NSUInteger)section;
 -(NSMutableArray*) realContentsForSection: (NSUInteger)section;

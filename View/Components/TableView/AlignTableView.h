@@ -1,13 +1,10 @@
 #import "FilterTableView.h"
 
-#define CELL_CONTENT_DELIMITER @"`"
+//#define CELL_CONTENT_DELIMITER @"`"
 #define CELL_CONTENT_LABEL_TAG(_index) (_index + 505)
 #define HEADER_CONTENT_LABEL_TAG(_index) (_index + 202)
 
 /**
- *  Here , this align table's contentsDictionary's every line content should connect with CELL_CONTENT_DELIMITER
- *
- * i.e. {@"Section_1":@[@[@"1,2,3"],@[@"a,b,c"]]}, divided by ","
  *  
  *  Note , for more than one sections , the header will be the same 
  *
@@ -32,7 +29,7 @@
 
 #pragma mark - AlignTableView Class Object Methods
 
-+ (void)setAlignHeaders: (UITableView*)tableView headerView:(UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates headersYcoordinates:(NSArray*)headersYcoordinates;
-+ (void)separateCellTextToAlignHeaders: (UITableView*)tableView cell:(UITableViewCell*)cell valuesXcoordinates:(NSArray*)valuesXcoordinates valuesYcoordinates:(NSArray*)valuesYcoordinates;
++ (void)setAlignHeaders: (TableViewBase*)tableView headerView:(UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates headersYcoordinates:(NSArray*)headersYcoordinates;
++ (void)separateCellTextToAlignHeaders: (TableViewBase*)tableView cell:(UITableViewCell*)cell indexPath:(NSIndexPath*)indexPath valuesXcoordinates:(NSArray*)valuesXcoordinates valuesYcoordinates:(NSArray*)valuesYcoordinates;
 
 @end

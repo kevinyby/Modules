@@ -45,7 +45,7 @@
     return [[array firstObject] isKindOfClass: [NSArray class]];
 }
 
-
+// array with string
 +(NSArray*) sort:(NSArray*)array
 {
     NSMutableArray* temp = [NSMutableArray arrayWithArray: array];

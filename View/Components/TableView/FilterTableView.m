@@ -1,10 +1,9 @@
 #import "FilterTableView.h"
 #import "_Helper.h"
 
-@implementation FilterTableView {
-    NSString* predicateString ;
-    NSMutableDictionary* contentsDictionaryBackUp;
-}
+@implementation FilterTableView
+
+@synthesize contentsDictionaryBackup;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -19,23 +18,7 @@
 -(void)setContentsDictionary:(NSMutableDictionary *)contentsDictionary
 {
     super.contentsDictionary = contentsDictionary;
-    contentsDictionaryBackUp = contentsDictionary;
-}
-
--(void) setFilterMode:(FilterMode)mode
-{
-    switch (mode) {
-        case FilterModeContains:
-            predicateString = @"SELF contains[cd] %@";
-            break;
-            
-        case FilterModeBeginWith:
-            predicateString = @"self BEGINSWITH[cd] %@";
-            break;
-            
-        default:
-            break;
-    }
+    contentsDictionaryBackup = contentsDictionary;
 }
 
 -(void)setFilterText:(NSString *)filterText
@@ -45,11 +28,30 @@
     // Filter Mode
     if ([self isInFilteringMode]) {
         NSMutableDictionary* searchContentsDictionary = [NSMutableDictionary dictionary];
-        for (NSString* key in contentsDictionaryBackUp) {
-            NSArray* contents = [contentsDictionaryBackUp objectForKey: key];
-            NSArray* filteredContents = [contents filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:predicateString, filterText]];
-            if (filteredContents.count) {
-                [searchContentsDictionary setObject:[ArrayHelper sort: filteredContents] forKey:key];
+        
+        for (NSString* key in contentsDictionaryBackup) {
+            NSArray* contents = [contentsDictionaryBackup objectForKey: key];
+            
+            NSMutableArray* results = [NSMutableArray array];
+            
+            for (int i = 0; i < contents.count; i++) {
+                id value = [contents objectAtIndex: i];
+                NSString* string = nil;
+                // string
+                if ([value isKindOfClass:[NSString class]]) {
+                    string = value;
+                // array
+                } else if ([value isKindOfClass:[NSArray class]]) {
+                    NSArray* array = [contents objectAtIndex:i];
+                    string = [array componentsJoinedByString:@" "];
+                }
+                // is meet
+                BOOL isBingo = self.filterMode == FilterModeContains ? [string rangeOfString:filterText options:NSCaseInsensitiveSearch].location != NSNotFound : [string hasPrefix: filterText];
+                if (isBingo) [results addObject: value];
+            }
+            
+            if (results.count) {
+                [searchContentsDictionary setObject: results forKey:key];
             } else {
                 [searchContentsDictionary removeObjectForKey: key];
             }
@@ -59,7 +61,7 @@
         
     // Normal Mode
     } else {
-        super.contentsDictionary = contentsDictionaryBackUp;
+        super.contentsDictionary = contentsDictionaryBackup;
     }
     
     [super reloadData];
@@ -100,12 +102,12 @@
 {
     if (![self isInFilteringMode]) return indexPath;
     
-    UITableViewCell* cell = [self cellForRowAtIndexPath: indexPath];
-    NSString* cellText = cell.textLabel.text;
-    for (int section = 0 ; section < self.numberOfSections; section++ ){
+    id value = [super contentForIndexPath: indexPath];
+    
+    for (NSInteger section = 0 ; section < self.numberOfSections; section++ ){
         NSString* sectionKey = [self.sections objectAtIndex: section];
-        NSArray* sectionContents = [contentsDictionaryBackUp objectForKey: sectionKey];
-        NSUInteger row = [sectionContents indexOfObject: cellText];
+        NSArray* sectionContents = [contentsDictionaryBackup objectForKey: sectionKey];
+        NSUInteger row = [sectionContents indexOfObject: value];
         if (row != NSNotFound) {
             return [NSIndexPath indexPathForRow: row inSection:section];
         }

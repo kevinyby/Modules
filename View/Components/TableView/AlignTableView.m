@@ -37,7 +37,7 @@
     
     UIView* headerView = [[UIView alloc] init];
     headerView.backgroundColor = [UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:0.5];
-    [AlignTableView setAlignHeaders:tableView headerView:headerView headers:sectionsHeaders headersXcoordinates:sectionsHeaderXCoordinates headersYcoordinates:sectionsHeaderYCoordinates];
+    [AlignTableView setAlignHeaders:self headerView:headerView headers:sectionsHeaders headersXcoordinates:sectionsHeaderXCoordinates headersYcoordinates:sectionsHeaderYCoordinates];
     return headerView;
 }
 
@@ -47,7 +47,7 @@
     NSArray* valueXCoordinates = [ArrayHelper isTwoDimension: valuesXcoordinates] ? [valuesXcoordinates objectAtIndex: indexPath.section] : valuesXcoordinates;
     NSArray* valueYCoordinates = [ArrayHelper isTwoDimension: valuesYcoordinates] ? [valuesYcoordinates objectAtIndex: indexPath.section] : valuesYcoordinates;
     
-    [AlignTableView separateCellTextToAlignHeaders: self cell:cell valuesXcoordinates:valueXCoordinates valuesYcoordinates:valueYCoordinates];
+    [AlignTableView separateCellTextToAlignHeaders: self cell:cell indexPath:indexPath  valuesXcoordinates:valueXCoordinates valuesYcoordinates:valueYCoordinates];
     
     [super tableView:tableView willDisplayCell:cell forRowAtIndexPath:indexPath];
 }
@@ -60,7 +60,7 @@
 
 #pragma mark - AlignTableView Class Object Methods
 
-+ (void)setAlignHeaders: (UITableView*)tableView headerView:(UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates headersYcoordinates:(NSArray*)headersYcoordinates
++ (void)setAlignHeaders: (TableViewBase*)tableView headerView:(UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates headersYcoordinates:(NSArray*)headersYcoordinates
 {
     int count = headers.count;
     // set up contents & labels with x coordinate
@@ -88,12 +88,12 @@
 }
 
 
-+ (void)separateCellTextToAlignHeaders: (UITableView*)tableView cell:(UITableViewCell*)cell valuesXcoordinates:(NSArray*)valuesXcoordinates valuesYcoordinates:(NSArray*)valuesYcoordinates
++ (void)separateCellTextToAlignHeaders: (TableViewBase*)tableView cell:(UITableViewCell*)cell indexPath:(NSIndexPath*)indexPath valuesXcoordinates:(NSArray*)valuesXcoordinates valuesYcoordinates:(NSArray*)valuesYcoordinates
 {
-    cell.textLabel.hidden = YES;        // hide the original text
-    NSString* cellText = cell.textLabel.text;
+    NSArray* texts = [tableView contentForIndexPath: indexPath];
+    if (! [texts isKindOfClass:[NSArray class]]) return;
     
-    NSArray* texts = [cellText componentsSeparatedByString: CELL_CONTENT_DELIMITER];
+    cell.textLabel.hidden = YES;        // hide the original text
     int count = texts.count;        // == headers count
     
     // if not label , initialize the label

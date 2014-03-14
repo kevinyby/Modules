@@ -4,8 +4,8 @@
 
 @interface TableViewBaseHelper : NSObject
 
-+(void) insertToLastRowWithAnimation: (TableViewBase*)tableView section:(int)section content:(NSString*)content realContent:(id)realContent;
++(void) insertToLastRowWithAnimation: (TableViewBase*)tableView section:(int)section content:(NSArray*)contents realContent:(id)realContent;
 
-+(void) insertToFirstRowWithAnimation: (TableViewBase*)tableView section:(int)section content:(NSString*)content realContent:(id)realContent;
++(void) insertToFirstRowWithAnimation: (TableViewBase*)tableView section:(int)section content:(NSArray*)contents realContent:(id)realContent;
 
 @end

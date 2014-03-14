@@ -12,6 +12,8 @@ typedef enum {
 @property (assign, nonatomic) FilterMode filterMode;
 @property (strong) NSIndexPath* seletedVisibleIndexPath;        // when did selected, in filter is the filter index path , in real mode is the real index path
 
+@property (strong) NSMutableDictionary* contentsDictionaryBackup;
+
 -(BOOL) isInFilteringMode;
 -(NSIndexPath*) getRealIndexPath:(UIView*)subview ;
 -(NSIndexPath*) traslateFilterModeIndexPath: (NSIndexPath*)indexPath;

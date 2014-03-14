@@ -94,7 +94,7 @@ static NSString* const tableViewBaseCellId = @"tableViewBaseCellId";
     return [[self realContentsForSection: indexPath.section] objectAtIndex: indexPath.row];
 }
 
--(NSString*) contentForIndexPath: (NSIndexPath*)indexPath
+-(id) contentForIndexPath: (NSIndexPath*)indexPath
 {
     return [[self contentsForSection: indexPath.section] objectAtIndex: indexPath.row];
 }
@@ -173,11 +173,12 @@ static NSString* const tableViewBaseCellId = @"tableViewBaseCellId";
         cell = [proxy tableViewBase:self cellForIndexPath:indexPath oldCell:cell];
     }
     
-    NSString* cellText = [self contentForIndexPath: indexPath];  // == cell.textLabel.text, for AlignTableView and FilterTableView are important!!!
-    cell.textLabel.text = cellText;     // set font first then set text
-   
-//    cell.layer.borderColor = [[UIColor grayColor] CGColor];
-//    cell.layer.borderWidth = 2.0f;
+    // set font first then set text
+    id value = [self contentForIndexPath: indexPath];
+    NSString* text = nil;
+    if ([value isKindOfClass: [NSString class]]) text = value;
+    else if ([value isKindOfClass: [NSNumber class]]) text = [value stringValue];
+    if (text) cell.textLabel.text = text;
     
     return cell;
 }
