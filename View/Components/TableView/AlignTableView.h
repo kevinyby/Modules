@@ -1,6 +1,5 @@
 #import "FilterTableView.h"
 
-//#define CELL_CONTENT_DELIMITER @"`"
 #define CELL_CONTENT_LABEL_TAG(_index) (_index + 505)
 #define HEADER_CONTENT_LABEL_TAG(_index) (_index + 202)
 

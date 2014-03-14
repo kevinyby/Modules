@@ -21,8 +21,6 @@
 @synthesize headersYcoordinates;
 @synthesize valuesYcoordinates;
 
-#pragma mark - UITableViewDataSource
-//
 
 #pragma mark - UITableViewDelegate
 // this header is for sections, not for the whole table
