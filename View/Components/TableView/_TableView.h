@@ -13,3 +13,6 @@
 
 #import "HeaderSearchTableView.h"
 
+
+
+#import "TableContentHelper.h"
