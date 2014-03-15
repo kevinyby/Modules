@@ -1,4 +1,5 @@
 #import "TableViewBase.h"
+#import "TableContentHelper.h"
 
 //#import "_View.h"
 #import "NSArray+Additions.h"
@@ -175,10 +176,8 @@ static NSString* const tableViewBaseCellId = @"tableViewBaseCellId";
     
     // set font first then set text
     id value = [self contentForIndexPath: indexPath];
-    NSString* text = nil;
-    if ([value isKindOfClass: [NSString class]]) text = value;
-    else if ([value isKindOfClass: [NSNumber class]]) text = [value stringValue];
-    if (text) cell.textLabel.text = text;
+    NSString* text = [TableContentHelper getStringValue: value];
+    cell.textLabel.text = text;
     
     return cell;
 }

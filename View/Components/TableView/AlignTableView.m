@@ -1,6 +1,7 @@
 #import "AlignTableView.h"
-#import "UIView+PropertiesSetter.h"
+#import "TableContentHelper.h"
 
+#import "UIView+PropertiesSetter.h"
 
 #import "_Frame.h"
 #import "FrameHelper.h"
@@ -124,7 +125,10 @@
     for (int i = 0; i < count; i++) {
         UILabel* label = (UILabel*)[cell viewWithTag:CELL_CONTENT_LABEL_TAG(i)];
         label.hidden = NO;
-        label.text = [texts objectAtIndex: i];
+        
+        id value = [texts objectAtIndex: i];
+        NSString* text = [TableContentHelper getStringValue: value];
+        label.text = text;
         // adjust width by text content
         [label adjustWidthToFontText];
     }
