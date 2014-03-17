@@ -1,6 +1,4 @@
 
-#import "FrameManager.h"
-
 #import "FrameHelper.h"
 
 #import "FrameTranslater.h"

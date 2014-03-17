@@ -28,10 +28,10 @@
     return [executors objectForKey: action];
 }
 
--(void) runActionExecutors: (NSDictionary*)config onObjects:(NSArray*)objects values:(NSArray*)values baseTimes:(NSArray*)baseTimes {
-    for (NSString* key in config) {
-        NSDictionary* actionParameters = [config objectForKey: key];
-        [self runActionExecutor: actionParameters onObjects: objects values:values baseTimes:baseTimes];
+-(void) runActionExecutors: (NSArray*)actionsConfigs onObjects:(NSArray*)objects values:(NSArray*)values baseTimes:(NSArray*)baseTimes {
+    for (NSInteger i = 0; i < actionsConfigs.count; i++) {
+        NSDictionary* config = [actionsConfigs objectAtIndex:i];
+        [self runActionExecutor: config onObjects: objects values:values baseTimes:baseTimes];
     }
 }
 

@@ -14,7 +14,7 @@
 -(void) removeActionExecutor: (NSString*)action ;
 -(ActionExecutorBase*) getActionExecutor: (NSString*)action ;
 
--(void) runActionExecutors: (NSDictionary*)config onObjects:(NSArray*)objects values:(NSArray*)values baseTimes:(NSArray*)baseTimes ;
+-(void) runActionExecutors: (NSArray*)actionsConfigs onObjects:(NSArray*)objects values:(NSArray*)values baseTimes:(NSArray*)baseTimes;
 
 -(void) runActionExecutor: (NSDictionary*)config onObjects:(NSArray*)objects values:(NSArray*)values baseTimes:(NSArray*)baseTimes ;
 

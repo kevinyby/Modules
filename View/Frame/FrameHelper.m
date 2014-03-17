@@ -2,8 +2,6 @@
 
 #import "FrameTranslater.h"
 
-#import "FrameManager.h"
-
 #import "UIView+CanvasFrame.h"
 
 #import "UIView+PropertiesSetter.h"
