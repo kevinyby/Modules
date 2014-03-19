@@ -42,4 +42,18 @@
     }
 }
 
+#pragma mark - 
++(void) iterateTwoDimensionArray: (NSArray*)array handler:(BOOL(^)(NSInteger outterIndex, NSInteger innerIndex, id obj, NSInteger outterCount, NSInteger innerCount))handler
+{
+    NSInteger outterCount = array.count;
+    for (NSInteger i = 0; i < outterCount; i++) {
+        NSArray* innerArray = [array objectAtIndex:i];
+        NSInteger innerCount = innerArray.count;
+        for (NSInteger j = 0; j < innerCount; j++) {
+            id obj = [innerArray objectAtIndex: j];
+            if ( handler(i, j, obj, outterCount, innerCount) ) return;
+        }
+    }
+}
+
 @end

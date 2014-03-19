@@ -7,4 +7,10 @@
 
 +(void) iterateDictionary:(NSDictionary*)dictionary handler:(BOOL (^)(id key, id value))handler;
 
+
+
+#pragma mark -
++(void) iterateTwoDimensionArray: (NSArray*)array handler:(BOOL(^)(NSInteger outterIndex, NSInteger innerIndex, id obj, NSInteger outterCount, NSInteger innerCount))handler;
+
+
 @end
