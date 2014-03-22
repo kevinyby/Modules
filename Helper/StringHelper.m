@@ -154,4 +154,61 @@
     }
 }
 
+
+
+#pragma mark - 
+
++(NSString*) stringBetweenString:(NSString*)string start:(NSString*)start end:(NSString*)end
+{
+    NSRange startRange = [string rangeOfString:start];
+    if (startRange.location != NSNotFound) {
+        NSRange targetRange;
+        targetRange.location = startRange.location + startRange.length;
+        targetRange.length = [string length] - targetRange.location;
+        NSRange endRange = [string rangeOfString:end options:0 range:targetRange];
+        
+        if (endRange.location != NSNotFound) {
+            targetRange.length = endRange.location - targetRange.location;
+            return [string substringWithRange:targetRange];
+        }
+    }
+    return nil;
+}
+
+-(NSMutableArray*)stringsBetweenString:(NSString*)string start:(NSString*)start end:(NSString*)end
+{
+    
+    NSMutableArray* strings = [NSMutableArray arrayWithCapacity:0];
+    NSRange startRange = [string rangeOfString:start];
+    for( ;; ) {
+        if (startRange.location != NSNotFound) {
+            NSRange targetRange;
+            
+            targetRange.location = startRange.location + startRange.length;
+            targetRange.length = [string length] - targetRange.location;
+            
+            NSRange endRange = [string rangeOfString:end options:0 range:targetRange];
+            
+            if (endRange.location != NSNotFound) {
+                
+                targetRange.length = endRange.location - targetRange.location;
+                [strings addObject:[string substringWithRange:targetRange]];
+                
+                NSRange restOfString;
+                
+                restOfString.location = endRange.location + endRange.length;
+                restOfString.length = [string length] - restOfString.location;
+                
+                startRange = [string rangeOfString:start options:0 range:restOfString];
+                
+            } else {
+                break;
+            }
+        } else {
+            break;
+        }
+    }
+    return strings;
+}
+
 @end

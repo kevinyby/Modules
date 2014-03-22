@@ -12,4 +12,8 @@
 
 +(NSMutableString*) separate:(NSString*)string spaceMeta:(NSString*)spaceMeta;
 
+#pragma mark -
+
++(NSString*) stringBetweenString:(NSString*)string start:(NSString*)start end:(NSString*)end;
+
 @end
