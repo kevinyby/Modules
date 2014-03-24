@@ -55,7 +55,7 @@ static NSString* currentLanguage = nil ;
     
     NSString* localizeValue = NSLocalizedStringFromTable(key, table, nil);
     
-    // when the same , return nill , so , be sure the key-value are not the same
+    // when the same , return nil , so , be sure the key-value are not the same
     if ([localizeValue isEqualToString: key]) localizeValue = nil;
     
     return localizeValue;

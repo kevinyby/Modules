@@ -73,11 +73,11 @@
 // @{@"section_1_l" : @"section_1", @"section_2_l":@"section_2" }
 @property(strong) NSMutableDictionary* keysMap;
 
-// { @"section_1":@[[@"1",@"2",@"3"],[@"1",@"2",@"3"]], @"section_2":@[[@"1",@"2",@"3"],[@"1",@"2",@"3"]] };
+// { @"section_1":@[@"1",,@"2",@"3"], @"section_2":@[@"1",@"2",@"3"] };
 // the background/real data of contentsDictionary, be sure has the same sort/order/sequence contentsDictionary
 @property (strong) NSMutableDictionary* realContentsDictionary;
 
-// { @"section_1_l":@[[@"1_l",@"2_l",@"3_l"],[@"1_l",@"2_l",@"3_l"]], @"section_2_l":@[[@"1_l",@"2_l",@"3_l"],[@"1_l",@"2_l",@"3_l"]] };
+// { @"section_1_l":@[@"1_l",@"2_l",@"3_l"], @"section_2_l":@[@"1_l",@"2_l",@"3_l] };
 // the show/visible contents to end-user, be sure has the same sort/order/sequence realContentsDictionary
 @property(strong, nonatomic) NSMutableDictionary* contentsDictionary;
 

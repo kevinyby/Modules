@@ -76,10 +76,14 @@
 - (void)tableView:(UITableView *)tableViewObj didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.seletedVisibleIndexPath = indexPath;
     
-    if ([self isInFilteringMode])  indexPath = [self traslateFilterModeIndexPath: indexPath];
-    
-    // super
-    [super tableView: tableViewObj didSelectRowAtIndexPath:indexPath];
+    if ([self isInFilteringMode])  {
+        NSIndexPath* realIndexPath = [self traslateFilterModeIndexPath: indexPath];
+        // super
+        [super tableView: tableViewObj didSelectRowAtIndexPath:realIndexPath];
+    } else {
+        // super
+        [super tableView: tableViewObj didSelectRowAtIndexPath:indexPath];
+    }
 }
 
 #pragma mark - Public Methods

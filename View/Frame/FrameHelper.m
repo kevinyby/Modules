@@ -165,8 +165,8 @@ static Boolean isNeedReserve ;
         NSString* key = NSStringFromClass([subview class]);
         NSArray* rectArray = config[key];
         if (!rectArray) {
-            int index = [subviews indexOfObject: subview];
-            NSString* realKey = [key stringByAppendingFormat:@"%d", index];
+            NSInteger index = [subviews indexOfObject: subview];
+            NSString* realKey = [key stringByAppendingFormat:@"%d", (int)index];
             rectArray = config[realKey];
         }
         

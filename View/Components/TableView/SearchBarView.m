@@ -44,8 +44,9 @@
     
     
     // insert the search icon/ magnify glass icon
+    // Google "Emoji" for more informations : http://stackoverflow.com/a/11815568
+    
 //    UILabel *magnifyingGlass = [[UILabel alloc] init];
-//    // Google "Emoji" for more informations : http://stackoverflow.com/a/11815568
 //    NSString* string = [[NSString alloc] initWithUTF8String:"\xF0\x9F\x8D\xB0"]; // \xF0\x9F\x94\x8D
 //    magnifyingGlass.text = string;
 //    [magnifyingGlass sizeToFit];
