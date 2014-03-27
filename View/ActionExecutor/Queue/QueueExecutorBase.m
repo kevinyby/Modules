@@ -95,14 +95,14 @@
     float elementStartingOffset = [[config objectForKey: @"element.startingOffset"] floatValue];
     double totalTime = [[config objectForKey: @"element.totalTransitTime"] doubleValue] ;
     BOOL isByTotal = totalTime > 0 ;
-    BOOL isStepInEmpty = [[config objectForKey: @"queue.isStepInEmpty"] boolValue];
+    BOOL isLeaveEmpty = [[config objectForKey: @"queue.isLeaveEmpty"] boolValue];
     
     NSArray* realValues = [self translateValues: values];
     
     for (int i = viewsCount-1; i >= 0; i--) {
         UIView* view = [views objectAtIndex: i];
         if (! [view isKindOfClass: [UIView class]]) {
-            if (isStepInEmpty) emptyIndividual++ ;
+            if (! isLeaveEmpty) emptyIndividual++ ;
             [durationsQueue addObject: [NSNull null]];
             [beginTimesQueue addObject: [NSNull null]] ;
             continue ;

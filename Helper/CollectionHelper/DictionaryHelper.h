@@ -12,9 +12,10 @@
 +(NSArray*) getSortedKeys: (NSDictionary*)dictionary;
 +(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary with:(NSString*)tail;
 +(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary with:(NSString*)tail excepts:(NSArray*)excepts;
-+(void) replace: (NSMutableDictionary*)dictionary keys:(NSArray*)keys with:(NSArray*)replacements;
++(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary keys:(NSArray*)keys with:(NSString*)tail;
++(void) replaceKeys: (NSMutableDictionary*)dictionary keys:(NSArray*)keys withKeys:(NSArray*)replacements;
 
-#pragma mark - About Content
+#pragma mark - About Values
 
 +(NSMutableDictionary*) subtract: (NSMutableDictionary*)dictionary withType:(Class)clazz;
 
@@ -25,10 +26,10 @@
 +(NSMutableDictionary*) convertNumberToString: (NSDictionary*)dictionary;
 
 
-#pragma mark - Temporary
+#pragma mark - About Keys and Values
 +(NSMutableDictionary*) convertToOneDimensionDictionary: (NSDictionary*)dictionary;
 
-
++(NSMutableDictionary*) convert: (NSArray*)values keys:(NSArray*)keys;
 
 #pragma mark - Get the depth
 +(NSInteger) getTheDepth: (NSDictionary*)dictionary;

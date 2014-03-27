@@ -59,17 +59,22 @@
 
 +(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary with:(NSString*)tail excepts:(NSArray*)excepts
 {
+    NSMutableArray* keys = [ArrayHelper deepCopy: [dictionary allKeys]];
+    for (id key in excepts) [keys removeObject: key];
+    return [self tailKeys: dictionary keys:keys with:tail];
+}
+
++(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary keys:(NSArray*)keys with:(NSString*)tail
+{
     NSMutableDictionary* result = [NSMutableDictionary dictionary];
-    for (id key in dictionary) {
+    for (id key in keys) {
         id value = [dictionary objectForKey: key];
-        NSString* newKey = [excepts containsObject: key] ? key : [key stringByAppendingString:tail];
-        [result setObject: value forKey:newKey];
+        [result setObject: value forKey:[key stringByAppendingString:tail]];
     }
     return result;
 }
 
-
-+(void) replace: (NSMutableDictionary*)dictionary keys:(NSArray*)keys with:(NSArray*)replacements
++(void) replaceKeys: (NSMutableDictionary*)dictionary keys:(NSArray*)keys withKeys:(NSArray*)replacements
 {
     for (int i = 0; i < keys.count; i ++) {
         NSString* key = keys[i];
@@ -78,7 +83,7 @@
     }
 }
 
-#pragma mark - About Content
+#pragma mark - About Values
 
 // return the subtract contents
 +(NSMutableDictionary*) subtract: (NSMutableDictionary*)dictionary withType:(Class)clazz
@@ -152,7 +157,7 @@
 
 
 
-#pragma mark - Temporary
+#pragma mark - About Keys and Values
 
 // For Two Dimension Dictioanry
 // i.e :
@@ -170,6 +175,16 @@
     return result;
 }
 
+
++(NSMutableDictionary*) convert: (NSArray*)values keys:(NSArray*)keys
+{
+    NSMutableDictionary* dictionary = [NSMutableDictionary dictionary];
+    for (int i = 0; i < values.count; i++) {
+        id obj = values[i];
+        [dictionary setObject: obj forKey:keys[i]];
+    }
+    return dictionary.count ? dictionary : nil;
+}
 
 
 #pragma mark - Get the depth
