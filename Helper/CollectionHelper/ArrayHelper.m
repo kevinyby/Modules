@@ -104,6 +104,24 @@
 }
 
 
+
+#pragma mark - 
+
++(void) sortArray: (NSMutableArray*) array asc:(BOOL)isASC
+{
+    [array sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSArray* array1 = (NSArray*)obj1;
+        NSArray* array2 = (NSArray*)obj2;
+        NSNumber* outerIndex1 = [array1 firstObject];
+        NSNumber* outerIndex2 = [array2 firstObject];
+        NSNumber* innerIndex1 = [array1 lastObject];
+        NSNumber* innerIndex2 = [array2 lastObject];
+        NSComparisonResult result1 = isASC ? [innerIndex1 compare: innerIndex2] : [innerIndex2 compare: innerIndex1] ;
+        NSComparisonResult result2 = isASC ? [outerIndex1 compare: outerIndex2] : [outerIndex2 compare: outerIndex1] ;
+        return ([outerIndex1 compare: outerIndex2] == NSOrderedSame) ? result1 : result2;
+    }];
+}
+
 @end
 
 

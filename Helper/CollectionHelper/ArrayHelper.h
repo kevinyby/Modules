@@ -13,6 +13,7 @@
 +(NSArray*) sort:(NSArray*)array;
 
 #pragma mark - Handler Contents
+
 +(NSArray*) rerangeContents: (NSArray*)array frontContents:(NSArray*)frontContents;
 +(void) subtract:(NSMutableArray*)array with:(NSArray*)subtracts;
 
@@ -22,6 +23,11 @@
 +(CGRect) convertToRect: (NSArray *)array;
 
 +(UIEdgeInsets) convertToEdgeInsets: (NSArray *)array;
+
+
+#pragma mark -
+
++(void) sortArray: (NSMutableArray*) array asc:(BOOL)isASC;
 
 @end
 
