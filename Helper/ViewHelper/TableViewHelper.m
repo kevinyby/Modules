@@ -5,13 +5,13 @@
 
 +(NSIndexPath*) getLastIndexPath: (UITableView*)tableView
 {
-    int lastSection = tableView.numberOfSections - 1;
+    NSInteger lastSection = tableView.numberOfSections - 1;
     return [self getLastIndexPath: tableView inSection:lastSection];
 }
 
 +(NSIndexPath*) getLastIndexPath: (UITableView*)tableView inSection: (NSUInteger)section
 {
-    int lastRow = [tableView numberOfRowsInSection: section] - 1;
+    NSInteger lastRow = [tableView numberOfRowsInSection: section] - 1;
     return [NSIndexPath indexPathForRow: lastRow inSection:section];
 }
 

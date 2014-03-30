@@ -40,7 +40,7 @@
 
 #pragma mark - Private Methods
 -(NSMutableArray*) translateRectValueToPointValue: (NSArray*)values {
-    int count = values.count;
+    NSInteger count = values.count;
     NSMutableArray* pointValues = [NSMutableArray arrayWithCapacity: values.count];
     for (int i = 0; i < count; i ++) {
         NSValue* rectValue = [values objectAtIndex: i];
@@ -58,7 +58,7 @@
 
 -(NSMutableArray*) leavingTheTurningPoint: (NSMutableArray*)transtionList {
     float preRadians = 3.15;
-    int count = transtionList.count;
+    NSInteger count = transtionList.count;
     NSMutableArray* newTransition = [NSMutableArray arrayWithCapacity: 2];
     for (int i = 0; i < count-1; i++) {
         NSValue* value = [transtionList objectAtIndex: i] ;

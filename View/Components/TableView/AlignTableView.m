@@ -61,7 +61,7 @@
 
 + (void)setAlignHeaders: (TableViewBase*)tableView headerView:(UIView*)headerView headers:(NSArray*)headers headersXcoordinates:(NSArray*)headersXcoordinates headersYcoordinates:(NSArray*)headersYcoordinates
 {
-    int count = headers.count;
+    NSUInteger count = headers.count;
     // set up contents & labels with x coordinate
     for (int i = 0; i < count; i++) {
         NSString* labelText = [headers objectAtIndex:i];
@@ -93,7 +93,7 @@
     if (! [texts isKindOfClass:[NSArray class]]) return;
     
     cell.textLabel.hidden = YES;        // hide the original text
-    int count = texts.count;        // == headers count
+    NSUInteger count = texts.count;        // == headers count
     
     // if not label , initialize the label
     for (int i = 0; i < count;  i++) {

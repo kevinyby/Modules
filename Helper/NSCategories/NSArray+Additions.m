@@ -7,7 +7,7 @@
 
 -(id)safeObjectAtIndex:(NSUInteger)index
 {
-    return ((int)self.count - 1) < (int)index ? nil : [self objectAtIndex: index];
+    return index >= self.count ? nil : [self objectAtIndex: index];
 }
 
 @end

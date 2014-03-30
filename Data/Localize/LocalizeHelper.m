@@ -6,7 +6,7 @@
 
 +(NSArray*) localize: (NSArray*)array
 {
-    int count = array.count;
+    NSInteger count = array.count;
     NSMutableArray* localizes = [NSMutableArray arrayWithCapacity: count];
     for (int i = 0; i < count; i++) {
         NSString* key = array[i];
