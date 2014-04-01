@@ -145,40 +145,34 @@ static Boolean isNeedReserve ;
 
 /**
  Convention :
- i.e.
  {
  "GameView" : {
- "HeaderView": [50, 20, 900, 100],
- "ContainerView": [50, 150, 900, 550],
- "HeaderView+" : {
- "UILabel0" : [0,0, 100, 50],
- "UILabel1" : [200,0, 100, 50]
- }
+    "SELF": [0, 0, 1024, 768],
+    "HeaderView": [50, 20, 900, 100],
+    "ContainerView": [50, 150, 900, 550],
  }
  }
  */
 +(void) setSubViewsFrames: (UIView*)view config:(NSDictionary*)config
 {
+    if (!config) return;
+    
+    if (config[@"SELF"]) [FrameHelper setFrame: [ArrayHelper convertToRect: config[@"SELF"]] view:view];
+    
     NSArray* subviews = [view subviews];
     for (UIView* subview in subviews) {
         // get rect array
-        NSString* key = NSStringFromClass([subview class]);
-        NSArray* rectArray = config[key];
-        if (!rectArray) {
-            NSInteger index = [subviews indexOfObject: subview];
-            NSString* realKey = [key stringByAppendingFormat:@"%d", (int)index];
-            rectArray = config[realKey];
+        NSString* className = NSStringFromClass([subview class]);
+        id values = config[className];
+        
+        if ([values isKindOfClass:[NSArray class]]) {
+            [FrameHelper setFrame: [ArrayHelper convertToRect: (NSArray*)values] view:subview];
+            
+        } else if ([values isKindOfClass:[NSDictionary class]]) {
+            // recursively set subviews frames
+            [self setSubViewsFrames: subview config:(NSDictionary*)values];
+            
         }
-        
-        // rect array to cgrect
-        CGRect rect = [ArrayHelper convertToRect: rectArray];
-        [FrameHelper setFrame: rect view:subview];
-        //        [BorderHelper setBorder: subview];
-        
-        // recursively set subviews frames
-        NSString* subKey = [key stringByAppendingString:@"+"];
-        NSDictionary* subConfig = config[subKey];
-        [self setSubViewsFrames: subview config:subConfig];
     }
 }
 

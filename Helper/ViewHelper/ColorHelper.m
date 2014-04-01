@@ -138,13 +138,18 @@
 
 +(void) setBorder: (id)obj color:(id)color
 {
+    [self setBorder:obj color:color width:1.0f];
+}
+
++(void) setBorder: (id)obj color:(id)color width:(float)width
+{
     CALayer* layer = nil;
     if ([obj isKindOfClass: [UIView class]]) {
         layer = ((UIView*)obj).layer;
     } else if ([obj isKindOfClass: [CALayer class]]) {
         layer = obj;
     }
-    layer.borderWidth = 1.0f;
+    layer.borderWidth = width;
     layer.borderColor = [[self parseColor:color] CGColor];
 }
 

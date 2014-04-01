@@ -17,6 +17,7 @@
 +(void) setBorder: (id)obj;
 +(void) setBorderRecursive: (id)obj;
 +(void) setBorder: (id)obj color:(id)color;
++(void) setBorder: (id)obj color:(id)color width:(float)width;
 
 +(void) clearBorder: (id)obj;
 +(void) clearBorderRecursive: (id)obj;
