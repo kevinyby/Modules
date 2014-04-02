@@ -10,14 +10,13 @@
 
 +(BOOL) isTwoDimension: (NSArray*)array;
 
-+(NSArray*) sort:(NSArray*)array;
 
 #pragma mark - Handler Contents
 
 +(NSArray*) rerangeContents: (NSArray*)array frontContents:(NSArray*)frontContents;
 +(void) subtract:(NSMutableArray*)array with:(NSArray*)subtracts;
 
-#pragma mark - 
+#pragma mark -
 +(CGPoint) convertToPoint: (NSArray *)array;
 
 +(CGRect) convertToRect: (NSArray *)array;
@@ -27,6 +26,7 @@
 
 #pragma mark -
 
++(NSArray*) sort:(NSArray*)array;
 +(void) sortArray: (NSMutableArray*) array asc:(BOOL)isASC;
 
 @end

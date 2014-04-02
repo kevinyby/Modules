@@ -45,16 +45,6 @@
     return [[array firstObject] isKindOfClass: [NSArray class]];
 }
 
-// array with string
-+(NSArray*) sort:(NSArray*)array
-{
-    NSMutableArray* temp = [NSMutableArray arrayWithArray: array];
-    NSArray* result = [temp sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        return [obj1 compare: obj2];
-    }];
-    return result;
-}
-
 
 #pragma mark - Handler Contents
 
@@ -107,6 +97,17 @@
 
 #pragma mark - 
 
+// array with string
++(NSArray*) sort:(NSArray*)array
+{
+    NSMutableArray* temp = [NSMutableArray arrayWithArray: array];
+    NSArray* result = [temp sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        return [obj1 compare: obj2];
+    }];
+    return result;
+}
+
+// array with [[1,0], [5,4]]
 +(void) sortArray: (NSMutableArray*) array asc:(BOOL)isASC
 {
     [array sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {

@@ -12,7 +12,7 @@
 +(NSArray*) getSortedKeys: (NSDictionary*)dictionary;
 +(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary with:(NSString*)tail;
 +(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary with:(NSString*)tail excepts:(NSArray*)excepts;
-+(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary keys:(NSArray*)keys with:(NSString*)tail;
+
 +(void) replaceKeys: (NSMutableDictionary*)dictionary keys:(NSArray*)keys withKeys:(NSArray*)replacements;
 
 #pragma mark - About Values

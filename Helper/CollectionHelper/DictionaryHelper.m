@@ -59,17 +59,11 @@
 
 +(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary with:(NSString*)tail excepts:(NSArray*)excepts
 {
-    NSMutableArray* keys = [ArrayHelper deepCopy: [dictionary allKeys]];
-    for (id key in excepts) [keys removeObject: key];
-    return [self tailKeys: dictionary keys:keys with:tail];
-}
-
-+(NSMutableDictionary*) tailKeys: (NSDictionary*)dictionary keys:(NSArray*)keys with:(NSString*)tail
-{
     NSMutableDictionary* result = [NSMutableDictionary dictionary];
-    for (id key in keys) {
+    for (NSString* key in dictionary) {
         id value = [dictionary objectForKey: key];
-        [result setObject: value forKey:[key stringByAppendingString:tail]];
+        NSString* newKey = [excepts containsObject: key] ? key : [key stringByAppendingString:tail];
+        [result setObject: value forKey: newKey];
     }
     return result;
 }
