@@ -31,11 +31,7 @@
 
 @implementation FrameTranslater
 
-
-static bool isPortraitDesigned;
-
-static CGSize  portraitCanvasSize;
-static CGSize  landscapeCanvasSize;
+static CGSize canvasSize;
 
 static bool isIOS7;
 static CGFloat statusBarVerticalHeight;
@@ -57,9 +53,7 @@ static CGFloat statusBarVerticalHeight;
  **/
 
 + (void)initialize {
-    isPortraitDesigned = YES;                       // default is designed according portrait
-    portraitCanvasSize = CGSizeMake(SHORT, LONG);   // default
-    landscapeCanvasSize = CGSizeMake(LONG, SHORT);  // default
+    canvasSize = CGSizeMake(LONG, SHORT);           // default (landscape)
     
     // For status bar
     isIOS7 = [[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0;
@@ -71,25 +65,14 @@ static CGFloat statusBarVerticalHeight;
 
 
 #pragma mark -
-+(BOOL) isPortraitDesigned {
-    return isPortraitDesigned;
-}
-+(void) setIsPortraitDesigned: (BOOL)isPortrait {
-    isPortraitDesigned = isPortrait;
-}
 
-+(CGSize) portraitCanvasSize {
-    return portraitCanvasSize;
++(CGSize) canvasSize
+{
+    return canvasSize;
 }
-+(void) setPortraitCanvasSize: (CGSize)size {
-    portraitCanvasSize = size;
-}
-
-+(CGSize) landscapeCanvasSize {
-    return landscapeCanvasSize ;
-}
-+(void) setLandscapeCanvasSize: (CGSize)size {
-    landscapeCanvasSize = size;
++(void) setCanvasSize: (CGSize)canvas
+{
+    canvasSize = canvas;
 }
 
 #pragma mark - About Font (In UILable)
@@ -116,7 +99,7 @@ static CGFloat statusBarVerticalHeight;
 #pragma mark -
 
 +(CGRect) convertCanvasRect: (CGRect)canvasFrame {
-    return [self getFrame: isPortraitDesigned canvasFrame:canvasFrame];
+    return [self getFrame: canvasFrame];
 }
 
 +(CGSize) convertCanvasSize: (CGSize)size
@@ -159,13 +142,13 @@ static CGFloat statusBarVerticalHeight;
 }
 
 +(NSArray*) screenCanvasRatio {
-    return [self getRatios: isPortraitDesigned];
+    return [self getRatios: canvasSize];
 }
 
 
 #pragma mark - Private Methods
 
-+(CGRect) getFrame: (BOOL)isPortrait canvasFrame:(CGRect)canvasFrame {
++(CGRect) getFrame: (CGRect)canvasFrame {
     float ratioX = self.ratioX;
     float ratioY = self.ratioY;
     
@@ -179,9 +162,8 @@ static CGFloat statusBarVerticalHeight;
     return frame;
 }
 
-+(NSArray*) getRatios:(BOOL)isPortrait {
-    CGSize canvas = (isPortrait) ? portraitCanvasSize : landscapeCanvasSize;
-    CGSize screen = [self getDeviceSize: isPortrait];
++(NSArray*) getRatios: (CGSize)canvas {
+    CGSize screen = [self getDeviceSize: canvas.height > canvas.width];
     
     float ratioX = (float)screen.width / (float)canvas.width;
     float ratioY = (float)screen.height/ (float)canvas.height;

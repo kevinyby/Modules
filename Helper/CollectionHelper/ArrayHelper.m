@@ -75,8 +75,12 @@
     return CGPointMake([[array safeObjectAtIndex: 0] floatValue],
                       [[array safeObjectAtIndex: 1] floatValue]);
 }
-
-/** @prama rectArray @[@(0),@(0), @(200), @(50)] */
++(CGSize) convertToSize: (NSArray*)array
+{
+    return CGSizeMake([[array safeObjectAtIndex: 0] floatValue],
+                       [[array safeObjectAtIndex: 1] floatValue]);
+}
+/** @prama rectArray @[@(0), @(0) @(200), @(50)] */
 +(CGRect) convertToRect: (NSArray *)array
 {
     return CGRectMake([[array safeObjectAtIndex: 0] floatValue],
@@ -84,7 +88,6 @@
                       [[array safeObjectAtIndex: 2] floatValue],
                       [[array safeObjectAtIndex: 3] floatValue]);
 }
-
 +(UIEdgeInsets) convertToEdgeInsets: (NSArray *)array
 {
     return UIEdgeInsetsMake([[array safeObjectAtIndex: 0] floatValue],

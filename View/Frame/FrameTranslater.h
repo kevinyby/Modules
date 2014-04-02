@@ -4,15 +4,8 @@
 
 
 #pragma mark -
-
-+(BOOL) isPortraitDesigned ;
-+(void) setIsPortraitDesigned: (BOOL)isPortrait ;
-
-+(CGSize) portraitCanvasSize ;
-+(CGSize) landscapeCanvasSize ;
-+(void) setPortraitCanvasSize: (CGSize)size ;
-+(void) setLandscapeCanvasSize: (CGSize)size ;
-
++(CGSize) canvasSize;
++(void) setCanvasSize: (CGSize)canvas;
 
 
 #pragma mark -
@@ -25,7 +18,6 @@
 
 
 #pragma mark -
-
 +(CGRect) convertCanvasRect: (CGRect)canvasFrame ;
 +(CGPoint) convertCanvasPoint: (CGPoint)point;
 +(CGSize) convertCanvasSize: (CGSize)size;

@@ -12,20 +12,17 @@
 
 
 #pragma mark - Handler Contents
-
 +(NSArray*) rerangeContents: (NSArray*)array frontContents:(NSArray*)frontContents;
 +(void) subtract:(NSMutableArray*)array with:(NSArray*)subtracts;
 
 #pragma mark -
-+(CGPoint) convertToPoint: (NSArray *)array;
-
++(CGSize) convertToSize: (NSArray*)array;
 +(CGRect) convertToRect: (NSArray *)array;
-
++(CGPoint) convertToPoint: (NSArray *)array;
 +(UIEdgeInsets) convertToEdgeInsets: (NSArray *)array;
 
 
 #pragma mark -
-
 +(NSArray*) sort:(NSArray*)array;
 +(void) sortArray: (NSMutableArray*) array asc:(BOOL)isASC;
 
