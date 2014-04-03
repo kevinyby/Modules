@@ -1,16 +1,22 @@
 #import <Foundation/Foundation.h>
 #import "LocalizeManager.h"
 
+
+#define LOCALIZE_KEY(_key) [CategoriesLocalizer getCategoriesLocalized: _key]
+#define LOCALIZE_MESSAGE(_key) [CategoriesLocalizer getCategoriesLocalized: _key kind:@"MESSAGE"]
+#define LOCALIZE_DESCRIPTION(_key) [CategoriesLocalizer getCategoriesLocalized: _key kind:@"DESCRIPTION"]
+
+
 #define LOCALIZE_KEY_CONNECTOR @"."
 #define LOCALIZE_CONNECT_KEYS(_item, _attr) [CategoriesLocalizer connectKeys:_item attribute:_attr]
-
-#define LOCALIZE_KEY(_key) [CategoriesLocalizer getLocalize: _key]
-#define LOCALIZE_MESSAGE(_key) [CategoriesLocalizer getMessageLocalize: _key]
-
  #define LOCALIZE_MESSAGE_FORMAT(_key, args...) [NSString stringWithFormat: LOCALIZE_MESSAGE(_key), ##args]
 
 
 // Convention:
+
+// Table name should be : Localize_[Kind]_[Category]_{en|zh-Hans...}.stringa
+// ie : i18n_message_HumanResource_en.strings
+
 
 // First :
 // categories forbid that two different keys have the same value . i.e.
@@ -25,8 +31,22 @@
 +(NSDictionary*) categories;
 +(void) setCategories: (NSDictionary*)categories;
 
-+(NSString*) getLocalize: (NSString*)key;
-+(NSString*) getMessageLocalize: (NSString*)key;
-+(NSString*) connectKeys: (NSString*) item attribute:(NSString*)attribute;
+
+
+
++(NSString*) getCategoriesLocalized: (NSString*)key;
++(NSString*) getCategoriesLocalized: (NSString*)key kind:(NSString*)kind;
+
+
+#pragma mark -
++(NSString*) connectKeys: (NSString*)item attribute:(NSString*)attribute;
++(NSString*) getCategoryByItem: (NSString*)item;
+
+
+#pragma mark -
++(NSString*) getCategoriesLocalized: (NSString*)key kind:(NSString*)kind category:(NSString*)category;
++(NSString*) getCategoriesLocalized: (NSString*)key kind:(NSString*)kind category:(NSString*)category language:(NSString*)language;
++(NSString*) getTableName: (NSString*)kind category:(NSString*)category language:(NSString*)language;
+
 
 @end
