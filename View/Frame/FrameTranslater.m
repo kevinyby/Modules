@@ -28,6 +28,9 @@
     #define SHORT 768
 #endif
 
+CGFloat CGSizeGetMax(CGSize size) {
+    return size.width > size.height ? size.width : size.height;
+}
 
 @implementation FrameTranslater
 
@@ -57,8 +60,7 @@ static CGFloat statusBarVerticalHeight;
     
     // For status bar
     isIOS7 = [[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0;
-    CGSize statusBarSize = [UIApplication sharedApplication].statusBarFrame.size;
-    statusBarVerticalHeight = statusBarSize.height > statusBarSize.width ? statusBarSize.width : statusBarSize.height;
+    statusBarVerticalHeight = CGSizeGetMax([UIApplication sharedApplication].statusBarFrame.size);
     
     [super initialize];
 }
@@ -171,11 +173,11 @@ static CGFloat statusBarVerticalHeight;
 }
 + (CGSize) getDeviceSize: (BOOL)isPortrait
 {
-    // like UIWindow's bounds,  always will be (768 x 1024)(ipad) not influnce by orientation.
-    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     // Ignore the case of statusbar on ios 7 and hidden.
     CGFloat statusBarVH = isIOS7 || [UIApplication sharedApplication].statusBarHidden ? 0 : statusBarVerticalHeight;
     
+    // like UIWindow's bounds,  always will be (768 x 1024)(ipad) not influnce by orientation.
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     return isPortrait ? CGSizeMake(screenSize.width, screenSize.height-statusBarVH):
                         CGSizeMake(screenSize.height, screenSize.width-statusBarVH);
 }
