@@ -7,7 +7,7 @@
 }
 
 -(void) execute:(NSDictionary*)config objects:(NSArray*)objects values:(NSArray*)values times:(NSArray*)times {
-    if (objects){
+    if (objects.count){
         [objectsRegister addObjectsFromArray: objects];
         [super execute: config objects: objects values:values times:times];
     } else {

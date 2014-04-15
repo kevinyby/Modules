@@ -1,5 +1,8 @@
 #import "ActionExecutorBase.h"
 
+
+
+
 @class QueueExecutorBase;
 
 @protocol QueueExecutorDelegate <NSObject>
@@ -12,14 +15,19 @@
 
 @end
 
+
+
+
+
+
+
 @interface QueueExecutorBase : ActionExecutorBase
 
-#pragma mark - Public Methods
 @property (strong) id<QueueExecutorDelegate> delegate;
 
-#pragma mark - Protect Methods
 
-#pragma mark - required
+
+#pragma mark - Required Protect Methods
 -(void) applyKeyPath: (CAKeyframeAnimation*)animation ;
 
 -(NSArray*) translateValues: (NSArray*)values ;
@@ -28,7 +36,8 @@
 
 -(void) applyForwardWith: (id)forwardNum animation:(CAKeyframeAnimation*)animation view:(UIView*)view ;
 
-#pragma mark - optional
+
+#pragma mark - Optional Protect Methods
 -(void) extendTransitionWithMode: (int)transitionMode transitionList:(NSMutableArray*)transitionList values:(NSArray*)values from:(int)fromIndex to:(int)toIndex ;
 
 @end

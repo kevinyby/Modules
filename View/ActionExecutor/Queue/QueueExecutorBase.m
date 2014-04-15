@@ -12,55 +12,65 @@
     NSMutableArray* durations = [NSMutableArray array];
     NSMutableArray* beginTimes = [NSMutableArray array];
     
-    // a queue
-    if (! [[objects firstObject] isKindOfClass: [NSArray class]]) {
+    
+    // Empty ? We do not add the animation . But the delegate should go on .
+    if (objects.count) {
         
-        [self execute: config views:objects values:values times:times durationsRep:durations beginTimesRep:beginTimes];
         
-    } else {
         
-        // a matrix
-        NSNumber* stepTimeNum = [config objectForKey: @"stepTime"];
-        double stepTime = stepTimeNum ? [stepTimeNum floatValue] : defaultStepTime;
-        
-        NSNumber* delayNumber = [config objectForKey: @"matrix.delayRelativeToMilestone"];
-        int delayCount = delayNumber ? [delayNumber intValue] : 0;
-        double delayTime = stepTime * delayCount;                   // the resutl we need first
-        
-        NSNumber* intervalNumber = [config objectForKey: @"matrix.delayRelativeToQueueIndex"];
-        int intervalCount = intervalNumber ? [intervalNumber  intValue] : 0;
-        
-        int queueCount = objects.count;
-        for (int i = 0; i < queueCount; i++) {
-            NSArray* innerViews = [objects objectAtIndex: i];
-            NSArray* innerValues = [values objectAtIndex: i];
-            NSMutableArray* innerTimes = i < times.count ? [times objectAtIndex: i] : nil;
+        if (! [[objects firstObject] isKindOfClass: [NSArray class]]) {
+            // a queue, one dimension
+            [self execute: config views:objects values:values times:times durationsRep:durations beginTimesRep:beginTimes];
             
-            int interval = intervalCount;
-            interval = interval < 0 ? abs(interval) * (queueCount - i - 1) : interval * i;
-            double intervalTime = stepTime * interval;              // the resutl we need second
+        } else {
+            // a matrix, two dimension
+            NSNumber* stepTimeNum = [config objectForKey: @"stepTime"];
+            double stepTime = stepTimeNum ? [stepTimeNum floatValue] : defaultStepTime;
             
-            double incrementTime = intervalTime + delayTime;        // the resutl we need , we have to do is caculate the new baseTime values
-            if (incrementTime != 0) {
-                int objectCount = innerViews.count;
-                innerTimes = innerTimes ? innerTimes : [NSMutableArray arrayWithCapacity: objectCount];
-                for (int j = 0; j < objectCount; j++) {
-                    NSNumber* baseTimeNumOld = j < innerTimes.count ? [innerTimes objectAtIndex: j] : nil ;
-                    double exBaseTime = [baseTimeNumOld doubleValue];
-                    NSNumber* baseTimeNumNew = [NSNumber numberWithFloat: exBaseTime + incrementTime];
-                    j < innerTimes.count ? [innerTimes replaceObjectAtIndex: j withObject:baseTimeNumNew] : [innerTimes addObject: baseTimeNumNew];
+            NSNumber* delayNumber = [config objectForKey: @"matrix.delayRelativeToMilestone"];
+            int delayCount = delayNumber ? [delayNumber intValue] : 0;
+            double delayTime = stepTime * delayCount;                   // the resutl we need first
+            
+            NSNumber* intervalNumber = [config objectForKey: @"matrix.delayRelativeToQueueIndex"];
+            int intervalCount = intervalNumber ? [intervalNumber  intValue] : 0;
+            
+            int queueCount = objects.count;
+            for (int i = 0; i < queueCount; i++) {
+                NSArray* innerViews = [objects objectAtIndex: i];
+                NSArray* innerValues = [values objectAtIndex: i];
+                NSMutableArray* innerTimes = i < times.count ? [times objectAtIndex: i] : nil;
+                
+                int interval = intervalCount;
+                interval = interval < 0 ? abs(interval) * (queueCount - i - 1) : interval * i;
+                double intervalTime = stepTime * interval;              // the resutl we need second
+                
+                double incrementTime = intervalTime + delayTime;        // the resutl we need , we have to do is caculate the new baseTime values
+                if (incrementTime != 0) {
+                    NSUInteger objectCount = innerViews.count;
+                    innerTimes = innerTimes ? innerTimes : [NSMutableArray arrayWithCapacity: objectCount];
+                    for (NSUInteger j = 0; j < objectCount; j++) {
+                        NSNumber* baseTimeNumOld = j < innerTimes.count ? [innerTimes objectAtIndex: j] : nil ;
+                        double exBaseTime = [baseTimeNumOld doubleValue];
+                        NSNumber* baseTimeNumNew = [NSNumber numberWithFloat: exBaseTime + incrementTime];
+                        j < innerTimes.count ? [innerTimes replaceObjectAtIndex: j withObject:baseTimeNumNew] : [innerTimes addObject: baseTimeNumNew];
+                    }
                 }
+                
+                // for the return value
+                NSMutableArray* innerDurations = [NSMutableArray array];
+                NSMutableArray* innerBeginTimes = [NSMutableArray array];
+                [durations addObject: innerDurations];
+                [beginTimes addObject: innerBeginTimes];
+                [self execute: config views:innerViews values:innerValues times:innerTimes durationsRep:innerDurations beginTimesRep:innerBeginTimes];
             }
             
-            // for the return value
-            NSMutableArray* innerDurations = [NSMutableArray array];
-            NSMutableArray* innerBeginTimes = [NSMutableArray array];
-            [durations addObject: innerDurations];
-            [beginTimes addObject: innerBeginTimes];
-            [self execute: config views:innerViews values:innerValues times:innerTimes durationsRep:innerDurations beginTimesRep:innerBeginTimes];
         }
         
+        
+        
     }
+    
+    
     
     // delegate
     if (delegate && [delegate respondsToSelector:@selector(queue:beginTimes:durations:)]) {

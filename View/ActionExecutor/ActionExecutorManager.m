@@ -36,7 +36,6 @@
 }
 
 -(void) runActionExecutor: (NSDictionary*)config onObjects:(NSArray*)objects values:(NSArray*)values baseTimes:(NSArray*)baseTimes {
-    if (! objects || objects.count == 0 ) return;
     NSString* action = [config objectForKey: KeyOfAction];
     ActionExecutorBase* executor = [executors objectForKey: action];
     [executor execute: config objects:objects values:values times:baseTimes];
