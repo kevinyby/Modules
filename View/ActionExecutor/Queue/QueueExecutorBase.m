@@ -34,7 +34,7 @@
             NSNumber* intervalNumber = [config objectForKey: @"matrix.delayRelativeToQueueIndex"];
             int intervalCount = intervalNumber ? [intervalNumber  intValue] : 0;
             
-            int queueCount = objects.count;
+            int queueCount = (int)objects.count;
             for (int i = 0; i < queueCount; i++) {
                 NSArray* innerViews = [objects objectAtIndex: i];
                 NSArray* innerValues = [values objectAtIndex: i];
@@ -95,8 +95,8 @@
     animation.repeatDuration = [[config objectForKey: @"repeatDuration"] doubleValue];
     
     int emptyIndividual = 0 ;
-    int viewsCount = views.count;
-    int valuesCount = values.count;
+    int viewsCount = (int)views.count;
+    int valuesCount = (int)values.count;
     int offset = valuesCount - viewsCount;
     BOOL isBaseTimeEmpty = times ? times.count == 0 : YES;
     
@@ -121,7 +121,7 @@
         NSMutableArray* transitionList = [self getTransitionList: config values:realValues from:i to:i+offset+emptyIndividual];
         
         NSMutableArray* newTransitionList = [self applyValuesEasing: config transitionList:transitionList];
-        int newTransitionsCount = newTransitionList.count;
+        int newTransitionsCount = (int)newTransitionList.count;
         
         float baseTime = isBaseTimeEmpty ? 0.0 : [[times objectAtIndex: i] floatValue];         // a
         
@@ -176,7 +176,7 @@
     EasingType easeType = [[config objectForKey: @"queue.easingType"] intValue];
     NSKeyframeAnimationFunction easeFunction = [EaseFunction easingFunctionForType: easeType];
     
-    int listCount = transitionList.count;
+    int listCount = (int)transitionList.count;
     NSUInteger degree = degreeNum ? ([degreeNum intValue] < listCount-1 ? listCount-1 : [degreeNum intValue]) : listCount-1;
     
     if (! easeFunction) return transitionList;
@@ -251,9 +251,9 @@
         if(isControllAll) animation.timingFunction = [CAMediaTimingFunction functionWithControlPoints: c1x :c1y :c2x :c2y];
         
         if (isControllEach) {
-            int count = animation.keyTimes.count;
+            NSUInteger count = animation.keyTimes.count;
             NSMutableArray* timingFunctions = [NSMutableArray arrayWithCapacity: count];
-            for (int i = 0; i < count - 1 ; i++ ) {
+            for (NSUInteger i = 0; i < count - 1 ; i++ ) {
                 CAMediaTimingFunction* timing = [CAMediaTimingFunction functionWithControlPoints: c1x :c1y :c2x :c2y];
                 [timingFunctions addObject: timing];
             }

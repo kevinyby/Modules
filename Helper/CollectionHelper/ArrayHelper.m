@@ -48,13 +48,14 @@
 
 #pragma mark - Handler Contents
 
-// array: ["4","5","6","1","2"], frontContents:["1","2"]
+// array: ["4","5","6","1","2"], frontContents:["1","2", "3", "100"]
 // return ["1","2", "4","5","6"], just put the frontContents to front
-+(NSArray*) rerangeContents: (NSArray*)array frontContents:(NSArray*)frontContents
++(NSArray*) reRangeContents: (NSArray*)array frontContents:(NSArray*)frontContents
 {
     NSMutableArray* newContents = [ArrayHelper deepCopy: array];
-    [ArrayHelper subtract: newContents with: frontContents];             // remove the front keys in all keys
-    [newContents insertObjects: frontContents atIndexes:[NSIndexSet indexSetWithIndexesInRange:(NSRange){0, frontContents.count}]];  // then insert the front keys in the front
+    NSArray* intersections = [ArrayHelper intersect: array with:frontContents];
+    [ArrayHelper subtract: newContents with: intersections];             // remove the front keys in array
+    [newContents insertObjects: intersections atIndexes:[NSIndexSet indexSetWithIndexesInRange:(NSRange){0, intersections.count}]];  // then insert the front keys in the front
     return newContents;
 }
 
@@ -65,6 +66,30 @@
             [array removeObject: element];
         }
     }
+}
+
++(NSMutableArray*) intersect: (NSArray*)array with:(NSArray*)arrayObj
+{
+    NSMutableArray* result = [NSMutableArray array];
+    for (NSUInteger i = 0; i < arrayObj.count; i++) {
+        id obj = arrayObj[i];
+        if ([array containsObject: obj]) {
+            [result addObject: obj];
+        }
+    }
+    return result;
+}
+
+
+// remove the duplicate objects & maintain the orders
++(NSMutableArray*) eliminateDuplicates: (NSArray*)array
+{
+    NSMutableArray* result = [NSMutableArray array];
+    for (NSUInteger i = 0; i < array.count; i++) {
+        id obj = array[i];
+        if (![result containsObject: obj])  [result addObject: obj];
+    }
+    return  result;
 }
 
 
@@ -111,7 +136,7 @@
 }
 
 // array with [[1,0], [5,4]]
-+(void) sortArray: (NSMutableArray*) array asc:(BOOL)isASC
++(void) sortArray: (NSMutableArray*)array asc:(BOOL)isASC
 {
     [array sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         NSArray* array1 = (NSArray*)obj1;

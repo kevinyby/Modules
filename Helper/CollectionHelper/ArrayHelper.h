@@ -12,8 +12,13 @@
 
 
 #pragma mark - Handler Contents
-+(NSArray*) rerangeContents: (NSArray*)array frontContents:(NSArray*)frontContents;
++(NSArray*) reRangeContents: (NSArray*)array frontContents:(NSArray*)frontContents;
 +(void) subtract:(NSMutableArray*)array with:(NSArray*)subtracts;
++(NSMutableArray*) intersect: (NSArray*)array with:(NSArray*)arrayObj;
+
+// remove the duplicate objects & maintain the orders
++(NSMutableArray*) eliminateDuplicates: (NSArray*)array;
+
 
 #pragma mark -
 +(CGSize) convertToSize: (NSArray*)array;
