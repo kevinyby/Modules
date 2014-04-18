@@ -11,21 +11,21 @@
 +(void) iterate: (NSArray*)array handler:(BOOL (^)(int index, id obj, int count))handler {
     for (int i = 0; i < array.count; i++) {
         id obj = [array objectAtIndex: i];
-        if (handler(i, obj, array.count)) return;
+        if (handler(i, obj, (int)array.count)) return;
     }
 }
 
 +(void) iterateRadom: (NSArray*)array handler:(BOOL (^)(int index, id obj, int count))handler {
-    int radomIndex = RANDOMINT(array.count);
+    int radomIndex = RANDOMINT((int)array.count);
     for (int i = 0, m = radomIndex; i < array.count; i++, m++) {
         if (m >= array.count) m = 0;
         id obj = [array objectAtIndex: m];
-        if (handler(i, obj, array.count)) return;
+        if (handler(i, obj, (int)array.count)) return;
     }
 }
 
 +(void) shuffle: (NSMutableArray*)array {
-    int count = [array count];
+    int count = (int)[array count];
     for (int i = 0; i < count; ++i) {
         // Select a random element between i and end of array to swap with.
         int nElements = count - i;

@@ -16,13 +16,13 @@
     // check if already has
     if ([sectionsContents contains: contents])
     {
-        int row = [sectionsContents index: contents];
+        NSUInteger row = [sectionsContents index: contents];
         NSIndexPath* containsIndexPath = [NSIndexPath indexPathForRow: row inSection:section];
         [tableView selectRowAtIndexPath:containsIndexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
         return;
     }
     
-    int row = sectionsContents.count ? sectionsContents.count - 1 : 0;      // get the last row
+    NSUInteger row = sectionsContents.count ? sectionsContents.count - 1 : 0;      // get the last row
     
     [sectionsContents insertObject: contents atIndex: row ];
     [realSectionsContents insertObject: realContent atIndex:row];
@@ -45,7 +45,7 @@
     // check if already has
     if ([sectionsContents contains: contents])
     {
-        int row = [sectionsContents index: contents];
+        NSUInteger row = [sectionsContents index: contents];
         NSIndexPath* containsIndexPath = [NSIndexPath indexPathForRow: row inSection:section];
         [tableView selectRowAtIndexPath:containsIndexPath animated:YES scrollPosition:UITableViewScrollPositionMiddle];
         return;

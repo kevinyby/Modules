@@ -112,8 +112,8 @@
 
 +(int) getSpaceNumber: (NSArray*)tails index:(int)index
 {
-    int length = tails.count;
-    for (int i = 0; i < length; i++) {
+    NSUInteger length = tails.count;
+    for (NSUInteger i = 0; i < length; i++) {
         NSString* string = tails[i];
         NSArray* atoms = [string componentsSeparatedByString:SPACE_ATOM_CONNECTOR];
         
@@ -132,7 +132,7 @@
 
 +(void) iterateChineseWord:(NSString*)string handler:(BOOL(^)(int length, int index, NSString* chinese))handler
 {
-    int length = string.length;
+    int length = (int)string.length;
     for (int i = 0 ; i < length; i++) {
         unichar ch = [string characterAtIndex:i];
         
@@ -147,7 +147,7 @@
 +(void) iterateEnglishWord: (NSString*)string handler:(BOOL(^)(int length, int index, NSString* word))handler
 {
     NSArray* array = [string componentsSeparatedByString: SPACE_STRING];
-    int length = array.count;
+    int length = (int)array.count;
     for (int i = 0; i < array.count; i++) {
         NSString* word = array[i];
         if(handler(length, i, word)) return;
