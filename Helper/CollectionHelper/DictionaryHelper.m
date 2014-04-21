@@ -70,7 +70,7 @@
 
 +(void) replaceKeys: (NSMutableDictionary*)dictionary keys:(NSArray*)keys withKeys:(NSArray*)replacements
 {
-    if (! [dictionary isKindOfClass:[dictionary class]]) return;
+    if (! [dictionary isKindOfClass:[NSMutableDictionary class]]) return;
     for (int i = 0; i < keys.count; i ++) {
         NSString* key = keys[i];
         id content = [dictionary objectForKey: key];
