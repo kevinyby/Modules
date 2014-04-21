@@ -19,4 +19,6 @@
 
 @property (assign) id<SearchBarViewDelegate> delegate;
 
+-(void) setHiddenCancelButton:(BOOL)hidden;
+
 @end

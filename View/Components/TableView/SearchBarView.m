@@ -17,8 +17,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self initializeSubviews];
-        [self initializeSubviewsHConstraints];
-        [self initializeSubviewsVConstraints];
+        [self setSubviewsVConstraints];
     }
     return self;
 }
@@ -72,11 +71,30 @@
 //    [ColorHelper setBorderRecursive: self];
 }
 
+-(void)setHiddenCancelButton:(BOOL)hidden
+{
+    cancelButton.hidden = hidden;
+    if (hidden) [self setSubviewsVConstraints];
+}
+
+-(void) setSubviewsVConstraints
+{
+    [self removeConstraints: self.constraints];
+    [self initializeSubviewsHConstraints];
+    [self initializeSubviewsVConstraints];
+}
+
 -(void) initializeSubviewsHConstraints
 {
     float inset = [FrameTranslater convertCanvasHeight: 20.0f];
+    NSString* format = nil;
+    if (cancelButton.hidden) {
+        format = @"|-(inset)-[textField]-(inset)-|";
+    } else {
+        format = @"|-(inset)-[textField]-(inset)-[cancelButton]-(inset)-|";
+    }
     [self addConstraints:[NSLayoutConstraint
-                          constraintsWithVisualFormat:@"|-(inset)-[textField]-(inset)-[cancelButton]-(inset)-|"
+                          constraintsWithVisualFormat:format
                           options:NSLayoutFormatDirectionLeadingToTrailing
                           metrics:@{@"inset":@(inset)}
                           views:NSDictionaryOfVariableBindings(textField,cancelButton)]];
